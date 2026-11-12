@@ -4,6 +4,11 @@
 use crate::position::{Piece, Position, Side};
 use std::sync::OnceLock;
 
+#[inline]
+fn inside_board(file: i8, rank: i8) -> bool {
+    (0..8).contains(&file) && (0..8).contains(&rank)
+}
+
 // Model weights are intentionally not tracked in the public source repository.
 // A local copy is embedded when available; source-only builds use the classical evaluator.
 #[cfg(valox_nnue_weights)]
@@ -255,34 +260,153 @@ fn threat_feature_indices(
             continue;
         };
         let attacker_code = piece_code(attacker_piece, attacker_side);
-        for &(to, attacked_piece, attacked_side) in &occupied[..occupied_count] {
-            let attacked_kind = match attacked_piece {
-                Piece::Pawn => 0,
-                Piece::Knight => 1,
-                Piece::Bishop => 2,
-                Piece::Rook => 3,
-                Piece::Queen => 4,
-                Piece::King => continue,
-            };
-            if TARGET_MAP[attacker_kind][attacked_kind] < 0
-                || !position.piece_attacks_square(from, to, attacker_piece, attacker_side)
-            {
-                continue;
+        let file = (from % 8) as i8;
+        let rank = (from / 8) as i8;
+        match attacker_piece {
+            Piece::Pawn => {
+                let dr = if attacker_side == Side::White { 1 } else { -1 };
+                for df in [-1, 1] {
+                    let (target_file, target_rank) = (file + df, rank + dr);
+                    if inside_board(target_file, target_rank) {
+                        push_threat_feature(
+                            position,
+                            attacker_code,
+                            attacker_kind,
+                            from,
+                            (target_rank * 8 + target_file) as u8,
+                            perspective,
+                            king,
+                            features,
+                        );
+                    }
+                }
             }
-            let Some(feature) = threat_index(
-                attacker_code,
-                from,
-                to,
-                piece_code(attacked_piece, attacked_side),
-                perspective,
-                king,
-            ) else {
-                continue;
-            };
-            features.push(feature);
+            Piece::Knight => {
+                for (df, dr) in [
+                    (1, 2),
+                    (2, 1),
+                    (2, -1),
+                    (1, -2),
+                    (-1, -2),
+                    (-2, -1),
+                    (-2, 1),
+                    (-1, 2),
+                ] {
+                    let (target_file, target_rank) = (file + df, rank + dr);
+                    if inside_board(target_file, target_rank) {
+                        push_threat_feature(
+                            position,
+                            attacker_code,
+                            attacker_kind,
+                            from,
+                            (target_rank * 8 + target_file) as u8,
+                            perspective,
+                            king,
+                            features,
+                        );
+                    }
+                }
+            }
+            Piece::King => {
+                for df in -1..=1 {
+                    for dr in -1..=1 {
+                        if df == 0 && dr == 0 {
+                            continue;
+                        }
+                        let (target_file, target_rank) = (file + df, rank + dr);
+                        if inside_board(target_file, target_rank) {
+                            push_threat_feature(
+                                position,
+                                attacker_code,
+                                attacker_kind,
+                                from,
+                                (target_rank * 8 + target_file) as u8,
+                                perspective,
+                                king,
+                                features,
+                            );
+                        }
+                    }
+                }
+            }
+            Piece::Bishop | Piece::Rook | Piece::Queen => {
+                let directions: &[(i8, i8)] = match attacker_piece {
+                    Piece::Bishop => &[(1, 1), (1, -1), (-1, 1), (-1, -1)],
+                    Piece::Rook => &[(1, 0), (-1, 0), (0, 1), (0, -1)],
+                    Piece::Queen => &[
+                        (1, 1),
+                        (1, -1),
+                        (-1, 1),
+                        (-1, -1),
+                        (1, 0),
+                        (-1, 0),
+                        (0, 1),
+                        (0, -1),
+                    ],
+                    _ => unreachable!(),
+                };
+                for &(df, dr) in directions {
+                    let (mut target_file, mut target_rank) = (file + df, rank + dr);
+                    while inside_board(target_file, target_rank) {
+                        let to = (target_rank * 8 + target_file) as u8;
+                        if position.piece_at(to).is_some() {
+                            push_threat_feature(
+                                position,
+                                attacker_code,
+                                attacker_kind,
+                                from,
+                                to,
+                                perspective,
+                                king,
+                                features,
+                            );
+                            break;
+                        }
+                        target_file += df;
+                        target_rank += dr;
+                    }
+                }
+            }
         }
     }
     features.sort_unstable();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn push_threat_feature(
+    position: &Position,
+    attacker_code: usize,
+    attacker_kind: usize,
+    from: u8,
+    to: u8,
+    perspective: usize,
+    king: u8,
+    features: &mut Vec<usize>,
+) {
+    let Some((attacked_piece, attacked_side)) = position.piece_at(to) else {
+        return;
+    };
+    let attacked_kind = match attacked_piece {
+        Piece::Pawn => 0,
+        Piece::Knight => 1,
+        Piece::Bishop => 2,
+        Piece::Rook => 3,
+        Piece::Queen => 4,
+        Piece::King => return,
+    };
+    if TARGET_MAP[attacker_kind][attacked_kind] < 0 {
+        return;
+    }
+    if let Some(feature) = threat_index(
+        attacker_code,
+        from,
+        to,
+        piece_code(attacked_piece, attacked_side),
+        perspective,
+        king,
+    ) {
+        features.push(feature);
+    }
 }
 
 struct FeatureDelta {
@@ -661,6 +785,97 @@ pub fn evaluate(position: &Position) -> Option<i32> {
         .reset(position)
         .then(|| evaluator.evaluate(position))
         .flatten()
+}
+
+#[cfg(test)]
+mod threat_generation_tests {
+    use super::{piece_code, threat_feature_indices, threat_index, PIECE_TYPES, TARGET_MAP};
+    use crate::position::{Piece, Position, Side};
+
+    fn brute_force_threat_features(
+        position: &Position,
+        perspective: usize,
+        king: u8,
+    ) -> Vec<usize> {
+        let mut features = Vec::new();
+        for from in 0..64u8 {
+            let Some((attacker_piece, attacker_side)) = position.piece_at(from) else {
+                continue;
+            };
+            let attacker_kind = PIECE_TYPES
+                .iter()
+                .position(|piece| *piece == attacker_piece)
+                .unwrap();
+            for to in 0..64u8 {
+                let Some((attacked_piece, attacked_side)) = position.piece_at(to) else {
+                    continue;
+                };
+                let attacked_kind = match attacked_piece {
+                    Piece::Pawn => 0,
+                    Piece::Knight => 1,
+                    Piece::Bishop => 2,
+                    Piece::Rook => 3,
+                    Piece::Queen => 4,
+                    Piece::King => continue,
+                };
+                if TARGET_MAP[attacker_kind][attacked_kind] < 0
+                    || !position.piece_attacks_square(from, to, attacker_piece, attacker_side)
+                {
+                    continue;
+                }
+                if let Some(feature) = threat_index(
+                    piece_code(attacker_piece, attacker_side),
+                    from,
+                    to,
+                    piece_code(attacked_piece, attacked_side),
+                    perspective,
+                    king,
+                ) {
+                    features.push(feature);
+                }
+            }
+        }
+        features.sort_unstable();
+        features
+    }
+
+    #[test]
+    fn optimized_threat_generation_matches_brute_force_in_play_positions() {
+        let fens = [
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "r3k2r/ppp2ppp/2n5/3qp3/3P4/2N2N2/PPP2PPP/R2QK2R w KQkq - 0 10",
+            "8/2p2pk1/1p3np1/3Pp3/2P1P3/1P3NP1/5PK1/8 w - - 0 40",
+        ];
+        for fen in fens {
+            let mut position = Position::from_fen(fen).expect("valid test position");
+            for _ in 0..32 {
+                for (perspective, side) in [Side::White, Side::Black].into_iter().enumerate() {
+                    let king = (0..64u8)
+                        .find(|&sq| position.piece_at(sq) == Some((Piece::King, side)))
+                        .expect("king exists");
+                    let mut optimized = Vec::new();
+                    threat_feature_indices(&position, perspective, king, &mut optimized);
+                    let brute = brute_force_threat_features(&position, perspective, king);
+                    let missing = brute
+                        .iter()
+                        .filter(|feature| !optimized.contains(feature))
+                        .copied()
+                        .collect::<Vec<_>>();
+                    assert_eq!(
+                        optimized,
+                        brute,
+                        "threat features differ for perspective {perspective} in {fen}; missing {missing:?}"
+                    );
+                }
+                let moves = position.legal_moves();
+                if moves.is_empty() {
+                    break;
+                }
+                let index = (position.hash() as usize) % moves.len();
+                position = position.play(moves[index]);
+            }
+        }
+    }
 }
 
 #[cfg(all(test, valox_nnue_weights))]

@@ -402,7 +402,6 @@ impl Searcher {
             let reduction = 2 + depth / 5 + ((static_eval - beta).max(0) / 200).min(2);
             let mut null_position = position.null_move();
             self.previous_moves[(ply + 1).clamp(0, 127) as usize] = None;
-            self.nnue.push(&null_position);
             let score = -self.negamax(
                 &mut null_position,
                 depth - 1 - reduction,
@@ -411,7 +410,6 @@ impl Searcher {
                 ply + 1,
                 true,
             );
-            self.nnue.pop();
             if self.aborted {
                 return 0;
             }
