@@ -2,8 +2,12 @@
 /build/
 /syzygy/
 /networks/*.nnue
-/web/valox.wasm
-/networks/*.nnue
+/web/
+/run-browser.ps1
+/stop-browser.ps1
+/tools/engine-match/run-browser-match.ps1
+/tools/engine-match/stop-browser-match.ps1
+/tools/engine-match/server.js
 *valox-source-*.zip
 /docs/CCC_CONTACT_DRAFT.md
 /tools/engine-match/cutechess/
