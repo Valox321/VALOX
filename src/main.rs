@@ -155,6 +155,7 @@ fn main() {
             "go" => {
                 if let Some(s) = finish_worker(worker.take(), true) { search_history = s.history_state(); table = s.tt; }
                 let depth = command_value(&words,"depth").unwrap_or(64).clamp(1,64) as u32;
+                let node_limit = command_value(&words,"nodes").filter(|nodes| *nodes > 0);
                 let time_ms = if let Some(ms) = command_value(&words,"movetime") { ms.max(1) }
                     else if position.side == Side::White && command_value(&words,"wtime").is_some() || position.side == Side::Black && command_value(&words,"btime").is_some() {
                         let (time, inc) = if position.side == Side::White { (command_value(&words,"wtime").unwrap_or(1000),command_value(&words,"winc").unwrap_or(0)) } else { (command_value(&words,"btime").unwrap_or(1000),command_value(&words,"binc").unwrap_or(0)) };
@@ -162,7 +163,7 @@ fn main() {
                         // against a longer game so Valox keeps time for the endgame.
                         let divisor = command_value(&words,"movestogo").unwrap_or(60).clamp(1,100);
                         time.saturating_div(divisor).saturating_add(inc.saturating_mul(3)/4).clamp(20,time.max(20))
-                    } else if words.contains(&"infinite") || words.contains(&"depth") { 86_400_000 } else { 3000 };
+                    } else if node_limit.is_some() || words.contains(&"infinite") || words.contains(&"depth") { 86_400_000 } else { 3000 };
                 let signal = Arc::new(AtomicBool::new(false));
                 let thread_signal = signal.clone();
                 let pos = position.clone();
@@ -174,6 +175,7 @@ fn main() {
                 worker = Some((thread::spawn(move || {
                     let mut searcher = Searcher::new_with_history(tt, limit, thread_signal, Duration::from_millis(time_ms), prior_history, true);
                     searcher.set_tablebases(syzygy);
+                    searcher.set_node_limit(node_limit);
                     let best = searcher.search_with_threads(&pos, depth, thread_count);
                     println!("bestmove {}", best.map(|m| pos.uci_move(m, chess960)).unwrap_or_else(|| "0000".into()));
                     let _ = io::stdout().flush();

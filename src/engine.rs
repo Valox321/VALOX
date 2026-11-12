@@ -5,7 +5,7 @@ use crate::syzygy::{self, ValoxAdapter};
 use pyrrhic_rs::{TableBases, WdlProbeResult};
 use std::collections::HashMap;
 use std::sync::{
-    atomic::{AtomicBool, AtomicU8, Ordering},
+    atomic::{AtomicBool, AtomicU64, AtomicU8, Ordering},
     Arc,
 };
 use std::time::Duration;
@@ -38,6 +38,15 @@ use std::time::Instant;
 
 const MATE: i32 = 30_000;
 static NEXT_TT_GENERATION: AtomicU8 = AtomicU8::new(0);
+
+fn format_uci_score(score: i32) -> String {
+    if score.abs() >= MATE - 1_000 {
+        let moves = ((MATE - score.abs() + 1) / 2).max(1);
+        format!("mate {}", moves * score.signum())
+    } else {
+        format!("cp {score}")
+    }
+}
 
 fn score_to_tt(score: i32, ply: i32) -> i32 {
     if score > MATE - 1_000 {
@@ -111,6 +120,8 @@ pub struct Searcher {
     report: bool,
     uci_chess960: bool,
     generation: u8,
+    node_budget: Arc<AtomicU64>,
+    node_limit: Option<u64>,
     killers: [[Option<Move>; 2]; 128],
     history: [[i32; 64]; 64],
     continuation: HashMap<u32, i16>,
@@ -150,6 +161,8 @@ impl Searcher {
             report,
             uci_chess960: false,
             generation: NEXT_TT_GENERATION.fetch_add(1, Ordering::Relaxed),
+            node_budget: Arc::new(AtomicU64::new(0)),
+            node_limit: None,
             killers: search_history.killers,
             history: search_history.history,
             continuation: search_history.continuation,
@@ -171,6 +184,11 @@ impl Searcher {
 
     pub fn nodes(&self) -> u64 {
         self.nodes
+    }
+
+    pub fn set_node_limit(&mut self, limit: Option<u64>) {
+        self.node_limit = limit.filter(|value| *value > 0);
+        self.node_budget.store(0, Ordering::Relaxed);
     }
 
     pub fn set_uci_chess960(&mut self, enabled: bool) {
@@ -240,9 +258,12 @@ impl Searcher {
     }
 
     fn should_stop(&mut self) -> bool {
-        if self.nodes & 2047 == 0
-            && (self.stop.load(Ordering::Relaxed) || Instant::now() >= self.deadline)
-        {
+        let node_limit_reached = self
+            .node_limit
+            .is_some_and(|limit| self.node_budget.load(Ordering::Relaxed) >= limit);
+        let time_or_stop = self.nodes & 2047 == 0
+            && (self.stop.load(Ordering::Relaxed) || Instant::now() >= self.deadline);
+        if node_limit_reached || time_or_stop {
             self.aborted = true;
         }
         self.aborted
@@ -308,13 +329,16 @@ impl Searcher {
     fn negamax(
         &mut self,
         position: &mut Position,
-        depth: i32,
+        mut depth: i32,
         mut alpha: i32,
         beta: i32,
         ply: i32,
         allow_null: bool,
     ) -> i32 {
         self.nodes += 1;
+        if self.node_limit.is_some() {
+            self.node_budget.fetch_add(1, Ordering::Relaxed);
+        }
         if self.should_stop() {
             return self.evaluate_position(position);
         }
@@ -335,8 +359,12 @@ impl Searcher {
         if let Some(score) = self.tablebase_score(position, ply) {
             return score;
         }
+        let in_check = position.in_check(position.side);
         if depth <= 0 {
             return self.quiescence(position, alpha, beta, ply, 0);
+        }
+        if in_check && ply < 32 && depth <= 8 {
+            depth += 1;
         }
 
         let key = position.hash();
@@ -359,7 +387,6 @@ impl Searcher {
                 }
             }
         }
-        let in_check = position.in_check(position.side);
         let (mut move_buffer, move_count) = Self::generate_moves(position);
         if move_count == 0 {
             return if in_check { -MATE + ply } else { 0 };
@@ -575,6 +602,9 @@ impl Searcher {
         qply: u8,
     ) -> i32 {
         self.nodes += 1;
+        if self.node_limit.is_some() {
+            self.node_budget.fetch_add(1, Ordering::Relaxed);
+        }
         if self.should_stop() {
             return self.evaluate_position(position);
         }
@@ -783,7 +813,8 @@ impl Searcher {
                 let elapsed = started.elapsed().as_millis().max(1);
                 let nps = self.nodes.saturating_mul(1000) / elapsed as u64;
                 println!(
-                    "info depth {depth} score cp {depth_score} nodes {} time {elapsed} nps {nps} pv {}",
+                    "info depth {depth} score {} nodes {} time {elapsed} nps {nps} pv {}",
+                    format_uci_score(depth_score),
                     self.nodes,
                     best.map(|m| if self.uci_chess960 {
                         m.uci_chess960()
@@ -836,18 +867,23 @@ impl Searcher {
                 .map(|(key, entry)| (*key, *entry))
                 .collect::<HashMap<_, _>>();
             let uci_chess960 = self.uci_chess960;
+            let node_budget = self.node_budget.clone();
+            let node_limit = self.node_limit;
             let results = std::thread::scope(|scope| {
                 let mut handles = Vec::with_capacity(worker_count);
                 for partition in partitions {
                     let stop = self.stop.clone();
                     let tt = worker_tt.clone();
                     let history = self.history_state();
+                    let worker_node_budget = node_budget.clone();
                     #[cfg(not(target_arch = "wasm32"))]
                     let tablebases = self.tablebases.clone();
                     handles.push(scope.spawn(move || {
                         let mut worker = Searcher::new_with_history(
                             tt, tt_limit, stop, time_left, history, false,
                         );
+                        worker.node_budget = worker_node_budget;
+                        worker.node_limit = node_limit;
                         worker.set_uci_chess960(uci_chess960);
                         #[cfg(not(target_arch = "wasm32"))]
                         worker.set_tablebases(tablebases);
@@ -917,7 +953,8 @@ impl Searcher {
                 let elapsed = started.elapsed().as_millis().max(1);
                 let nps = self.nodes.saturating_mul(1000) / elapsed as u64;
                 println!(
-                    "info depth {depth} score cp {best_score} nodes {} time {elapsed} nps {nps} pv {}",
+                    "info depth {depth} score {} nodes {} time {elapsed} nps {nps} pv {}",
+                    format_uci_score(best_score),
                     self.nodes,
                     if self.uci_chess960 {
                         best.uci_chess960()
@@ -959,7 +996,11 @@ pub fn best_move(position: &Position, depth: u32) -> Option<Move> {
 
 #[cfg(test)]
 mod tests {
-    use super::transposition_entries_for_mb;
+    use super::{format_uci_score, transposition_entries_for_mb, Searcher, MATE};
+    use crate::position::Position;
+    use std::collections::HashMap;
+    use std::sync::{atomic::AtomicBool, Arc};
+    use std::time::Duration;
 
     #[test]
     fn hash_option_scales_to_requested_memory() {
@@ -969,5 +1010,30 @@ mod tests {
         assert!(two_hundred_fifty_six_mb >= sixteen_mb);
         assert!(two_hundred_fifty_six_mb - sixteen_mb < 16);
         assert_eq!(transposition_entries_for_mb(0), 1);
+    }
+
+    #[test]
+    fn mate_scores_use_uci_mate_distance_not_centipawns() {
+        assert_eq!(format_uci_score(MATE - 1), "mate 1");
+        assert_eq!(format_uci_score(-MATE + 2), "mate -1");
+        assert_eq!(format_uci_score(MATE - 4), "mate 2");
+        assert_eq!(format_uci_score(123), "cp 123");
+    }
+
+    #[test]
+    fn node_limit_stops_search_at_requested_budget() {
+        let position = Position::start();
+        let mut searcher = Searcher::new(
+            HashMap::new(),
+            4096,
+            Arc::new(AtomicBool::new(false)),
+            Duration::from_secs(60),
+            false,
+        );
+        searcher.set_node_limit(Some(10_000));
+        let best = searcher.search(&position, 64).expect("legal root move");
+        assert!(position.legal_moves().contains(&best));
+        assert!(searcher.nodes() <= 10_000);
+        assert!(searcher.nodes() >= 9_000);
     }
 }

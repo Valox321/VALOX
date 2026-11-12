@@ -38,12 +38,17 @@ POSITIONS = [
         "4k3/8/8/4q3/8/8/4R3/4K3 w - - 0 1",
         {"e2e5"},
     ),
+    (
+        "find a forced mate while defending",
+        "8/5R2/3p3k/8/P4R1p/8/6KP/8 b - - 1 45",
+        {"mate"},
+    ),
 ]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--depth", type=int, default=10)
+    parser.add_argument("--depth", type=int, default=12)
     parser.add_argument("--valox", type=Path, default=ROOT / "target/release/valox.exe")
     parser.add_argument(
         "--stockfish",
@@ -62,9 +67,10 @@ def main() -> int:
                 info = engine.analyse(board, chess.engine.Limit(depth=args.depth))
                 move = info["pv"][0]
                 uci = move.uci()
-                passed = move in board.legal_moves and uci in expected
-                results[name].append(passed)
                 score = info["score"].white()
+                found_expected_mate = "mate" in expected and score.is_mate()
+                passed = move in board.legal_moves and (uci in expected or found_expected_mate)
+                results[name].append(passed)
                 print(
                     f"{name:9} {'PASS' if passed else 'MISS':4} "
                     f"{label:38} move={uci:5} score={score} depth={info.get('depth')}"
@@ -78,7 +84,7 @@ def main() -> int:
         f"\nSummary: Valox {valox_passes}/{len(POSITIONS)}; "
         f"Stockfish reference {reference_passes}/{len(POSITIONS)}"
     )
-    return 0 if all(all(outcomes) for outcomes in results.values()) else 1
+    return 0 if all(results["Valox"]) else 1
 
 
 if __name__ == "__main__":

@@ -73,6 +73,12 @@ def main() -> None:
                 expect("info")
                 send("stop")
                 move = expect("bestmove", timeout=15.0)
+            elif index % 6 == 5:
+                started = time.monotonic()
+                send("go nodes 10000")
+                move = expect("bestmove", timeout=15.0)
+                if time.monotonic() - started > 5.0:
+                    raise RuntimeError("go nodes did not stop promptly")
             else:
                 send("go depth 7")
                 move = expect("bestmove", timeout=30.0)
@@ -85,7 +91,7 @@ def main() -> None:
         process.wait(timeout=10)
         if process.returncode != 0:
             raise RuntimeError(f"engine exited with status {process.returncode}")
-        print(f"UCI stress passed: {args.games} searches, 8 threads, depth, clock-managed and interrupted searches, repeated ucinewgame/position/isready/quit")
+        print(f"UCI stress passed: {args.games} searches, 8 threads, node-limited, depth, clock-managed and interrupted searches, repeated ucinewgame/position/isready/quit")
     finally:
         if process.poll() is None:
             process.kill()
