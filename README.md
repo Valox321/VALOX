@@ -2,6 +2,8 @@
 
 Valox is an independent UCI chess engine written in Rust. Its legal move generation, position handling, search, and evaluation are implemented in this project.
 
+Valox's source license has not been selected yet. The public repository does not currently grant permission to reuse or redistribute the source code.
+
 ## Play against Valox in your browser
 
 1. In PowerShell, move into this folder and run `.\run-browser.ps1`.

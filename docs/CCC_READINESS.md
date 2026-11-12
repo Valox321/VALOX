@@ -22,7 +22,7 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - [x] Chess960 castling tests cover a stationary king, stationary rook, rook on the king destination, and make/unmake restoration.
 - [x] Configure Windows/Linux native and WebAssembly CI workflows.
 - [x] Add native UCI smoke/stress steps to the Windows and Linux CI jobs.
-- [ ] Run the CI workflow on GitHub; its Linux job has not run in this Windows workspace.
+- [x] Run the GitHub Actions workflow on Windows, Linux, and WebAssembly from the public source repository.
 - [x] Run a 50-search no-crash UCI stress test with clock-managed searches, repeated interrupts, eight threads, and repeated `position`/`ucinewgame`/`isready`/quit cycles.
 - [x] Extend the UCI lifecycle stress run to 100 searches on the pinned release executable; all depth, clock-managed, and interrupted searches completed, with repeated resets and clean exit.
 - [x] Benchmark 1, 2, 4, and 8 threads and test a 5+0 match on this Windows host.
@@ -36,8 +36,9 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 
 ## Current evidence
 
-- `cargo test`: 13 unit tests pass (2026-11-12).
-- `cargo fmt --all -- --check`, Windows `cargo clippy --all-targets -- -D warnings`, Linux-target `cargo check --all-targets` and `cargo clippy --all-targets -- -D warnings`, native release build, and `cargo check --lib --target wasm32-unknown-unknown` pass locally. GitHub Actions has not run yet.
+- `cargo test`: 13 NNUE-enabled unit tests pass locally (2026-11-12); the source-only fallback build passes 12 tests. Both configurations also pass formatting, Clippy, and release build.
+- GitHub Actions run [#1](https://github.com/Valox321/VALOX/actions/runs/43240093039) passed on commit `e540d9b`: Windows native build, UCI handshake/stress checks, Linux native build/UCI stress, and WebAssembly compile all succeeded. The public source build uses the documented classical fallback because the unlicensed model weights are excluded.
+- `cargo fmt --all -- --check`, Windows `cargo clippy --all-targets -- -D warnings`, Linux-target `cargo check --all-targets` and `cargo clippy --all-targets -- -D warnings`, native release build, and `cargo check --lib --target wasm32-unknown-unknown` pass locally.
 - Fresh extraction of `build\valox-source-20261112.zip`: formatting, 13 tests, Clippy with warnings denied, release build, UCI standard/Chess960/stop smoke check, and 10 UCI stress searches all passed. Extracted Windows build has the same size as the pinned executable but differs in 24 PE metadata bytes due to a different build path; source build works, but the executable is not bit-for-bit reproducible across paths.
 - `cargo build --release`: passes (2026-11-12).
 - `tools\engine-match\verify-uci.ps1`: passed with eight threads; checks UCI identification/options, readiness, standard search, Chess960 Shredder-FEN and rook-square castling input, `stop`, and `quit`.
