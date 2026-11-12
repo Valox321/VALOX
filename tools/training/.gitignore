@@ -1,0 +1,6 @@
+/target/
+/data/
+/data-*/
+/checkpoints/
+/checkpoints-*/
+/.bullet-source/

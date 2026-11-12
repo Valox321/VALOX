@@ -1,0 +1,41 @@
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "1"]
+[Result "*"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 *
+
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "2"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Be7 *
+
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "3"]
+[Result "*"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 *
+
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "4"]
+[Result "*"]
+
+1. c4 e5 2. Nc3 Nf6 3. g3 d5 4. cxd5 Nxd5 *
+
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "5"]
+[Result "*"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 *
+
+[Event "Valox vs Stockfish 19 strength-limited"]
+[Site "Local match"]
+[Round "6"]
+[Result "*"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 *
