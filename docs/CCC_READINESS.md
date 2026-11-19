@@ -38,7 +38,7 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - [x] Cross-build a static Linux x86_64 musl binary and verify the ELF type, machine, and absence of a dynamic loader.
 - [x] Add a `linux-nnue` CI job that runs the 38-test NNUE suite on Ubuntu with the synthetic network, builds the static musl binary, and runs a UCI smoke test and benchmark.
 - [x] Add `tools/build-release.py` with SHA-256 manifests and a hard gate: a binary containing the Reckless v60 network cannot be packaged without `--allow-network-redistribution`.
-- [x] Produce a legally distributable weight-free Windows package that contains no `.nnue` file and can load an external model through `EvalFile`.
+- [x] Produce legally distributable weight-free Windows and Linux packages that contain no `.nnue` file and can load an external model through `EvalFile`.
 - [x] Add runtime NNUE loading through the `EvalFile` UCI option, `--evalfile`, and `VALOX_EVALFILE`.
 - [x] Verify runtime-loaded v60 produces the same nodes and best moves as the embedded build; an eight-round ABBA `--bench 12` comparison was performance-neutral (median -0.18%, 5/8 pairs faster).
 - [x] Extend the `linux-nnue` CI job to compare a weight-free musl build using `--evalfile` against the embedded synthetic-network build.
@@ -69,9 +69,10 @@ only through `VALOX_NNUE_PATH`, and packages binaries with license texts,
 `VALOX_NO_NNUE=1`, so a release cannot accidentally embed a local copy and the
 resulting binary starts with the classical evaluator. Packaging a network build
 requires `--allow-network-redistribution`; the script refuses otherwise. The
-first legally distributable artifact is the weight-free Windows package
-`build/release/valox-0.5.0-windows-x86_64.zip`, which contains no `.nnue` file
-and supports runtime loading through `EvalFile`.
+first legally distributable artifacts are the weight-free Windows and Linux
+packages (`valox-0.5.0-windows-x86_64.zip`,
+`valox-0.5.0-linux-x86_64-musl.zip`), which contain no `.nnue` file and support
+runtime loading through `EvalFile`.
 
 The synthetic network (`tools/make-synthetic-net.py`) has exactly the v60 byte
 layout (63,266,880 bytes) but small deterministic values. It makes the 38 tests
