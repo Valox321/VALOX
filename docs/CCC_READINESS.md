@@ -87,10 +87,13 @@ deployment check.
 
 The engine can now load a same-layout model at runtime through the UCI
 `EvalFile` option, the `--evalfile` command-line argument, or the
-`VALOX_EVALFILE` environment variable. The weight-free Windows binary is
-`build/valox-runtime-evalfile-20261119.exe` (537,600 bytes), SHA-256
-`09CCA536342F92B5CF1B1CCB088D82871D00B9FCC8114FFBE242244CEEA5843F`. It contains
-no weights and starts with the classical evaluator.
+`VALOX_EVALFILE` environment variable. The distributable weight-free Windows
+package is `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes),
+SHA-256 `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907`. Its
+`valox.exe` has SHA-256
+`B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`, contains
+no weights, and starts with the classical evaluator. It was built from commit
+`abf772c`.
 
 Loading `networks/v60-7f587dfb.nnue` at runtime produces exactly the embedded
 build's results:
@@ -228,9 +231,11 @@ QEMU.
   `build\valox-threat-ray-20261119.exe`, SHA-256
   `D1DEBC3333B42E481E94B0A4A2169CFF632F9078FA6596DB8CDAB09A38D2E958`. These are
   local candidate artifacts only; no public release has been prepared.
-- The weight-free runtime build is
-  `build\valox-runtime-evalfile-20261119.exe` (537,600 bytes), SHA-256
-  `09CCA536342F92B5CF1B1CCB088D82871D00B9FCC8114FFBE242244CEEA5843F`. With
+- The distributable weight-free release is
+  `build\release\valox-0.5.0-windows-x86_64.zip` (218,735 bytes), SHA-256
+  `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907`; its
+  `valox.exe` has SHA-256
+  `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`. With
   `--evalfile networks\v60-7f587dfb.nnue` it reports the same `--bench 10`
   nodes and best moves as the embedded build. Eight ABBA `--bench 12` rounds
   measured a median -0.18% time (5/8 faster), which is noise; no performance

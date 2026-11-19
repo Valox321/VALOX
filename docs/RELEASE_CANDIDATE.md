@@ -142,14 +142,17 @@ and `VALOX_NO_NNUE=1` to produce a weight-free binary. The default remains
 | Linux artifact SHA-256 | `FA8FB875F99196DBA04534BF950055328877333186F16D71998847405C72F167` |
 | Release tool | `tools/build-release.py` |
 | Network gate | packaging a network build requires `--allow-network-redistribution` |
-| Weight-free Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` |
-| Weight-free package SHA-256 | updated after the runtime-EvalFile rebuild |
-| Weight-free executable SHA-256 | updated after the runtime-EvalFile rebuild |
+| Weight-free Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes) |
+| Weight-free package SHA-256 | `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907` |
+| Weight-free executable SHA-256 | `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5` |
 
 The weight-free package contains no `.nnue` file and is the only artifact that
 is currently safe to distribute. It can load the v60 model through `EvalFile`.
 The Linux artifact embeds the Reckless network and is local-only until
-permission is confirmed.
+permission is confirmed. The package was rebuilt from commit `abf772c` and
+checked: the ZIP has no `.nnue` entry, and its `valox.exe` with
+`--evalfile networks/v60-7f587dfb.nnue --bench 10` reports 389,894 nodes and
+the expected best moves `g1f3`, `c1g5`, `e3c5`, `c4c5`.
 
 `tools/make-synthetic-net.py` writes a 63,266,880-byte file with the v60 layout
 and small deterministic weights. The `linux-nnue` CI job uses it to run all 38
