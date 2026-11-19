@@ -35,7 +35,7 @@ This supersedes the executable fingerprint above for current local testing. It i
 | NNUE | Reckless v60, embedded at compile time |
 | NNUE SHA-256 | `7F587DFB1FE5D74D53909328AFA6FD51650C8C7F45907602DB7FBB1E52948C61` |
 | Benchmark reference | `--bench 10`: 389,894 nodes, best moves `g1f3`, `c1g5`, `e3c5`, `c4c5` |
-| Source archive | `build\valox-source-20261119.zip` (63 files, no `.nnue` weights); SHA-256 in `build\valox-source-20261119.zip.sha256` |
+| Source archive | `build\valox-source-20261119.zip` (64 files, no `.nnue` weights); SHA-256 in `build\valox-source-20261119.zip.sha256` |
 
 Validation for this state:
 
@@ -87,7 +87,7 @@ for testing; it is still not a public release.
 | NNUE | Reckless v60, embedded at compile time |
 | NNUE SHA-256 | `7F587DFB1FE5D74D53909328AFA6FD51650C8C7F45907602DB7FBB1E52948C61` |
 | Benchmark reference | `--bench 10`: 389,894 nodes; `--bench 13`: 1,957,764 nodes; best moves identical to the hashpair build |
-| Source archive | `build\valox-source-20261119.zip` (63 files, no `.nnue` weights); SHA-256 in `build\valox-source-20261119.zip.sha256` |
+| Source archive | `build\valox-source-20261119.zip` (64 files, no `.nnue` weights); SHA-256 in `build\valox-source-20261119.zip.sha256` |
 
 Change 27 tightens the NNUE threat-feature delta. The old update rebuilt all
 outgoing edges of every piece that geometrically attacked a changed square. The
@@ -132,6 +132,14 @@ and small deterministic weights. The new `linux-nnue` CI job uses it to run all
 38 tests through the NNUE path on Ubuntu, builds the static musl binary, and
 runs a UCI smoke test and benchmark. This validates the Linux binary and NNUE
 inference without distributing the third-party weights; it does not measure
-playing strength.
+playing strength. GitHub Actions run
+[#8](https://github.com/Valox321/VALOX/actions/runs/44598540713) passed all
+jobs, including `linux-nnue`, on commit `5ae51b4`.
 
-
+The local real-network musl artifact was also booted in an Alpine Linux 6.18.60
+kernel under QEMU TCG. It reported `--bench 10` = 389,894 nodes with best moves
+`g1f3`, `c1g5`, `e3c5`, `c4c5`, identical to the Windows build, and
+`id name Valox 0.5.0 NNUE` confirmed the embedded weights were active. The
+emulated run validates the Linux runtime path without publishing the weights;
+native tournament-host execution is the remaining deployment check.
+`tools/linux-qemu-smoke.py` reproduces the run from a kernel, BusyBox, and QEMU.

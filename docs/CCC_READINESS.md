@@ -39,8 +39,9 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - [x] Add a `linux-nnue` CI job that runs the 38-test NNUE suite on Ubuntu with the synthetic network, builds the static musl binary, and runs a UCI smoke test and benchmark.
 - [x] Add `tools/build-release.py` with SHA-256 manifests and a hard gate: a binary containing the Reckless v60 network cannot be packaged without `--allow-network-redistribution`.
 - [x] Produce a legally distributable classical-evaluation Windows package that contains no `.nnue` file.
-- [ ] Confirm the new `linux-nnue` CI job passes in GitHub Actions.
-- [ ] Run the real-network binary natively on Linux. The CI job uses the synthetic network until the Reckless weights are cleared.
+- [x] Confirm the new `linux-nnue` CI job passes in GitHub Actions.
+- [x] Run the real-network Linux binary in a Linux kernel under QEMU TCG. `--bench 10` reports 389,894 nodes and the same best moves as Windows; `id name Valox 0.5.0 NNUE` confirms the embedded weights are active.
+- [ ] Run the real-network binary on native Linux hardware at the tournament host. The static musl binary and the QEMU run cover the runtime path; this is a final deployment check.
 - [x] Decide Valox's own source license. Valox source is dual-licensed under
   MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`), and `Cargo.toml`
   declares `license = "MIT OR Apache-2.0"`. `tools/package-source.py` excludes
@@ -77,6 +78,36 @@ comparisons, without using or distributing the third-party weights. The new CI
 job runs those tests natively on Ubuntu, then builds and exercises the static
 musl binary. A native Linux run with the real weights remains a release step
 after the permission question is resolved.
+
+## Real-network Linux runtime check (2026-11-19)
+
+The local static musl artifact with the real Reckless v60 weights was booted in
+an Alpine Linux 6.18.60 kernel under QEMU TCG (no Windows reboot, no weight
+distribution). The initramfs contained only BusyBox, the Valox binary, and a
+short init script; the kernel command line was
+`console=ttyS0 rdinit=/init panic=-1`.
+
+Observed output:
+
+```text
+start: bestmove g1f3 nodes 129168
+open: bestmove c1g5 nodes 193465
+tactics: bestmove e3c5 nodes 48412
+endgame: bestmove c4c5 nodes 18849
+bench depth 10 nodes 389894 time_ms 31990 nps 12187
+VALOX_BENCH_EXIT=0
+id name Valox 0.5.0 NNUE
+bestmove b1c3
+VALOX_UCI_EXIT=0
+```
+
+The node counts and all four best moves are identical to the Windows build, and
+the UCI identification confirms the NNUE is active. The slower time is QEMU
+instruction emulation, not a regression. This is emulated hardware, not native
+Linux; the binary and code path are the same, so it closes the Linux runtime
+risk apart from the final tournament-host deployment check. The check is
+reproducible with `tools/linux-qemu-smoke.py` given a kernel, BusyBox, and
+QEMU.
 
 ## Current evidence
 
@@ -115,6 +146,7 @@ after the permission question is resolved.
   `docs/STRENGTH-CAMPAIGN-2026-11.md`.
 - Earlier source (2026-11-17): `cargo test` passed 24 tests locally; formatting and Clippy with warnings denied passed, and the release build completed.
 - Strength campaign 2026-11-17: AVX2 NNUE feature updates measure +17.5% NPS with identical nodes and best moves; the rewritten root-split SMP search reaches depth 13 instead of 10 at 3 s/move with four threads while searching 3.7x fewer nodes at fixed depth; stop checks run every 512 nodes; Chess960 `info` and Syzygy castling/en-passant guards are fixed. Details: `docs/STRENGTH-CAMPAIGN-2026-11.md`.
+- GitHub Actions run [#8](https://github.com/Valox321/VALOX/actions/runs/44598540713) passed on commit `5ae51b4`: Windows native, Ubuntu native, WebAssembly, and the new `linux-nnue` job. The Linux job generated the synthetic same-layout network, passed all 38 tests through the NNUE path natively on Ubuntu, built the static x86_64 musl binary, verified static linkage, and passed a UCI smoke test and `--bench 10`. This validates Linux execution and the NNUE code path without the third-party weights.
 - GitHub Actions run [#1](https://github.com/Valox321/VALOX/actions/runs/43240093039) passed on commit `e540d9b`: Windows native build, UCI handshake/stress checks, Linux native build/UCI stress, and WebAssembly compile all succeeded. The public source build uses the documented classical fallback because the unlicensed model weights are excluded.
 - `cargo fmt --all -- --check`, Windows `cargo clippy --all-targets -- -D warnings`, Linux-target `cargo check --all-targets` and `cargo clippy --all-targets -- -D warnings`, native release build, and `cargo check --lib --target wasm32-unknown-unknown` pass locally.
 - Fresh extraction of `build\valox-source-20261112.zip`: all 17 tests, Clippy with warnings denied, and offline release build pass. The archive now includes the root build script and strength roadmap.
@@ -148,7 +180,7 @@ after the permission question is resolved.
 - Latest 100-game paired match (2026-11-12) against Stockfish 19 with `UCI_LimitStrength=true`, `UCI_Elo=2000`, `Hash=256`, Syzygy WDL, `5+0`, one thread per engine, two concurrent games, and the bundled sequential opening set: Valox 68 wins, 28 draws, 4 losses (82/100 points, 82%). Cute Chess reports `+263.4 ±65.9` relative Elo and LOS 100%. Valox scored 43/50 as White and 39/50 as Black. Treat this as a local result for this configuration, not an official or opponent-independent Valox rating. The pinned Valox executable SHA-256 was `87EF90A88B2A629A357DE7ABB460216E5733B7130E7AC7BCE96F1C94E03951BF`.
 - `python tools\engine-match\audit-pgn.py tools\engine-match\results\valox-stockfish-2000-20261112-145753.pgn --expected-games 100`: parsed all 100 games and found no illegal moves or PGN errors. Match log shows 28 threefold draws and 72 checkmates; no time forfeits.
 - `THIRD_PARTY_NOTICES.md` lists the current Rust runtime dependencies and the source snapshot includes the identified MIT/Apache license texts. Valox's own source is licensed under MIT OR Apache-2.0; the external NNUE model's redistribution rights remain unresolved and the model is excluded from source archives.
-- `build/valox-source-20261119.zip` (63 files, no `.nnue` files) is accompanied
+- `build/valox-source-20261119.zip` (64 files, no `.nnue` files) is accompanied
   by `build/valox-source-20261119.zip.sha256`. A fresh extraction passes 31
   tests with the classical evaluator and builds offline; with `VALOX_NNUE_PATH`
   pointing at the synthetic network outside the archive, it passes all 38 tests.

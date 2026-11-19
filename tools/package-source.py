@@ -14,6 +14,7 @@ INCLUDE_FILES = {
     "THIRD_PARTY_NOTICES.md", "LICENSE-MIT", "LICENSE-APACHE", "run-browser.ps1", "stop-browser.ps1",
     "tools/engine-match/openings.pgn", "tools/package-source.py",
     "tools/build-release.py", "tools/make-synthetic-net.py",
+    "tools/linux-qemu-smoke.py",
     "tools/training/.gitignore", "tools/training/Cargo.toml", "tools/training/Cargo.lock",
     "tools/training/README.md", "tools/training/EXPERIMENT-2026-11.md",
     "tools/training/generate_data.py", "tools/training/prepare_data.ps1", "tools/training/train.ps1",

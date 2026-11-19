@@ -28,6 +28,8 @@ python tools\build-release.py --target linux-musl
 
 The second command deliberately builds without NNUE weights. Packaging a binary that contains the Reckless v60 network requires `--allow-network-redistribution`, which must only be used after written permission. `tools\make-synthetic-net.py` creates a deterministic same-layout network for CI tests of the NNUE code path without using the third-party weights.
 
+`tools\linux-qemu-smoke.py` boots a static build in a minimal Linux initramfs under QEMU TCG. It needs a Linux kernel image, a static BusyBox binary, and QEMU; the script's help lists the arguments.
+
 ## Engine features
 
 Valox supports the UCI `Hash`, `Threads`, `SyzygyPath`, `Clear Hash`, and `UCI_Chess960` options. Chess960 positions use Shredder-FEN rook-file castling rights and king-to-rook castling notation when Chess960 mode is enabled. Native builds can use Syzygy WDL tablebases.
