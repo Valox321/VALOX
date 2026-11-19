@@ -169,8 +169,10 @@ that `--evalfile synthetic.nnue` reproduces the embedded build's nodes and best
 moves, and that the UCI `EvalFile` option loads the file. This validates Linux,
 runtime loading, and NNUE inference without distributing the third-party
 weights; it does not measure playing strength. GitHub Actions run
-[#8](https://github.com/Valox321/VALOX/actions/runs/44598540713) passed all
-jobs, including `linux-nnue`, on commit `5ae51b4`.
+[#11](https://github.com/Valox321/VALOX/actions/runs/44606262028) passed all
+jobs, including `linux-nnue`, on commit `261a196`. Its runtime check reported
+identical nodes (304,504 at depth 10) and best moves for the embedded synthetic
+build and the weight-free build loaded with `--evalfile`.
 
 The local real-network musl artifact was also booted in an Alpine Linux 6.18.60
 kernel under QEMU TCG. It reported `--bench 10` = 389,894 nodes with best moves

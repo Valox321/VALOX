@@ -1,25 +1,31 @@
 # Draft permission request: Reckless v60 NNUE weights
 
-**Status: not sent.** Valox currently embeds `networks/v60-7f587dfb.nnue`
-(Reckless v60) for local evaluation and testing. The Reckless engine repository
-is licensed under AGPL-3.0, but the separate
+**Status: not sent.** Valox uses `networks/v60-7f587dfb.nnue`
+(Reckless v60) as optional evaluation weights. The engine now has a
+weight-free build that loads a compatible network at runtime through the UCI
+`EvalFile` option, so a legal release no longer depends on this answer. The
+question is whether the weights may also be embedded in a single-file binary.
+The Reckless engine repository is licensed under AGPL-3.0, but the separate
 `https://github.com/codedeliveryservice/RecklessNetworks` repository does not
 state a model-specific license. Until the rights are clarified, Valox binaries
 and source snapshots that contain this file must not be distributed.
 
-Suggested recipient: the Reckless / RecklessNetworks maintainer, via the
-repository issue tracker or the contact address listed there. The question
-should explicitly cover the separate networks repository; the engine license
-alone does not establish terms for the weight files.
+Suggested recipient: the Reckless / RecklessNetworks maintainer. The
+RecklessNetworks repository has issues disabled, so the available public
+channel is the Reckless engine issue tracker:
+`https://github.com/codedeliveryservice/Reckless/issues`. The question should
+explicitly cover the separate networks repository; the engine license alone
+does not establish terms for the weight files.
 
 **Subject:** Permission to redistribute the Reckless v60 NNUE weights with Valox
 
 Hello,
 
 I maintain Valox, an independent UCI chess engine written in Rust. Valox has
-its own search, move generation, and NNUE inference code; the current local
-build optionally embeds the Reckless v60 network file
-(`v60-7f587dfb.nnue`) as its evaluation weights.
+its own search, move generation, and NNUE inference code. A current local build
+can embed the Reckless v60 network file (`v60-7f587dfb.nnue`) as its evaluation
+weights; the public release is weight-free and asks the user to load the file
+through a UCI option.
 
 I saw that the Reckless engine is published under AGPL-3.0, while the separate
 RecklessNetworks repository does not show a model-specific license. I would
@@ -37,7 +43,7 @@ like to ask under what terms, if any, the v60 weights may be redistributed:
 Valox is not a Reckless fork and does not include Reckless engine source. The
 network is used only as trained evaluation data. No Valox binary or source
 snapshot containing the weights has been published; this request is to clarify
-the terms before any release.
+the terms before any stronger release.
 
 If useful, I can provide the file checksum, the Valox NNUE inference code, and
 a description of how the weights are embedded.
