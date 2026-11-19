@@ -151,14 +151,26 @@ and `VALOX_NO_NNUE=1` to produce a weight-free binary. The default remains
 | Weight-free Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes) |
 | Weight-free package SHA-256 | `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907` |
 | Weight-free executable SHA-256 | `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5` |
+| Weight-free Linux package | `build/release/valox-0.5.0-linux-x86_64-musl.zip` (412,173 bytes) |
+| Weight-free Linux package SHA-256 | `332A99850F6E21A7AB36F58EF66E17886DEC05378AB353124DD30219644A3564` |
+| Weight-free Linux executable SHA-256 | `0DB5C62CE3DEEA285DE717588CAE78D486B7857F223C85E82BB8D5F9EFF95087` |
 
-The weight-free package contains no `.nnue` file and is the only artifact that
-is currently safe to distribute. It can load the v60 model through `EvalFile`.
-The Linux artifact embeds the Reckless network and is local-only until
-permission is confirmed. The package was rebuilt from commit `abf772c` and
-checked: the ZIP has no `.nnue` entry, and its `valox.exe` with
+The weight-free packages contain no `.nnue` file and are the only artifacts that
+are currently safe to distribute. They can load the v60 model through `EvalFile`.
+The local Linux artifact embeds the Reckless network and is local-only until
+permission is confirmed. The Windows package was rebuilt from commit `abf772c`
+and checked: the ZIP has no `.nnue` entry, and its `valox.exe` with
 `--evalfile networks/v60-7f587dfb.nnue --bench 10` reports 389,894 nodes and
 the expected best moves `g1f3`, `c1g5`, `e3c5`, `c4c5`.
+
+The Linux package was built from commit `4fcf4a2` with the same weight-free
+configuration, extracted, and booted in an Alpine Linux 6.18.60 kernel under QEMU
+TCG with a synthetic same-layout network outside the package. Its
+`--evalfile /net.nnue --bench 10` reported 304,504 nodes with best moves
+`d2d3`, `a1b1`, `a1b1`, `c4c5`, matching the embedded-network build. A UCI
+session loaded 63,266,880 bytes through `EvalFile` and answered `go depth 8`
+with `b1c3`; both guest processes exited with status 0. Its `SHA256SUMS` was
+verified against all 11 packaged files.
 
 `tools/make-synthetic-net.py` writes a 63,266,880-byte file with the v60 layout
 and small deterministic weights. The `linux-nnue` CI job uses it to run all 38

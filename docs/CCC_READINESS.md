@@ -87,13 +87,25 @@ deployment check.
 
 The engine can now load a same-layout model at runtime through the UCI
 `EvalFile` option, the `--evalfile` command-line argument, or the
-`VALOX_EVALFILE` environment variable. The distributable weight-free Windows
-package is `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes),
-SHA-256 `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907`. Its
-`valox.exe` has SHA-256
-`B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`, contains
-no weights, and starts with the classical evaluator. It was built from commit
-`abf772c`.
+`VALOX_EVALFILE` environment variable. Two distributable weight-free packages
+exist:
+
+- `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes), SHA-256
+  `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907`; its
+  `valox.exe` has SHA-256
+  `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`. It was
+  built from commit `abf772c`.
+- `build/release/valox-0.5.0-linux-x86_64-musl.zip` (412,173 bytes), SHA-256
+  `332A99850F6E21A7AB36F58EF66E17886DEC05378AB353124DD30219644A3564`; its static
+  `valox` has SHA-256
+  `0DB5C62CE3DEEA285DE717588CAE78D486B7857F223C85E82BB8D5F9EFF95087`. It was
+  built from commit `4fcf4a2`, and all 11 entries in its `SHA256SUMS` verify.
+
+Both contain no weights and start with the classical evaluator. The Linux
+package was booted in an Alpine Linux 6.18.60 kernel under QEMU TCG with a
+synthetic net stored outside the package: `--bench 10` reported 304,504 nodes
+with the same moves as the embedded-network build, and a UCI `EvalFile` session
+answered `go depth 8` with `b1c3`.
 
 Loading `networks/v60-7f587dfb.nnue` at runtime produces exactly the embedded
 build's results:
