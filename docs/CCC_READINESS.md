@@ -89,7 +89,7 @@ The engine can now load a same-layout model at runtime through the UCI
 `EvalFile` option, the `--evalfile` command-line argument, or the
 `VALOX_EVALFILE` environment variable. The distributable weight-free Windows
 package is `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes),
-SHA-256 `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907`. Its
+SHA-256 `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907`. Its
 `valox.exe` has SHA-256
 `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`, contains
 no weights, and starts with the classical evaluator. It was built from commit
@@ -236,7 +236,7 @@ QEMU.
   local candidate artifacts only; no public release has been prepared.
 - The distributable weight-free release is
   `build\release\valox-0.5.0-windows-x86_64.zip` (218,735 bytes), SHA-256
-  `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907`; its
+  `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907`; its
   `valox.exe` has SHA-256
   `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5`. With
   `--evalfile networks\v60-7f587dfb.nnue` it reports the same `--bench 10`

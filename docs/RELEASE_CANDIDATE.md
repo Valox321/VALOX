@@ -150,7 +150,7 @@ and `VALOX_NO_NNUE=1` to produce a weight-free binary. The default remains
 | Release tool | `tools/build-release.py` |
 | Network gate | packaging a network build requires `--allow-network-redistribution` |
 | Weight-free Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` (218,735 bytes) |
-| Weight-free package SHA-256 | `74767B75D09B22256B479A9E80C51CCB2F19C0D606970D8B27DD8FC2F3907` |
+| Weight-free package SHA-256 | `74767B75D09B22256B479A9E80C51CCB2F19C0D606076970D8B27DD8FC2F3907` |
 | Weight-free executable SHA-256 | `B66CDA444AA21721D4A3E8F9DA3582B6D4CD9ABB9827DBD9368F0CCBACC80DD5` |
 
 The weight-free package contains no `.nnue` file and is the only artifact that
