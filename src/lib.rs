@@ -3,6 +3,7 @@ pub mod nnue;
 pub mod position;
 #[cfg(not(target_arch = "wasm32"))]
 pub mod syzygy;
+pub mod tt;
 
 use position::{parse_uci_move, Position};
 use std::alloc::{alloc, dealloc, Layout};

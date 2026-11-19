@@ -3,6 +3,13 @@ name = "valox"
 version = "0.5.0"
 edition = "2021"
 description = "Valox chess engine with UCI support"
+license = "MIT OR Apache-2.0"
+
+[features]
+nnue-scalar = []
+
+[profile.release]
+codegen-units = 1
 
 [lib]
 name = "valox_engine"

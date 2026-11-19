@@ -1,9 +1,12 @@
 use crate::position::{Move, Position};
 #[cfg(not(target_arch = "wasm32"))]
 use crate::syzygy::{self, ValoxAdapter};
+use crate::tt::{Bound, Entry, TranspositionTable};
 #[cfg(not(target_arch = "wasm32"))]
 use pyrrhic_rs::{TableBases, WdlProbeResult};
 use std::collections::HashMap;
+#[cfg(not(target_arch = "wasm32"))]
+use std::sync::atomic::AtomicUsize;
 use std::sync::{
     atomic::{AtomicBool, AtomicU64, AtomicU8, Ordering},
     Arc,
@@ -68,29 +71,29 @@ fn score_from_tt(score: i32, ply: i32) -> i32 {
     }
 }
 
-#[derive(Clone, Copy)]
-enum Bound {
-    Exact,
-    Lower,
-    Upper,
+/// True when `key` already occurred on the current search path with the same
+/// side to move. Every move flips the side, so only every second ancestor can
+/// match; the repetition hash includes the side to move.
+fn path_has_repetition(path: &[u64], key: u64, ply: usize) -> bool {
+    let ply = ply.min(path.len());
+    if ply < 2 {
+        return false;
+    }
+    let mut index = ply - 2;
+    loop {
+        if path[index] == key {
+            return true;
+        }
+        if index < 2 {
+            return false;
+        }
+        index -= 2;
+    }
 }
 
-#[derive(Clone, Copy)]
-pub struct Entry {
-    depth: i32,
-    score: i32,
-    bound: Bound,
-    best: Option<Move>,
-    age: u8,
-}
-
-/// Estimate a safe transposition-table entry limit for a requested Hash size.
-/// HashMap needs space for the key, entry, control bytes and capacity rounding;
-/// the factor of two keeps its allocation near (and below) the UCI MB setting.
+/// Number of shared transposition-table entries for a UCI `Hash` setting.
 pub fn transposition_entries_for_mb(hash_mb: usize) -> usize {
-    let bytes = hash_mb.saturating_mul(1024 * 1024);
-    let bytes_per_entry = std::mem::size_of::<(u64, Entry)>().saturating_mul(2).max(1);
-    (bytes / bytes_per_entry).max(1)
+    crate::tt::entries_for_mb(hash_mb)
 }
 
 #[derive(Clone)]
@@ -111,10 +114,10 @@ impl Default for SearchHistory {
 }
 
 pub struct Searcher {
-    pub tt: HashMap<u64, Entry>,
-    tt_limit: usize,
+    pub tt: Arc<TranspositionTable>,
     nodes: u64,
     deadline: Instant,
+    soft_deadline: Instant,
     stop: Arc<AtomicBool>,
     aborted: bool,
     report: bool,
@@ -128,24 +131,23 @@ pub struct Searcher {
     previous_moves: [Option<Move>; 128],
     path: [u64; 128],
     nnue: crate::nnue::NnueEvaluator,
+    order_scores: [(i32, Move, i32); 256],
     #[cfg(not(target_arch = "wasm32"))]
     tablebases: Option<Arc<TableBases<ValoxAdapter>>>,
 }
 
 impl Searcher {
     pub fn new(
-        tt: HashMap<u64, Entry>,
-        tt_limit: usize,
+        tt: Arc<TranspositionTable>,
         stop: Arc<AtomicBool>,
         time: Duration,
         report: bool,
     ) -> Self {
-        Self::new_with_history(tt, tt_limit, stop, time, SearchHistory::default(), report)
+        Self::new_with_history(tt, stop, time, SearchHistory::default(), report)
     }
 
     pub fn new_with_history(
-        tt: HashMap<u64, Entry>,
-        tt_limit: usize,
+        tt: Arc<TranspositionTable>,
         stop: Arc<AtomicBool>,
         time: Duration,
         search_history: SearchHistory,
@@ -153,9 +155,9 @@ impl Searcher {
     ) -> Self {
         Self {
             tt,
-            tt_limit,
             nodes: 0,
             deadline: Instant::now() + time,
+            soft_deadline: Instant::now() + time,
             stop,
             aborted: false,
             report,
@@ -169,6 +171,7 @@ impl Searcher {
             previous_moves: [None; 128],
             path: [0; 128],
             nnue: crate::nnue::NnueEvaluator::default(),
+            order_scores: [(i32::MIN, Move::default(), 0); 256],
             #[cfg(not(target_arch = "wasm32"))]
             tablebases: None,
         }
@@ -189,6 +192,12 @@ impl Searcher {
     pub fn set_node_limit(&mut self, limit: Option<u64>) {
         self.node_limit = limit.filter(|value| *value > 0);
         self.node_budget.store(0, Ordering::Relaxed);
+    }
+
+    /// Start no new iteration after `time`, but allow an iteration that is
+    /// already running to finish until the hard `deadline` set at construction.
+    pub fn set_soft_time(&mut self, time: Duration) {
+        self.soft_deadline = Instant::now() + time;
     }
 
     pub fn set_uci_chess960(&mut self, enabled: bool) {
@@ -219,10 +228,7 @@ impl Searcher {
     }
 
     fn repeated_position(&self, key: u64, ply: i32) -> bool {
-        self.path
-            .iter()
-            .take((ply.max(0) as usize).min(self.path.len()))
-            .any(|&previous| previous == key)
+        path_has_repetition(&self.path, key, ply.max(0) as usize)
     }
 
     fn remember_position(&mut self, key: u64, ply: i32) {
@@ -261,7 +267,7 @@ impl Searcher {
         let node_limit_reached = self
             .node_limit
             .is_some_and(|limit| self.node_budget.load(Ordering::Relaxed) >= limit);
-        let time_or_stop = self.nodes & 2047 == 0
+        let time_or_stop = self.nodes & 511 == 0
             && (self.stop.load(Ordering::Relaxed) || Instant::now() >= self.deadline);
         if node_limit_reached || time_or_stop {
             self.aborted = true;
@@ -275,24 +281,32 @@ impl Searcher {
         (moves, len)
     }
 
+    fn generate_captures(position: &Position) -> ([Move; 256], usize) {
+        let mut moves = [Move::default(); 256];
+        let len = position.legal_captures_into(&mut moves);
+        (moves, len)
+    }
+
     fn order_moves(
-        &self,
+        &mut self,
         position: &Position,
         moves: &mut [Move],
         tt_move: Option<Move>,
         ply: i32,
+        see_scores: Option<&mut [i32; 256]>,
     ) {
+        let mut see_scores = see_scores;
         let killers = self
             .killers
             .get(ply.max(0) as usize)
             .copied()
             .unwrap_or([None; 2]);
-        let mut scored = [(i32::MIN, Move::default()); 256];
         for (index, mv) in moves.iter().copied().enumerate() {
+            let mut see = 0;
             let score = if Some(mv) == tt_move {
                 i32::MAX
             } else if position.is_capture(mv) || mv.promotion.is_some() {
-                let see = position.static_exchange_eval(mv);
+                see = position.static_exchange_eval(mv);
                 if see >= 0 {
                     1_200_000 + see
                 } else {
@@ -318,11 +332,16 @@ impl Searcher {
                         .unwrap_or(0) as i32
                         * 2
             };
-            scored[index] = (score, mv);
+            self.order_scores[index] = (score, mv, see);
         }
-        scored[..moves.len()].sort_unstable_by_key(|entry| std::cmp::Reverse(entry.0));
-        for (mv, (_, ordered)) in moves.iter_mut().zip(scored.iter()) {
+        self.order_scores[..moves.len()].sort_unstable_by_key(|entry| std::cmp::Reverse(entry.0));
+        for (index, (mv, (_, ordered, see))) in
+            moves.iter_mut().zip(self.order_scores.iter()).enumerate()
+        {
             *mv = *ordered;
+            if let Some(scores) = &mut see_scores {
+                scores[index] = *see;
+            }
         }
     }
 
@@ -367,19 +386,20 @@ impl Searcher {
             depth += 1;
         }
 
-        let key = position.hash();
-        let repetition_key = position.repetition_hash();
+        let (key, repetition_key) = position.search_hashes();
         if self.repeated_position(repetition_key, ply) {
             return 0;
         }
         self.remember_position(repetition_key, ply);
         let original_alpha = alpha;
         let mut tt_move = None;
-        if let Some(entry) = self.tt.get(&key).copied() {
-            tt_move = entry.best;
-            if entry.depth >= depth {
-                let tt_score = score_from_tt(entry.score, ply);
-                match entry.bound {
+        let mut tt_eval = None;
+        if let Some(entry) = self.tt.probe(key) {
+            tt_move = entry.best();
+            tt_eval = entry.eval();
+            if entry.depth() >= depth {
+                let tt_score = score_from_tt(entry.score(), ply);
+                match entry.bound() {
                     Bound::Exact => return tt_score,
                     Bound::Lower if tt_score >= beta => return tt_score,
                     Bound::Upper if tt_score <= alpha => return tt_score,
@@ -391,7 +411,16 @@ impl Searcher {
         if move_count == 0 {
             return if in_check { -MATE + ply } else { 0 };
         }
-        let static_eval = self.evaluate_position(position);
+        // Every consumer of the static evaluation below requires a quiet
+        // position, so do not pay for the NNUE forward pass when in check.
+        // A shallow TT entry already carries the exact static evaluation.
+        let static_eval = if in_check {
+            0
+        } else if let Some(eval) = tt_eval {
+            eval
+        } else {
+            self.evaluate_position(position)
+        };
         if depth <= 2
             && beta - alpha <= 1
             && !in_check
@@ -454,7 +483,7 @@ impl Searcher {
                 }
             }
         }
-        self.order_moves(position, &mut move_buffer[..move_count], tt_move, ply);
+        self.order_moves(position, &mut move_buffer[..move_count], tt_move, ply, None);
         let mut best_score = -MATE;
         let mut best_move = None;
         for (move_index, mv) in move_buffer[..move_count].iter().copied().enumerate() {
@@ -482,7 +511,7 @@ impl Searcher {
                 0
             };
             let reducible = reduction > 0;
-            self.nnue.push(position);
+            self.nnue.push(position, undo);
             let mut score = if move_index == 0 {
                 -self.negamax(position, depth - 1, -beta, -alpha, ply + 1, true)
             } else {
@@ -517,7 +546,7 @@ impl Searcher {
             }
             alpha = alpha.max(score);
             if alpha >= beta {
-                if !position.is_capture(mv) && mv.promotion.is_none() {
+                if quiet {
                     let slot = ply.clamp(0, 127) as usize;
                     if self.killers[slot][0] != Some(mv) {
                         self.killers[slot][1] = self.killers[slot][0];
@@ -525,16 +554,12 @@ impl Searcher {
                     }
                     let bonus = (depth * depth * 8).min(2_048);
                     self.update_history(mv, bonus);
-                    self.update_continuation(
-                        self.previous_moves[ply.clamp(0, 127) as usize],
-                        mv,
-                        bonus,
-                    );
+                    self.update_continuation(self.previous_moves[slot], mv, bonus);
                     for previous in move_buffer[..move_index].iter().copied() {
                         if !position.is_capture(previous) && previous.promotion.is_none() {
                             self.update_history(previous, -bonus / 2);
                             self.update_continuation(
-                                self.previous_moves[ply.clamp(0, 127) as usize],
+                                self.previous_moves[slot],
                                 previous,
                                 -bonus / 2,
                             );
@@ -551,45 +576,17 @@ impl Searcher {
         } else {
             Bound::Exact
         };
-        let replace = match self.tt.get(&key) {
-            Some(old) => depth >= old.depth || matches!(bound, Bound::Exact),
-            None if self.tt.len() < self.tt_limit.max(1) => true,
-            None => {
-                // Keep the table useful after it fills instead of freezing
-                // it forever. Sample a few entries and replace an old or
-                // shallower result when this search found a better one.
-                let victim = self
-                    .tt
-                    .iter()
-                    .take(16)
-                    .map(|(old_key, old)| {
-                        (*old_key, old.depth, self.generation.wrapping_sub(old.age))
-                    })
-                    .min_by_key(|(_, old_depth, age)| *old_depth - i32::from(*age) * 2);
-                if let Some((old_key, old_depth, age)) = victim {
-                    if age >= 8 || depth >= old_depth {
-                        self.tt.remove(&old_key);
-                        true
-                    } else {
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
-        };
-        if replace {
-            self.tt.insert(
-                key,
-                Entry {
-                    depth,
-                    score: score_to_tt(best_score, ply),
-                    bound,
-                    best: best_move,
-                    age: self.generation,
-                },
-            );
-        }
+        self.tt.store(
+            key,
+            Entry::new(
+                depth,
+                score_to_tt(best_score, ply),
+                bound,
+                best_move,
+                self.generation & 0x3f,
+                (!in_check).then_some(static_eval),
+            ),
+        );
         best_score
     }
 
@@ -641,8 +638,9 @@ impl Searcher {
             }
             let mut best = -MATE + ply;
             for mv in moves[..len].iter().copied() {
-                let child = position.play(mv);
-                self.nnue.push(&child);
+                let mut child = position.clone();
+                let undo = child.make_move(mv);
+                self.nnue.push(&child, undo);
                 best = best.max(-self.evaluate_position(&child));
                 self.nnue.pop();
             }
@@ -655,29 +653,35 @@ impl Searcher {
             }
             alpha = alpha.max(stand_pat);
         }
-        let (mut move_buffer, mut move_count) = Self::generate_moves(position);
+        let (mut move_buffer, move_count) = if in_check {
+            Self::generate_moves(position)
+        } else {
+            Self::generate_captures(position)
+        };
         if move_count == 0 {
-            return if in_check { -MATE + ply } else { 0 };
-        }
-        if !in_check {
-            let mut kept = 0;
-            for read in 0..move_count {
-                let mv = move_buffer[read];
-                if position.is_capture(mv) || mv.promotion.is_some() {
-                    move_buffer[kept] = mv;
-                    kept += 1;
-                }
+            if in_check {
+                return -MATE + ply;
             }
-            move_count = kept;
+            // No captures: `alpha` already includes stand pat. The full
+            // generator returned 0 only for stalemate, so distinguish that
+            // rare case instead of treating every quiet position as a draw.
+            let mut scratch = [Move::default(); 256];
+            if position.legal_moves_into(&mut scratch) == 0 {
+                return 0;
+            }
+            return alpha;
         }
-        self.order_moves(position, &mut move_buffer[..move_count], None, ply);
-        for mv in move_buffer[..move_count].iter().copied() {
+        let mut see_scores = [0i32; 256];
+        self.order_moves(
+            position,
+            &mut move_buffer[..move_count],
+            None,
+            ply,
+            Some(&mut see_scores),
+        );
+        for (move_index, mv) in move_buffer[..move_count].iter().copied().enumerate() {
             let is_capture = position.is_capture(mv);
-            let see = if !in_check && is_capture && mv.promotion.is_none() {
-                position.static_exchange_eval(mv)
-            } else {
-                0
-            };
+            let see = see_scores[move_index];
             let undo = position.make_move(mv);
             self.previous_moves[(ply + 1).clamp(0, 127) as usize] = Some(mv);
             if !in_check
@@ -690,7 +694,7 @@ impl Searcher {
                 position.unmake_move(undo);
                 continue;
             }
-            self.nnue.push(position);
+            self.nnue.push(position, undo);
             let score = -self.quiescence(position, -beta, -alpha, ply + 1, qply.saturating_add(1));
             self.nnue.pop();
             position.unmake_move(undo);
@@ -717,7 +721,7 @@ impl Searcher {
         let started = Instant::now();
         let mut previous_score = 0;
         for depth in 1..=max_depth.max(1) {
-            if self.stop.load(Ordering::Relaxed) || Instant::now() >= self.deadline {
+            if self.stop.load(Ordering::Relaxed) || Instant::now() >= self.soft_deadline {
                 break;
             }
             let mut window = if depth >= 4 { 40 } else { MATE };
@@ -736,13 +740,13 @@ impl Searcher {
 
             loop {
                 let (mut move_buffer, move_count) = Self::generate_moves(&root);
-                self.order_moves(&root, &mut move_buffer[..move_count], depth_best, 0);
+                self.order_moves(&root, &mut move_buffer[..move_count], depth_best, 0, None);
                 let mut local_alpha = alpha;
                 depth_score = -MATE;
                 depth_best = best;
                 for (move_index, mv) in move_buffer[..move_count].iter().copied().enumerate() {
                     let undo = root.make_move(mv);
-                    self.nnue.push(&root);
+                    self.nnue.push(&root, undo);
                     self.previous_moves[1] = Some(mv);
                     let mut score = if move_index == 0 {
                         -self.negamax(&mut root, depth as i32 - 1, -beta, -local_alpha, 1, true)
@@ -845,65 +849,150 @@ impl Searcher {
         if root_len == 0 {
             return None;
         }
-        let moves = root_moves[..root_len].to_vec();
+        self.nnue.reset(position);
+        self.path[0] = position.repetition_hash();
+        let mut moves = root_moves[..root_len].to_vec();
+        let mut last_scores: HashMap<Move, i32> = HashMap::new();
         let started = Instant::now();
         let mut best = moves[0];
         let mut previous_score = 0;
         for depth in 1..=max_depth.max(1) {
-            if self.stop.load(Ordering::Relaxed) || Instant::now() >= self.deadline {
+            if self.stop.load(Ordering::Relaxed) || Instant::now() >= self.soft_deadline {
                 break;
             }
-            let worker_count = threads.min(moves.len()).max(1);
-            let mut partitions = vec![Vec::new(); worker_count];
-            for (index, mv) in moves.iter().copied().enumerate() {
-                partitions[index % worker_count].push(mv);
+            if let Some(index) = moves.iter().position(|mv| *mv == best) {
+                moves.swap(0, index);
             }
+            if depth > 1 {
+                moves[1..].sort_unstable_by_key(|mv| {
+                    std::cmp::Reverse(last_scores.get(mv).copied().unwrap_or(i32::MIN))
+                });
+            }
+
+            // Search the previous best move first with an aspiration window.
+            // Its exact score becomes the threshold for the remaining moves.
+            let mut baseline_score = previous_score;
+            let mut baseline_exact = false;
+            let mut window = if depth >= 4 { 50 } else { MATE };
+            loop {
+                let alpha = if window == MATE {
+                    -MATE
+                } else {
+                    (previous_score - window).max(-MATE)
+                };
+                let beta = if window == MATE {
+                    MATE
+                } else {
+                    (previous_score + window).min(MATE)
+                };
+                let mut child = position.play(best);
+                self.nnue.reset(&child);
+                self.previous_moves[1] = Some(best);
+                let score = -self.negamax(&mut child, depth as i32 - 1, -beta, -alpha, 1, true);
+                if self.aborted {
+                    break;
+                }
+                if score <= alpha && alpha > -MATE {
+                    window = (window * 2).min(MATE);
+                    continue;
+                }
+                if score >= beta && beta < MATE {
+                    window = (window * 2).min(MATE);
+                    continue;
+                }
+                baseline_score = score;
+                baseline_exact = true;
+                break;
+            }
+            if !baseline_exact {
+                break;
+            }
+
+            // The main thread already searched the previous best move with a
+            // full window; that established the threshold. It then waits for
+            // the workers, so all requested threads can pull candidate moves
+            // from the shared queue during the parallel phase. This keeps the
+            // fourth core busy instead of leaving it idle with 3 workers.
+            let candidates = &moves[1..];
+            let worker_count = threads.min(candidates.len()).max(1);
+            let next_candidate = AtomicUsize::new(0);
             let time_left = self.deadline.saturating_duration_since(Instant::now());
-            let tt_limit = (self.tt_limit / worker_count).max(256);
-            let worker_tt = self
-                .tt
-                .iter()
-                .take(tt_limit)
-                .map(|(key, entry)| (*key, *entry))
-                .collect::<HashMap<_, _>>();
             let uci_chess960 = self.uci_chess960;
             let node_budget = self.node_budget.clone();
             let node_limit = self.node_limit;
+            let generation = self.generation;
+            let threshold = baseline_score;
             let results = std::thread::scope(|scope| {
                 let mut handles = Vec::with_capacity(worker_count);
-                for partition in partitions {
+                for _ in 0..worker_count {
+                    if candidates.is_empty() {
+                        break;
+                    }
                     let stop = self.stop.clone();
-                    let tt = worker_tt.clone();
                     let history = self.history_state();
                     let worker_node_budget = node_budget.clone();
+                    let worker_tt = self.tt.clone();
+                    let worker_candidates = candidates;
+                    let worker_queue = &next_candidate;
                     #[cfg(not(target_arch = "wasm32"))]
                     let tablebases = self.tablebases.clone();
                     handles.push(scope.spawn(move || {
-                        let mut worker = Searcher::new_with_history(
-                            tt, tt_limit, stop, time_left, history, false,
-                        );
+                        let mut worker =
+                            Searcher::new_with_history(worker_tt, stop, time_left, history, false);
                         worker.node_budget = worker_node_budget;
                         worker.node_limit = node_limit;
+                        worker.generation = generation;
                         worker.set_uci_chess960(uci_chess960);
+                        worker.path[0] = position.repetition_hash();
                         #[cfg(not(target_arch = "wasm32"))]
                         worker.set_tablebases(tablebases);
-                        let mut scores = Vec::with_capacity(partition.len());
-                        for mv in partition {
+                        let mut scores = Vec::with_capacity(worker_candidates.len());
+                        let mut complete = true;
+                        loop {
+                            let index = worker_queue.fetch_add(1, Ordering::Relaxed);
+                            let Some(&mv) = worker_candidates.get(index) else {
+                                break;
+                            };
                             if worker.stop.load(Ordering::Relaxed)
                                 || Instant::now() >= worker.deadline
                             {
+                                complete = false;
                                 break;
                             }
                             let mut child = position.play(mv);
                             worker.nnue.reset(&child);
-                            let score =
-                                -worker.negamax(&mut child, depth as i32 - 1, -MATE, MATE, 1, true);
-                            scores.push((mv, score));
+                            worker.previous_moves[1] = Some(mv);
+                            // Null-window test: is this move better than the
+                            // current best? Re-search only on a fail-high.
+                            let mut score = -worker.negamax(
+                                &mut child,
+                                depth as i32 - 1,
+                                -threshold - 1,
+                                -threshold,
+                                1,
+                                true,
+                            );
                             if worker.aborted {
+                                complete = false;
                                 break;
                             }
+                            if score > threshold {
+                                score = -worker.negamax(
+                                    &mut child,
+                                    depth as i32 - 1,
+                                    -MATE,
+                                    -threshold,
+                                    1,
+                                    true,
+                                );
+                                if worker.aborted {
+                                    complete = false;
+                                    break;
+                                }
+                            }
+                            scores.push((mv, score, score > threshold));
                         }
-                        (scores, worker)
+                        (scores, worker, complete)
                     }));
                 }
                 handles
@@ -914,35 +1003,27 @@ impl Searcher {
             if results.is_empty() {
                 break;
             }
-            let complete = results
-                .iter()
-                .map(|(scores, _)| scores.len())
-                .sum::<usize>()
-                == moves.len();
-            let mut best_score = -MATE;
+            let mut complete = true;
+            let mut best_score = baseline_score;
             let mut depth_best = best;
-            for (scores, worker) in &results {
+            last_scores.clear();
+            last_scores.insert(best, baseline_score);
+            for (scores, worker, worker_complete) in &results {
                 self.nodes = self.nodes.saturating_add(worker.nodes);
-                for entry in worker.tt.iter() {
-                    if self
-                        .tt
-                        .get(entry.0)
-                        .map(|old| old.depth < entry.1.depth)
-                        .unwrap_or(true)
-                    {
-                        self.tt.insert(*entry.0, *entry.1);
-                    }
-                }
-                for (mv, score) in scores {
-                    if *score > best_score {
+                complete &= *worker_complete;
+                for (mv, score, better) in scores {
+                    if *better && *score > best_score {
                         best_score = *score;
                         depth_best = *mv;
                     }
+                    last_scores.insert(*mv, *score);
                 }
             }
-            if let Some((_, worker)) = results.first() {
-                self.history = worker.history_state().history;
-                self.killers = worker.history_state().killers;
+            if let Some((_, worker, _)) = results.first() {
+                let state = worker.history_state();
+                self.history = state.history;
+                self.killers = state.killers;
+                self.continuation = state.continuation;
             }
             if !complete {
                 break;
@@ -967,7 +1048,6 @@ impl Searcher {
                 break;
             }
         }
-        let _ = previous_score;
         Some(best)
     }
 
@@ -985,8 +1065,7 @@ impl Searcher {
 pub fn best_move(position: &Position, depth: u32) -> Option<Move> {
     let signal = Arc::new(AtomicBool::new(false));
     let mut searcher = Searcher::new(
-        HashMap::new(),
-        65_536,
+        Arc::new(TranspositionTable::new(65_536)),
         signal,
         Duration::from_secs(60),
         false,
@@ -996,20 +1075,49 @@ pub fn best_move(position: &Position, depth: u32) -> Option<Move> {
 
 #[cfg(test)]
 mod tests {
-    use super::{format_uci_score, transposition_entries_for_mb, Searcher, MATE};
+    use super::{
+        format_uci_score, path_has_repetition, transposition_entries_for_mb, Searcher, MATE,
+    };
     use crate::position::Position;
-    use std::collections::HashMap;
+    use crate::tt::TranspositionTable;
     use std::sync::{atomic::AtomicBool, Arc};
     use std::time::Duration;
 
+    fn shared_table() -> Arc<TranspositionTable> {
+        Arc::new(TranspositionTable::new(4096))
+    }
+
+    #[test]
+    fn repetition_scan_checks_only_same_side_ancestors() {
+        let path = [11, 22, 33, 44, 55];
+        // Ply 4 has the same side to move as plies 2 and 0.
+        assert!(path_has_repetition(&path, 33, 4));
+        assert!(path_has_repetition(&path, 11, 4));
+        assert!(!path_has_repetition(&path, 22, 4));
+        assert!(!path_has_repetition(&path, 44, 4));
+        // Ply 3 has the same side to move as ply 1.
+        assert!(path_has_repetition(&path, 22, 3));
+        assert!(!path_has_repetition(&path, 33, 3));
+        // The current position is not on the path yet.
+        assert!(!path_has_repetition(&path, 55, 4));
+        assert!(!path_has_repetition(&path, 11, 1));
+        assert!(!path_has_repetition(&path, 11, 0));
+        // A ply beyond the recorded path is clamped safely.
+        assert!(path_has_repetition(&path, 22, 99));
+    }
+
     #[test]
     fn hash_option_scales_to_requested_memory() {
-        assert!(transposition_entries_for_mb(16) > 2048 * 16);
-        let sixteen_mb = transposition_entries_for_mb(16) * 16;
-        let two_hundred_fifty_six_mb = transposition_entries_for_mb(256);
-        assert!(two_hundred_fifty_six_mb >= sixteen_mb);
-        assert!(two_hundred_fifty_six_mb - sixteen_mb < 16);
+        assert_eq!(transposition_entries_for_mb(16), 1_048_576);
+        assert_eq!(transposition_entries_for_mb(16) * 16, 16 * 1024 * 1024);
+        assert_eq!(transposition_entries_for_mb(256) * 16, 256 * 1024 * 1024);
         assert_eq!(transposition_entries_for_mb(0), 1);
+    }
+
+    #[test]
+    fn transposition_entry_fits_in_one_slot_word() {
+        assert_eq!(std::mem::size_of::<crate::tt::Entry>(), 8);
+        assert_eq!(std::mem::size_of::<TranspositionTable>(), 32);
     }
 
     #[test]
@@ -1024,8 +1132,7 @@ mod tests {
     fn node_limit_stops_search_at_requested_budget() {
         let position = Position::start();
         let mut searcher = Searcher::new(
-            HashMap::new(),
-            4096,
+            shared_table(),
             Arc::new(AtomicBool::new(false)),
             Duration::from_secs(60),
             false,
@@ -1035,5 +1142,37 @@ mod tests {
         assert!(position.legal_moves().contains(&best));
         assert!(searcher.nodes() <= 10_000);
         assert!(searcher.nodes() >= 9_000);
+    }
+
+    #[test]
+    fn threaded_search_finds_mate_in_one() {
+        let position =
+            Position::from_fen("6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1").expect("valid FEN");
+        let mut searcher = Searcher::new(
+            shared_table(),
+            Arc::new(AtomicBool::new(false)),
+            Duration::from_secs(30),
+            false,
+        );
+        let best = searcher
+            .search_with_threads(&position, 3, 4)
+            .expect("legal root move");
+        assert_eq!(best.uci(), "a1a8");
+        assert!(position.legal_moves().contains(&best));
+    }
+
+    #[test]
+    fn threaded_search_returns_a_legal_move() {
+        let position = Position::start();
+        let mut searcher = Searcher::new(
+            shared_table(),
+            Arc::new(AtomicBool::new(false)),
+            Duration::from_secs(30),
+            false,
+        );
+        let best = searcher
+            .search_with_threads(&position, 4, 4)
+            .expect("legal root move");
+        assert!(position.legal_moves().contains(&best));
     }
 }

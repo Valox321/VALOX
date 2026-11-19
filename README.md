@@ -1,8 +1,6 @@
 # Valox
 
-Valox is an independent UCI chess engine written in Rust. Its legal move generation, position handling, search, and evaluation are implemented in this project.
-
-Valox's source license has not been selected yet. The public repository does not currently grant permission to reuse or redistribute the source code.
+Valox is an independent UCI chess engine written in Rust. Its legal move generation, position handling, search, and evaluation are implemented in this project. Valox's own source is dual-licensed under **MIT OR Apache-2.0**; see `LICENSE-MIT` and `LICENSE-APACHE`.
 
 ## Build
 
@@ -11,6 +9,24 @@ cargo build --release
 ```
 
 The UCI executable is `target\release\valox.exe`. Start it from a chess GUI that supports UCI, such as Cute Chess.
+
+The default build embeds `networks\v60-7f587dfb.nnue` when that local file exists. To inject a network from outside the repository, set `VALOX_NNUE_PATH`:
+
+```powershell
+$env:VALOX_NNUE_PATH = 'D:\models\candidate.nnue'
+cargo build --release
+```
+
+Set `VALOX_NO_NNUE=1` to force the classical evaluator. Source-only builds without a network always use the classical evaluator.
+
+For a static Linux x86_64 binary and release archives, use the packaging tool:
+
+```powershell
+python tools\build-release.py --build-only --network networks\v60-7f587dfb.nnue
+python tools\build-release.py --target linux-musl
+```
+
+The second command deliberately builds without NNUE weights. Packaging a binary that contains the Reckless v60 network requires `--allow-network-redistribution`, which must only be used after written permission. `tools\make-synthetic-net.py` creates a deterministic same-layout network for CI tests of the NNUE code path without using the third-party weights.
 
 ## Engine features
 
@@ -40,3 +56,9 @@ The `tools\engine-match` directory contains UCI verification, stress, perft-diff
 ## Match evidence and tournament preparation
 
 In a local 100-game color-paired match against Stockfish 19 limited to UCI_Elo 2000 at 5+0, Valox scored 68 wins, 28 draws, and 4 losses. Cute Chess reported +263.4 ±65.9 relative Elo. This single-configuration result is not an official or independent Valox rating. Full methods, caveats, current CI status, and remaining CCC steps are in [`docs/CCC_READINESS.md`](docs/CCC_READINESS.md).
+
+## License
+
+Valox source is dual-licensed under **MIT OR Apache-2.0**. See `LICENSE-MIT` and `LICENSE-APACHE`.
+
+The Reckless v60 network file (`networks/v60-7f587dfb.nnue`) is not covered by this license. It is excluded from public source archives and must not be redistributed until its terms are clarified; source-only builds use the classical evaluator.

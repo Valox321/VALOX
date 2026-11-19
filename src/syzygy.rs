@@ -1,4 +1,4 @@
-use crate::position::{Position, Side};
+use crate::position::{Piece, Position, Side};
 use pyrrhic_rs::{Color, EngineAdapter};
 
 #[derive(Clone)]
@@ -85,10 +85,18 @@ pub fn probe(
     tablebase: &pyrrhic_rs::TableBases<ValoxAdapter>,
     position: &Position,
 ) -> Option<pyrrhic_rs::WdlProbeResult> {
+    // Syzygy tables assume a position without castling rights. Probing with
+    // rights still present can return a WDL result that does not apply.
+    if position.has_castling_rights() {
+        return None;
+    }
     if position.piece_count() > 7 || position.fifty_move_clock() >= 80 {
         return None;
     }
     let [white, black, kings, queens, rooks, bishops, knights, pawns] = position.syzygy_bitboards();
+    let en_passant = legal_en_passant_square(position)
+        .map(u32::from)
+        .unwrap_or(0);
     tablebase
         .probe_wdl(
             white,
@@ -99,8 +107,22 @@ pub fn probe(
             bishops,
             knights,
             pawns,
-            position.en_passant_square().map(u32::from).unwrap_or(0),
+            en_passant,
             position.side == Side::White,
         )
         .ok()
+}
+
+/// Syzygy expects an en-passant square only when an en-passant capture is
+/// actually legal. The position may still carry an ep square after a double
+/// pawn push when no enemy pawn can take.
+fn legal_en_passant_square(position: &Position) -> Option<u8> {
+    let en_passant = position.en_passant_square()?;
+    let capture_available = position.legal_moves().iter().any(|mv| {
+        mv.to == en_passant
+            && position
+                .piece_at(mv.from)
+                .is_some_and(|(piece, side)| piece == Piece::Pawn && side == position.side)
+    });
+    capture_available.then_some(en_passant)
 }

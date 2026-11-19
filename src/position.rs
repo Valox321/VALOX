@@ -1,4 +1,12 @@
-use std::hash::{DefaultHasher, Hash, Hasher};
+use std::hash::Hash;
+
+#[inline]
+fn mix_hash_component(value: u64, tag: u64) -> u64 {
+    let mut mixed = value ^ tag.wrapping_mul(0x9e37_79b9_7f4a_7c15);
+    mixed = (mixed ^ (mixed >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+    mixed = (mixed ^ (mixed >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+    mixed ^ (mixed >> 31)
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum Side {
@@ -74,22 +82,23 @@ pub struct Position {
     fullmove: u16,
 }
 
+#[doc(hidden)]
 #[derive(Clone, Copy)]
-pub(crate) struct Undo {
-    mv: Move,
-    moved: Option<(Piece, Side)>,
-    captured: Option<(u8, (Piece, Side))>,
-    rook: Option<(u8, u8)>,
-    castle: u8,
-    castle_rooks: [Option<u8>; 4],
-    en_passant: Option<u8>,
-    halfmove: u16,
-    fullmove: u16,
-    side: Side,
+pub struct Undo {
+    pub(crate) mv: Move,
+    pub(crate) moved: Option<(Piece, Side)>,
+    pub(crate) captured: Option<(u8, (Piece, Side))>,
+    pub(crate) rook: Option<(u8, u8)>,
+    pub(crate) castle: u8,
+    pub(crate) castle_rooks: [Option<u8>; 4],
+    pub(crate) en_passant: Option<u8>,
+    pub(crate) halfmove: u16,
+    pub(crate) fullmove: u16,
+    pub(crate) side: Side,
 }
 
 impl Position {
-    fn king_square(&self, side: Side) -> Option<u8> {
+    pub(crate) fn king_square(&self, side: Side) -> Option<u8> {
         let kings = self.piece_masks[side_index(side)][piece_index(Piece::King)];
         (kings != 0).then(|| kings.trailing_zeros() as u8)
     }
@@ -298,6 +307,10 @@ impl Position {
         self.en_passant
     }
 
+    pub fn has_castling_rights(&self) -> bool {
+        self.castle != 0
+    }
+
     pub fn syzygy_bitboards(&self) -> [u64; 8] {
         let white = self.occupied[side_index(Side::White)];
         let black = self.occupied[side_index(Side::Black)];
@@ -373,10 +386,41 @@ impl Position {
     pub fn legal_moves_into(&self, output: &mut [Move; 256]) -> usize {
         let mut len = 0;
         self.pseudo_moves_into(output, &mut len);
+        self.filter_legal_into(output, len)
+    }
+
+    /// Legal captures and promotions only, in the same relative order as
+    /// `legal_moves_into` would emit them. Quiescence discards quiet moves, so
+    /// generating them is wasted work there.
+    pub fn legal_captures_into(&self, output: &mut [Move; 256]) -> usize {
+        let mut len = 0;
+        self.pseudo_captures_into(output, &mut len);
+        self.filter_legal_into(output, len)
+    }
+
+    fn filter_legal_into(&self, output: &mut [Move; 256], len: usize) -> usize {
+        let in_check = self.in_check(self.side);
+        let pinned = self.pinned_mask(self.side);
         let mut legal_len = 0;
         let mut scratch = self.clone();
         for read in 0..len {
             let mv = output[read];
+            let piece = self.board[mv.from as usize].map(|entry| entry.0);
+            let en_passant = piece == Some(Piece::Pawn)
+                && self.en_passant == Some(mv.to)
+                && self.board[mv.to as usize].is_none();
+            // Without a check, a move can only expose the king when the moving
+            // piece is pinned. King moves, castling and en passant always need
+            // the full make/unmake test; every other unpinned move is legal.
+            let needs_test = in_check
+                || piece == Some(Piece::King)
+                || en_passant
+                || pinned & (1u64 << mv.from) != 0;
+            if !needs_test {
+                output[legal_len] = mv;
+                legal_len += 1;
+                continue;
+            }
             let undo = scratch.make_move(mv);
             let legal = !scratch.in_check(self.side);
             scratch.unmake_move(undo);
@@ -386,6 +430,87 @@ impl Position {
             }
         }
         legal_len
+    }
+
+    /// Pieces of `side` that stand between their king and an enemy slider.
+    /// Such a piece may only move along the pin ray.
+    /// Every square whose geometric attack set touches `target`, for both
+    /// sides. Used by the NNUE update to find attackers whose threat features
+    /// must be regenerated. Slider rays ignore blockers on purpose: the dirty
+    /// test is conservative and matches the per-piece attack maps.
+    pub(crate) fn attackers_to_mask(&self, target: u8) -> u64 {
+        let square = target as usize;
+        let knights = self.piece_masks[0][piece_index(Piece::Knight)]
+            | self.piece_masks[1][piece_index(Piece::Knight)];
+        let kings = self.piece_masks[0][piece_index(Piece::King)]
+            | self.piece_masks[1][piece_index(Piece::King)];
+        let rooks_queens = self.piece_masks[0][piece_index(Piece::Rook)]
+            | self.piece_masks[1][piece_index(Piece::Rook)]
+            | self.piece_masks[0][piece_index(Piece::Queen)]
+            | self.piece_masks[1][piece_index(Piece::Queen)];
+        let bishops_queens = self.piece_masks[0][piece_index(Piece::Bishop)]
+            | self.piece_masks[1][piece_index(Piece::Bishop)]
+            | self.piece_masks[0][piece_index(Piece::Queen)]
+            | self.piece_masks[1][piece_index(Piece::Queen)];
+        let mut mask = KNIGHT_MASKS[square] & knights;
+        mask |= KING_MASKS[square] & kings;
+        mask |= PAWN_ATTACKERS[0][square] & self.piece_masks[0][piece_index(Piece::Pawn)];
+        mask |= PAWN_ATTACKERS[1][square] & self.piece_masks[1][piece_index(Piece::Pawn)];
+        for rays in RAYS.iter().take(4) {
+            mask |= rays[square] & rooks_queens;
+        }
+        for rays in RAYS.iter().skip(4) {
+            mask |= rays[square] & bishops_queens;
+        }
+        mask
+    }
+
+    fn pinned_mask(&self, side: Side) -> u64 {
+        let kings = self.piece_masks[side_index(side)][piece_index(Piece::King)];
+        if kings == 0 {
+            return 0;
+        }
+        let square = kings.trailing_zeros() as usize;
+        let occupied = self.occupied[0] | self.occupied[1];
+        let own = self.occupied[side_index(side)];
+        let enemy = side_index(side.opposite());
+        let enemy_rooks_queens = self.piece_masks[enemy][piece_index(Piece::Rook)]
+            | self.piece_masks[enemy][piece_index(Piece::Queen)];
+        let enemy_bishops_queens = self.piece_masks[enemy][piece_index(Piece::Bishop)]
+            | self.piece_masks[enemy][piece_index(Piece::Queen)];
+        let mut pinned = 0u64;
+        for direction in 0..8 {
+            let blockers = RAYS[direction][square] & occupied;
+            if blockers == 0 {
+                continue;
+            }
+            let first = if RAY_INCREASING[direction] {
+                blockers.isolate_lowest_one()
+            } else {
+                1u64 << (63 - blockers.leading_zeros())
+            };
+            if first & own == 0 {
+                continue;
+            }
+            let rest = blockers & !first;
+            if rest == 0 {
+                continue;
+            }
+            let second = if RAY_INCREASING[direction] {
+                rest.isolate_lowest_one()
+            } else {
+                1u64 << (63 - rest.leading_zeros())
+            };
+            let sliders = if direction < 4 {
+                enemy_rooks_queens
+            } else {
+                enemy_bishops_queens
+            };
+            if second & sliders != 0 {
+                pinned |= first;
+            }
+        }
+        pinned
     }
 
     pub fn in_check(&self, side: Side) -> bool {
@@ -537,29 +662,50 @@ impl Position {
         next
     }
 
+    /// Play a move and also return the undo record. Used by NNUE accumulators
+    /// and benchmarks that need to know what changed between the two positions.
+    #[doc(hidden)]
+    pub fn play_tracked(&self, mv: Move) -> (Self, Undo) {
+        let mut next = self.clone();
+        let undo = next.make_move(mv);
+        (next, undo)
+    }
+
     fn hash_without_clock(&self) -> u64 {
-        let mut hasher = DefaultHasher::new();
-        self.board.hash(&mut hasher);
-        self.side.hash(&mut hasher);
-        self.castle.hash(&mut hasher);
-        self.castle_rooks.hash(&mut hasher);
-        self.en_passant.hash(&mut hasher);
-        hasher.finish()
+        // Hash the maintained piece bitboards directly. Hashing all 64 mailbox
+        // cells through DefaultHasher was a hot-path cost at every search node.
+        let mut key = 0;
+        for (side, pieces) in self.piece_masks.iter().enumerate() {
+            for (piece, mask) in pieces.iter().enumerate() {
+                let tag = (side * 6 + piece + 1) as u64;
+                key ^= mix_hash_component(*mask, tag);
+            }
+        }
+        key ^= mix_hash_component(self.side as u64, 13);
+        key ^= mix_hash_component(self.castle as u64, 14);
+        for (index, rook) in self.castle_rooks.iter().enumerate() {
+            key ^= mix_hash_component(rook.map(u64::from).unwrap_or(64), 15 + index as u64);
+        }
+        key ^= mix_hash_component(self.en_passant.map(u64::from).unwrap_or(64), 19);
+        key
     }
 
     pub fn repetition_hash(&self) -> u64 {
         self.hash_without_clock()
     }
 
+    /// Full TT key and clock-independent repetition key from a single pass over
+    /// the piece masks. The search needs both at every node.
+    pub(crate) fn search_hashes(&self) -> (u64, u64) {
+        let base = self.hash_without_clock();
+        (
+            base ^ mix_hash_component(self.halfmove.min(100) as u64, 20),
+            base,
+        )
+    }
+
     pub fn hash(&self) -> u64 {
-        let mut hasher = DefaultHasher::new();
-        self.board.hash(&mut hasher);
-        self.side.hash(&mut hasher);
-        self.castle.hash(&mut hasher);
-        self.castle_rooks.hash(&mut hasher);
-        self.en_passant.hash(&mut hasher);
-        self.halfmove.min(100).hash(&mut hasher);
-        hasher.finish()
+        self.hash_without_clock() ^ mix_hash_component(self.halfmove.min(100) as u64, 20)
     }
 
     pub fn evaluate(&self) -> i32 {
@@ -1076,6 +1222,140 @@ impl Position {
         }
     }
 
+    /// Captures and promotions in the same relative order as
+    /// `pseudo_moves_into`. Quiet moves, double pushes and castling are
+    /// deliberately omitted; quiescence never searches them.
+    fn pseudo_captures_into(&self, moves: &mut [Move; 256], len: &mut usize) {
+        for from in 0..64u8 {
+            let Some((piece, side)) = self.board[from as usize] else {
+                continue;
+            };
+            if side != self.side {
+                continue;
+            }
+            let f = (from % 8) as i8;
+            let r = (from / 8) as i8;
+            match piece {
+                Piece::Pawn => {
+                    let step = if side == Side::White { 1 } else { -1 };
+                    let one_r = r + step;
+                    if inside(f, one_r)
+                        && self.board[index(f, one_r)].is_none()
+                        && (one_r == 0 || one_r == 7)
+                    {
+                        self.push_pawn_move(moves, len, from, index(f, one_r) as u8, one_r);
+                    }
+                    for df in [-1, 1] {
+                        let nf = f + df;
+                        let nr = r + step;
+                        if !inside(nf, nr) {
+                            continue;
+                        }
+                        let to = index(nf, nr) as u8;
+                        let captures_piece = self.board[to as usize]
+                            .map(|p| p.1 != side && p.0 != Piece::King)
+                            .unwrap_or(false);
+                        if captures_piece || self.en_passant == Some(to) {
+                            self.push_pawn_move(moves, len, from, to, nr);
+                        }
+                    }
+                }
+                Piece::Knight => {
+                    for (df, dr) in [
+                        (1, 2),
+                        (2, 1),
+                        (2, -1),
+                        (1, -2),
+                        (-1, -2),
+                        (-2, -1),
+                        (-2, 1),
+                        (-1, 2),
+                    ] {
+                        self.add_capture_step(moves, len, from, f + df, r + dr, side);
+                    }
+                }
+                Piece::King => {
+                    for df in -1..=1 {
+                        for dr in -1..=1 {
+                            if df != 0 || dr != 0 {
+                                self.add_capture_step(moves, len, from, f + df, r + dr, side);
+                            }
+                        }
+                    }
+                }
+                Piece::Bishop | Piece::Rook | Piece::Queen => {
+                    let dirs: &[(i8, i8)] = match piece {
+                        Piece::Bishop => &[(1, 1), (1, -1), (-1, 1), (-1, -1)],
+                        Piece::Rook => &[(1, 0), (-1, 0), (0, 1), (0, -1)],
+                        _ => &[
+                            (1, 1),
+                            (1, -1),
+                            (-1, 1),
+                            (-1, -1),
+                            (1, 0),
+                            (-1, 0),
+                            (0, 1),
+                            (0, -1),
+                        ],
+                    };
+                    for &(df, dr) in dirs {
+                        let (mut nf, mut nr) = (f + df, r + dr);
+                        while inside(nf, nr) {
+                            let to = index(nf, nr) as u8;
+                            if let Some((target, target_side)) = self.board[to as usize] {
+                                if target_side != side && target != Piece::King {
+                                    push_move(
+                                        moves,
+                                        len,
+                                        Move {
+                                            from,
+                                            to,
+                                            promotion: None,
+                                            castle_rook_from: None,
+                                        },
+                                    );
+                                }
+                                break;
+                            }
+                            nf += df;
+                            nr += dr;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fn add_capture_step(
+        &self,
+        moves: &mut [Move; 256],
+        len: &mut usize,
+        from: u8,
+        file: i8,
+        rank: i8,
+        side: Side,
+    ) {
+        if !inside(file, rank) {
+            return;
+        }
+        let to = index(file, rank) as u8;
+        if self.board[to as usize]
+            .map(|p| p.1 != side && p.0 != Piece::King)
+            .unwrap_or(false)
+        {
+            push_move(
+                moves,
+                len,
+                Move {
+                    from,
+                    to,
+                    promotion: None,
+                    castle_rook_from: None,
+                },
+            );
+        }
+    }
+
     fn push_pawn_move(
         &self,
         moves: &mut [Move; 256],
@@ -1208,65 +1488,50 @@ impl Position {
     }
 
     fn is_attacked(&self, target: u8, by: Side) -> bool {
-        let tf = (target % 8) as i8;
-        let tr = (target / 8) as i8;
-        let mut candidates = self.occupied[side_index(by)];
-        while candidates != 0 {
-            let from = candidates.trailing_zeros() as u8;
-            candidates &= candidates - 1;
-            let Some((piece, side)) = self.board[from as usize] else {
-                continue;
-            };
-            if side != by {
+        let by = side_index(by);
+        let square = target as usize;
+        if KNIGHT_MASKS[square] & self.piece_masks[by][piece_index(Piece::Knight)] != 0 {
+            return true;
+        }
+        if KING_MASKS[square] & self.piece_masks[by][piece_index(Piece::King)] != 0 {
+            return true;
+        }
+        if PAWN_ATTACKERS[by][square] & self.piece_masks[by][piece_index(Piece::Pawn)] != 0 {
+            return true;
+        }
+        let occupied = self.occupied[0] | self.occupied[1];
+        let rooks_queens = self.piece_masks[by][piece_index(Piece::Rook)]
+            | self.piece_masks[by][piece_index(Piece::Queen)];
+        let bishops_queens = self.piece_masks[by][piece_index(Piece::Bishop)]
+            | self.piece_masks[by][piece_index(Piece::Queen)];
+        // Orthogonal rays: the nearest blocker has to be a rook or queen.
+        for direction in 0..4 {
+            let blockers = RAYS[direction][square] & occupied;
+            if blockers == 0 {
                 continue;
             }
-            let ff = (from % 8) as i8;
-            let fr = (from / 8) as i8;
-            let df = tf - ff;
-            let dr = tr - fr;
-            match piece {
-                Piece::Pawn => {
-                    if dr == if by == Side::White { 1 } else { -1 } && df.abs() == 1 {
-                        return true;
-                    }
-                }
-                Piece::Knight => {
-                    if (df.abs(), dr.abs()) == (1, 2) || (df.abs(), dr.abs()) == (2, 1) {
-                        return true;
-                    }
-                }
-                Piece::King => {
-                    if df.abs() <= 1 && dr.abs() <= 1 && (df != 0 || dr != 0) {
-                        return true;
-                    }
-                }
-                Piece::Bishop | Piece::Rook | Piece::Queen => {
-                    let diagonal = df.abs() == dr.abs() && df != 0;
-                    let straight = (df == 0) != (dr == 0);
-                    let slides = match piece {
-                        Piece::Bishop => diagonal,
-                        Piece::Rook => straight,
-                        _ => diagonal || straight,
-                    };
-                    if !slides {
-                        continue;
-                    }
-                    let sf = df.signum();
-                    let sr = dr.signum();
-                    let (mut f, mut r) = (ff + sf, fr + sr);
-                    let mut clear = true;
-                    while f != tf || r != tr {
-                        if self.board[index(f, r)].is_some() {
-                            clear = false;
-                            break;
-                        }
-                        f += sf;
-                        r += sr;
-                    }
-                    if clear {
-                        return true;
-                    }
-                }
+            let nearest = if RAY_INCREASING[direction] {
+                blockers.isolate_lowest_one()
+            } else {
+                1u64 << (63 - blockers.leading_zeros())
+            };
+            if nearest & rooks_queens != 0 {
+                return true;
+            }
+        }
+        // Diagonal rays: the nearest blocker has to be a bishop or queen.
+        for direction in 4..8 {
+            let blockers = RAYS[direction][square] & occupied;
+            if blockers == 0 {
+                continue;
+            }
+            let nearest = if RAY_INCREASING[direction] {
+                blockers.isolate_lowest_one()
+            } else {
+                1u64 << (63 - blockers.leading_zeros())
+            };
+            if nearest & bishops_queens != 0 {
+                return true;
             }
         }
         false
@@ -1315,6 +1580,125 @@ fn piece_index(piece: Piece) -> usize {
         Piece::King => 5,
     }
 }
+
+const RAY_FILE_DELTAS: [i32; 8] = [0, 0, 1, -1, 1, -1, 1, -1];
+const RAY_RANK_DELTAS: [i32; 8] = [1, -1, 0, 0, 1, 1, -1, -1];
+/// True when stepping along the ray increases the square index, so the
+/// closest blocker is the lowest set bit instead of the highest.
+const RAY_INCREASING: [bool; 8] = [true, false, true, false, true, true, false, false];
+
+const fn ray_masks(file_delta: i32, rank_delta: i32) -> [u64; 64] {
+    let mut table = [0u64; 64];
+    let mut square = 0usize;
+    while square < 64 {
+        let mut file = (square % 8) as i32 + file_delta;
+        let mut rank = (square / 8) as i32 + rank_delta;
+        while file >= 0 && file < 8 && rank >= 0 && rank < 8 {
+            table[square] |= 1u64 << (rank * 8 + file);
+            file += file_delta;
+            rank += rank_delta;
+        }
+        square += 1;
+    }
+    table
+}
+
+const RAYS: [[u64; 64]; 8] = [
+    ray_masks(RAY_FILE_DELTAS[0], RAY_RANK_DELTAS[0]),
+    ray_masks(RAY_FILE_DELTAS[1], RAY_RANK_DELTAS[1]),
+    ray_masks(RAY_FILE_DELTAS[2], RAY_RANK_DELTAS[2]),
+    ray_masks(RAY_FILE_DELTAS[3], RAY_RANK_DELTAS[3]),
+    ray_masks(RAY_FILE_DELTAS[4], RAY_RANK_DELTAS[4]),
+    ray_masks(RAY_FILE_DELTAS[5], RAY_RANK_DELTAS[5]),
+    ray_masks(RAY_FILE_DELTAS[6], RAY_RANK_DELTAS[6]),
+    ray_masks(RAY_FILE_DELTAS[7], RAY_RANK_DELTAS[7]),
+];
+
+const fn knight_masks() -> [u64; 64] {
+    let mut table = [0u64; 64];
+    let mut square = 0usize;
+    while square < 64 {
+        let file = (square % 8) as i32;
+        let rank = (square / 8) as i32;
+        let deltas = [
+            (1, 2),
+            (2, 1),
+            (2, -1),
+            (1, -2),
+            (-1, -2),
+            (-2, -1),
+            (-2, 1),
+            (-1, 2),
+        ];
+        let mut i = 0;
+        while i < deltas.len() {
+            let target_file = file + deltas[i].0;
+            let target_rank = rank + deltas[i].1;
+            if target_file >= 0 && target_file < 8 && target_rank >= 0 && target_rank < 8 {
+                table[square] |= 1u64 << (target_rank * 8 + target_file);
+            }
+            i += 1;
+        }
+        square += 1;
+    }
+    table
+}
+
+const KNIGHT_MASKS: [u64; 64] = knight_masks();
+
+const fn king_masks() -> [u64; 64] {
+    let mut table = [0u64; 64];
+    let mut square = 0usize;
+    while square < 64 {
+        let file = (square % 8) as i32;
+        let rank = (square / 8) as i32;
+        let mut rank_delta = -1;
+        while rank_delta <= 1 {
+            let mut file_delta = -1;
+            while file_delta <= 1 {
+                let target_file = file + file_delta;
+                let target_rank = rank + rank_delta;
+                if (file_delta != 0 || rank_delta != 0)
+                    && target_file >= 0
+                    && target_file < 8
+                    && target_rank >= 0
+                    && target_rank < 8
+                {
+                    table[square] |= 1u64 << (target_rank * 8 + target_file);
+                }
+                file_delta += 1;
+            }
+            rank_delta += 1;
+        }
+        square += 1;
+    }
+    table
+}
+
+const KING_MASKS: [u64; 64] = king_masks();
+
+/// Squares from which a pawn of the given side attacks `target`.
+const fn pawn_attacker_masks(black: bool) -> [u64; 64] {
+    let mut table = [0u64; 64];
+    let mut target = 0usize;
+    while target < 64 {
+        let file = (target % 8) as i32;
+        let rank = (target / 8) as i32;
+        let from_rank = if black { rank + 1 } else { rank - 1 };
+        if from_rank >= 0 && from_rank < 8 {
+            if file > 0 {
+                table[target] |= 1u64 << (from_rank * 8 + file - 1);
+            }
+            if file < 7 {
+                table[target] |= 1u64 << (from_rank * 8 + file + 1);
+            }
+        }
+        target += 1;
+    }
+    table
+}
+
+const PAWN_ATTACKERS: [[u64; 64]; 2] = [pawn_attacker_masks(false), pawn_attacker_masks(true)];
 
 pub fn piece_value(piece: Piece) -> i32 {
     match piece {
@@ -1403,6 +1787,137 @@ pub fn perft(position: &Position, depth: u32) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{parse_uci_move_mode, perft, Piece, Position, Side};
+
+    impl Position {
+        fn is_attacked_reference(&self, target: u8, by: Side) -> bool {
+            let tf = (target % 8) as i8;
+            let tr = (target / 8) as i8;
+            let mut candidates = self.occupied[super::side_index(by)];
+            while candidates != 0 {
+                let from = candidates.trailing_zeros() as u8;
+                candidates &= candidates - 1;
+                let Some((piece, side)) = self.board[from as usize] else {
+                    continue;
+                };
+                if side != by {
+                    continue;
+                }
+                let ff = (from % 8) as i8;
+                let fr = (from / 8) as i8;
+                let df = tf - ff;
+                let dr = tr - fr;
+                match piece {
+                    Piece::Pawn => {
+                        if dr == if by == Side::White { 1 } else { -1 } && df.abs() == 1 {
+                            return true;
+                        }
+                    }
+                    Piece::Knight => {
+                        if (df.abs(), dr.abs()) == (1, 2) || (df.abs(), dr.abs()) == (2, 1) {
+                            return true;
+                        }
+                    }
+                    Piece::King => {
+                        if df.abs() <= 1 && dr.abs() <= 1 && (df != 0 || dr != 0) {
+                            return true;
+                        }
+                    }
+                    Piece::Bishop | Piece::Rook | Piece::Queen => {
+                        let diagonal = df.abs() == dr.abs() && df != 0;
+                        let straight = (df == 0) != (dr == 0);
+                        let slides = match piece {
+                            Piece::Bishop => diagonal,
+                            Piece::Rook => straight,
+                            _ => diagonal || straight,
+                        };
+                        if !slides {
+                            continue;
+                        }
+                        let sf = df.signum();
+                        let sr = dr.signum();
+                        let (mut f, mut r) = (ff + sf, fr + sr);
+                        let mut clear = true;
+                        while f != tf || r != tr {
+                            if self.board[super::index(f, r)].is_some() {
+                                clear = false;
+                                break;
+                            }
+                            f += sf;
+                            r += sr;
+                        }
+                        if clear {
+                            return true;
+                        }
+                    }
+                }
+            }
+            false
+        }
+    }
+
+    #[test]
+    fn bitboard_attack_detection_matches_reference() {
+        let cases = [
+            ("startpos", None),
+            (
+                "kiwipete",
+                Some("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"),
+            ),
+            ("endgame", Some("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1")),
+            (
+                "promotions",
+                Some("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"),
+            ),
+            (
+                "pin-heavy",
+                Some("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"),
+            ),
+            (
+                "quiet-middlegame",
+                Some("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"),
+            ),
+            ("chess960", Some("4k3/8/8/8/8/8/8/R1K4R w HA - 0 1")),
+        ];
+        let mut positions = Vec::new();
+        for (name, fen) in cases {
+            let root = match fen {
+                Some(fen) => Position::from_fen(fen).unwrap(),
+                None => Position::start(),
+            };
+            let depth = if name == "startpos" || name == "kiwipete" {
+                2
+            } else {
+                1
+            };
+            let mut frontier = vec![root];
+            for _ in 0..depth {
+                let mut next = Vec::new();
+                for position in &frontier {
+                    let mut moves = [super::Move::default(); 256];
+                    let len = position.legal_moves_into(&mut moves);
+                    for mv in moves[..len].iter().copied() {
+                        next.push(position.play(mv));
+                    }
+                }
+                positions.append(&mut frontier);
+                frontier = next;
+            }
+            positions.extend(frontier);
+        }
+        for position in &positions {
+            for square in 0..64u8 {
+                for side in [Side::White, Side::Black] {
+                    assert_eq!(
+                        position.is_attacked(square, side),
+                        position.is_attacked_reference(square, side),
+                        "FEN: {}, square: {}, side: {side:?}",
+                        position.to_fen(),
+                        super::square_name(square)
+                    );
+                }
+            }
+        }
+    }
 
     #[test]
     fn standard_start_perft_remains_correct() {
@@ -1495,6 +2010,33 @@ mod tests {
     }
 
     #[test]
+    fn bitboard_hash_matches_fen_and_restores_after_make_unmake() {
+        let mut position = Position::start();
+        let initial_hash = position.hash();
+        let initial_repetition_hash = position.repetition_hash();
+        let mut undos = Vec::new();
+
+        for step in 0..160 {
+            let round_trip = Position::from_fen(&position.to_fen()).unwrap();
+            assert_eq!(position.hash(), round_trip.hash());
+            assert_eq!(position.repetition_hash(), round_trip.repetition_hash());
+
+            let moves = position.legal_moves();
+            if moves.is_empty() {
+                break;
+            }
+            let mv = moves[(step * 7 + 3) % moves.len()];
+            undos.push(position.make_move(mv));
+        }
+
+        while let Some(undo) = undos.pop() {
+            position.unmake_move(undo);
+        }
+        assert_eq!(position.hash(), initial_hash);
+        assert_eq!(position.repetition_hash(), initial_repetition_hash);
+    }
+
+    #[test]
     fn moving_or_capturing_the_designated_chess960_rook_revokes_castling() {
         let position = Position::from_fen("4k3/8/8/8/8/8/8/4K1RR w G - 0 1").unwrap();
         let castle = parse_uci_move_mode(&position, "e1g1", true).unwrap();
@@ -1559,5 +2101,51 @@ mod tests {
         }
         let first = Position::from_fen(cases[0].0).unwrap();
         assert_eq!(perft(&first, 4), 326_672);
+    }
+
+    #[test]
+    fn capture_generator_matches_filter() {
+        use super::Move;
+
+        fn check(position: &Position, depth: u32, path: &str) {
+            let all = position.legal_moves();
+            let expected: Vec<Move> = all
+                .iter()
+                .copied()
+                .filter(|&mv| position.is_capture(mv) || mv.promotion.is_some())
+                .collect();
+            let mut captures = [Move::default(); 256];
+            let capture_len = position.legal_captures_into(&mut captures);
+            assert_eq!(
+                expected,
+                &captures[..capture_len],
+                "capture set mismatch at {path}; all moves {:?}",
+                all.iter().map(|mv| mv.uci()).collect::<Vec<_>>()
+            );
+            if depth == 0 {
+                return;
+            }
+            for mv in all.iter().copied() {
+                let mut child = position.clone();
+                child.make_move(mv);
+                check(&child, depth - 1, &format!("{path} {}", mv.uci()));
+            }
+        }
+
+        let fens = [
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 4 8",
+            "r2q1rk1/ppp2ppp/2npbn2/2b1p3/2B1P3/2NPBN2/PPP2PPP/R2Q1RK1 w - - 0 9",
+            "8/5pk1/6p1/3P4/2P5/5K2/8/8 w - - 0 45",
+            "8/P6k/8/8/8/8/6K1/8 w - - 0 1",
+            "rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3",
+            "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
+            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+            "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1",
+        ];
+        for fen in fens {
+            let position = Position::from_fen(fen).unwrap();
+            check(&position, 2, fen);
+        }
     }
 }

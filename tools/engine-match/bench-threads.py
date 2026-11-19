@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 
-def run(engine: Path, threads: int, depth: int) -> tuple[int, int, str]:
+def run(engine: Path, threads: int, depth: int, movetime_ms: int = 0) -> tuple[int, int, str]:
     process = subprocess.Popen(
         [str(engine.resolve())], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, text=True, bufsize=1,
@@ -31,7 +31,10 @@ def run(engine: Path, threads: int, depth: int) -> tuple[int, int, str]:
         if line.startswith("readyok"):
             break
     send("position startpos")
-    send(f"go depth {depth}")
+    if movetime_ms:
+        send(f"go movetime {movetime_ms}")
+    else:
+        send(f"go depth {depth}")
     deadline = time.monotonic() + 90
     final_info = ""
     bestmove = ""
@@ -40,7 +43,9 @@ def run(engine: Path, threads: int, depth: int) -> tuple[int, int, str]:
         if not line:
             break
         line = line.strip()
-        if line.startswith(f"info depth {depth} "):
+        if movetime_ms and line.startswith("info depth "):
+            final_info = line
+        elif not movetime_ms and line.startswith(f"info depth {depth} "):
             final_info = line
         elif line.startswith("bestmove "):
             bestmove = line
@@ -50,17 +55,24 @@ def run(engine: Path, threads: int, depth: int) -> tuple[int, int, str]:
     match = re.search(r"\bnodes (\d+)\b.*\btime (\d+)\b", final_info)
     if not bestmove or not match:
         raise RuntimeError(f"incomplete search at {threads} threads: {final_info!r} {bestmove!r}")
-    return int(match.group(1)), int(match.group(2)), bestmove
+    reached = re.search(r"\bdepth (\d+)\b", final_info)
+    return int(match.group(1)), int(match.group(2)), bestmove, int(reached.group(1)) if reached else 0
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("engine", type=Path, nargs="?", default=Path("build/valox.exe"))
     parser.add_argument("--depth", type=int, default=10)
+    parser.add_argument("--movetime-ms", type=int, default=0)
+    parser.add_argument("--threads", default="1,2,4,8")
     args = parser.parse_args()
-    for threads in (1, 2, 4, 8):
-        nodes, elapsed, move = run(args.engine, threads, args.depth)
-        print(f"threads={threads} depth={args.depth} nodes={nodes} time_ms={elapsed} nps={nodes * 1000 // max(elapsed, 1)} {move}")
+    for threads in (int(value) for value in args.threads.split(",")):
+        nodes, elapsed, move, reached = run(args.engine, threads, args.depth, args.movetime_ms)
+        mode = f"movetime={args.movetime_ms}" if args.movetime_ms else f"depth={args.depth}"
+        print(
+            f"threads={threads} {mode} reached_depth={reached} nodes={nodes} "
+            f"time_ms={elapsed} nps={nodes * 1000 // max(elapsed, 1)} {move}"
+        )
 
 
 if __name__ == "__main__":

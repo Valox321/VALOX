@@ -1,8 +1,11 @@
 # Valox CCC preparation
 
-Status last reviewed: 2026-11-12
+Status last reviewed: 2026-11-19
 
 This file tracks technical preparation. It does not claim an invitation, an official rating, or CCC approval.
+
+The measurement-led engine-strength plan and current audit priorities are in
+[`STRENGTH_ROADMAP.md`](../STRENGTH_ROADMAP.md).
 
 ## CCC entry path
 
@@ -30,17 +33,112 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - [x] Record compiler/toolchain, build command, NNUE identity, executable/model SHA-256, and a filtered source snapshot for the local candidate.
 - [x] Inventory Rust dependency licenses and include their license texts in the source snapshot.
 - [x] Prepare an unsent inquiry asking the CCC director about current intake and runtime requirements.
-- [ ] Decide Valox's own source license.
-- [ ] Resolve permission/license terms for `networks/v60-7f587dfb.nnue` before distributing a binary that embeds it. The RecklessNetworks repository contains model files but currently shows no model-specific license in its README or repository file list: <https://github.com/codedeliveryservice/RecklessNetworks>.
+- [x] Add `VALOX_NNUE_PATH` and `VALOX_NO_NNUE` build controls so release builds can inject weights from outside the repository or force the classical evaluator.
+- [x] Add `tools/make-synthetic-net.py`, a deterministic same-layout network for exercising the NNUE code path without third-party weights.
+- [x] Cross-build a static Linux x86_64 musl binary and verify the ELF type, machine, and absence of a dynamic loader.
+- [x] Add a `linux-nnue` CI job that runs the 38-test NNUE suite on Ubuntu with the synthetic network, builds the static musl binary, and runs a UCI smoke test and benchmark.
+- [x] Add `tools/build-release.py` with SHA-256 manifests and a hard gate: a binary containing the Reckless v60 network cannot be packaged without `--allow-network-redistribution`.
+- [x] Produce a legally distributable classical-evaluation Windows package that contains no `.nnue` file.
+- [ ] Confirm the new `linux-nnue` CI job passes in GitHub Actions.
+- [ ] Run the real-network binary natively on Linux. The CI job uses the synthetic network until the Reckless weights are cleared.
+- [x] Decide Valox's own source license. Valox source is dual-licensed under
+  MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`), and `Cargo.toml`
+  declares `license = "MIT OR Apache-2.0"`. `tools/package-source.py` excludes
+  `.nnue` files; a fresh extraction of the source archive builds and passes 31
+  tests with the classical evaluator.
+- [ ] Resolve permission/license terms for `networks/v60-7f587dfb.nnue` before distributing a binary that embeds it. The Reckless engine is AGPL-3.0, but the separate RecklessNetworks repository contains model files without a model-specific license: <https://github.com/codedeliveryservice/RecklessNetworks>. A ready-to-send permission request is in [`NETWORK_PERMISSION_DRAFT.md`](NETWORK_PERMISSION_DRAFT.md).
 - [ ] After rights and release artifacts are ready, ask the CCC tournament director whether Valox can enter a qualifying event.
+
+## Linux and release preparation (2026-11-19)
+
+The Windows host can now cross-build a static Linux binary. `cargo build
+--release --target x86_64-unknown-linux-musl` with `rust-lld` produces a
+64-bit x86_64 ELF with no dynamic loader. The local artifact is
+`build/valox-linux-x86_64-musl-20261119` (64,310,424 bytes with the Reckless v60
+network embedded), SHA-256
+`FA8FB875F99196DBA04534BF950055328877333186F16D71998847405C72F167`. It is a
+local candidate only and must not be distributed.
+
+`tools/build-release.py` builds Windows and Linux binaries, injects a network
+only through `VALOX_NNUE_PATH`, and packages binaries with license texts,
+`BUILD-INFO.txt`, `SHA256SUMS`, and a ZIP checksum. Without a network it sets
+`VALOX_NO_NNUE=1`, so a classical release cannot accidentally embed a local
+copy. Packaging a network build requires `--allow-network-redistribution`; the
+script refuses otherwise. The first legally distributable artifact is the
+classical Windows package `build/release/valox-0.5.0-windows-x86_64.zip`
+(210,843 bytes), SHA-256
+`C33BA8C3578372E3E9D340FF36C20CE46CB5514DC5304D522C088CC045EF4651`; it contains
+no `.nnue` file.
+
+The synthetic network (`tools/make-synthetic-net.py`) has exactly the v60 byte
+layout (63,266,880 bytes) but small deterministic values. It makes the 38 tests
+run through the NNUE path on Linux, including incremental-versus-full-refresh
+comparisons, without using or distributing the third-party weights. The new CI
+job runs those tests natively on Ubuntu, then builds and exercises the static
+musl binary. A native Linux run with the real weights remains a release step
+after the permission question is resolved.
 
 ## Current evidence
 
-- `cargo test`: 13 NNUE-enabled unit tests pass locally (2026-11-12); the source-only fallback build passes 12 tests. Both configurations also pass formatting, Clippy, and release build.
+- Current source (2026-11-19): `cargo test --release` passes 38 tests
+  (including the full perft suite, Chess960 tests, and an ordered
+  capture-generator parity test); Clippy with warnings denied, the wasm check,
+  and Linux-target `cargo check`/`cargo clippy` all pass. Bench depths 8-13
+  produce identical nodes and best moves; `--bench 10` is 389,894 nodes with
+  `g1f3`, `c1g5`, `e3c5`, `c4c5`.
+- Throughput campaign 2026-11-18/19: accepted changes 16-23 cut `--bench 12`
+  wall time from about 4.4-4.9 s to about 3.0-3.1 s at identical node counts.
+  The final ABBA comparison against the i16-accumulator build measured a median
+  **-28.76% time** (about **1.40x NPS**). Release builds now use
+  `codegen-units = 1`. Change 24 adds capture-only quiescence generation at
+  identical nodes and moves; three ABBA `--bench 12` series gave medians of
+  -1.56%, -1.69% and -0.72%, and a bench-13 series gave -1.97% (15 of 21 rounds
+  faster). Change 25 computes both search hashes from one pass over the piece
+  masks at identical values; six ABBA `--bench 12` rounds gave -1.45% (6/6
+  faster), five bench-13 rounds -0.83%. Change 26 (caching the incremental
+  position hash) was rejected at +6% to +9% time. Change 27 rebuilds only the
+  actually affected NNUE threat edges; accumulators are bit-identical, and eight
+  ABBA `--bench 12` rounds measured -7.58% (8/8 faster) with six bench-13
+  rounds at -7.24% (6/6 faster). The current source artifact is
+  `build/valox-threat-ray-20261119.exe`, SHA-256
+  `D1DEBC3333B42E481E94B0A4A2169CFF632F9078FA6596DB8CDAB09A38D2E958`; the
+  preceding hashpair artifact was
+  `build/valox-hashpair-20261119.exe`, SHA-256
+  `362AF47FFD692F142A2E723D9B81C25149CB2B68DA611876A5F74A7CD1D0C782`, the
+  preceding capture-generator artifact was
+  `build/valox-capture-gen-20261118.exe`, SHA-256
+  `21053119F9FCA0309262DB6F5B7C0AA6CB656F65C4AF4C6E354CAA022045557E`, and the
+  original `codegen-units = 1` measurement baseline was
+  `build/valox-cgu1-20261118.exe`, SHA-256
+  `C64429012896A34D4A6A729F5044FDC2214DBAE325262BC0712094612D45D03E`. These are
+  throughput results, not Elo claims. Details:
+  `docs/STRENGTH-CAMPAIGN-2026-11.md`.
+- Earlier source (2026-11-17): `cargo test` passed 24 tests locally; formatting and Clippy with warnings denied passed, and the release build completed.
+- Strength campaign 2026-11-17: AVX2 NNUE feature updates measure +17.5% NPS with identical nodes and best moves; the rewritten root-split SMP search reaches depth 13 instead of 10 at 3 s/move with four threads while searching 3.7x fewer nodes at fixed depth; stop checks run every 512 nodes; Chess960 `info` and Syzygy castling/en-passant guards are fixed. Details: `docs/STRENGTH-CAMPAIGN-2026-11.md`.
 - GitHub Actions run [#1](https://github.com/Valox321/VALOX/actions/runs/43240093039) passed on commit `e540d9b`: Windows native build, UCI handshake/stress checks, Linux native build/UCI stress, and WebAssembly compile all succeeded. The public source build uses the documented classical fallback because the unlicensed model weights are excluded.
 - `cargo fmt --all -- --check`, Windows `cargo clippy --all-targets -- -D warnings`, Linux-target `cargo check --all-targets` and `cargo clippy --all-targets -- -D warnings`, native release build, and `cargo check --lib --target wasm32-unknown-unknown` pass locally.
-- Fresh extraction of `build\valox-source-20261112.zip`: formatting, 13 tests, Clippy with warnings denied, release build, UCI standard/Chess960/stop smoke check, and 10 UCI stress searches all passed. Extracted Windows build has the same size as the pinned executable but differs in 24 PE metadata bytes due to a different build path; source build works, but the executable is not bit-for-bit reproducible across paths.
+- Fresh extraction of `build\valox-source-20261112.zip`: all 17 tests, Clippy with warnings denied, and offline release build pass. The archive now includes the root build script and strength roadmap.
 - `cargo build --release`: passes (2026-11-12).
+- Current source after the bitboard-hash optimization: `cargo test` passes 17
+  tests; Clippy with warnings denied passes. UCI verification, tactical suite
+  (6/6), and 100 standard plus 40 Chess960 differential perft positions at
+  depth 3 pass. The fixed four-position depth-10 bench measured a +5.1% median
+  NPS change over three runs. A 20-game paired A/B match against the previous
+  Valox build scored 9.5/20; its +/-105 Elo interval is inconclusive. Full
+  details and artifacts are in `docs/SEARCH-AND-NNUE-EXPERIMENTS-2026-11.md`.
+- Current release candidate adds three NNUE hot-path changes. It passes 18
+  tests, Clippy, standard/Chess960/stop UCI checks, and 100 standard + 40
+  Chess960 differential-perft positions. Four interleaved fixed-depth bench
+  runs measure +74.3% throughput over the pre-NNUE-optimization local binary
+  at identical node counts and best moves. Two separate 20-game self-play A/B
+  runs favored the faster candidates, but their Elo confidence intervals
+  cross zero; neither establishes a strength gain. Full profiles, PGNs, logs,
+  and raw benchmark data are in `tools/engine-match/results/` and the NNUE
+  experiment report.
+- Full-strength Stockfish browser match, 2026-11-12: Valox lost two games by
+  mate (0-2) with a five-second per-move cap and no match clock. This is a
+  diagnostic two-game sample, not an Elo estimate. Legal PGN:
+  `tools/engine-match/results/valox-stockfish-fullstrength-browser-20261112.pgn`.
 - `tools\engine-match\verify-uci.ps1`: passed with eight threads; checks UCI identification/options, readiness, standard search, Chess960 Shredder-FEN and rook-square castling input, `stop`, and `quit`.
 - `python tools\engine-match\stress-uci.py build\valox.exe --games 100`: passed 100 searches with eight threads, alternating start position/opening moves and mixing depth-limited, clock-managed, and explicitly interrupted searches; repeated `ucinewgame`, `position`, `isready`, and clean exit all passed.
 - `python tools\engine-match\differential-perft.py build\valox.exe --positions 100 --chess960 40 --depth 3 --seed 20261112` and a second run of 20 standard plus 10 Chess960 positions at depth 4: every leaf count matched python-chess.
@@ -49,11 +147,15 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - `python tools\engine-match\bench-threads.py build\valox.exe --depth 10`: 1/2/4/8 threads measured 49,022/86,961/162,047/225,781 nps on the fixed start-position search. This is one noisy host sample at one depth; it records throughput, not playing strength.
 - Latest 100-game paired match (2026-11-12) against Stockfish 19 with `UCI_LimitStrength=true`, `UCI_Elo=2000`, `Hash=256`, Syzygy WDL, `5+0`, one thread per engine, two concurrent games, and the bundled sequential opening set: Valox 68 wins, 28 draws, 4 losses (82/100 points, 82%). Cute Chess reports `+263.4 ±65.9` relative Elo and LOS 100%. Valox scored 43/50 as White and 39/50 as Black. Treat this as a local result for this configuration, not an official or opponent-independent Valox rating. The pinned Valox executable SHA-256 was `87EF90A88B2A629A357DE7ABB460216E5733B7130E7AC7BCE96F1C94E03951BF`.
 - `python tools\engine-match\audit-pgn.py tools\engine-match\results\valox-stockfish-2000-20261112-145753.pgn --expected-games 100`: parsed all 100 games and found no illegal moves or PGN errors. Match log shows 28 threefold draws and 72 checkmates; no time forfeits.
-- `THIRD_PARTY_NOTICES.md` lists the current Rust runtime dependencies and the source snapshot includes the identified MIT/Apache license texts. The external NNUE model's redistribution rights and Valox's own source license are still unresolved.
+- `THIRD_PARTY_NOTICES.md` lists the current Rust runtime dependencies and the source snapshot includes the identified MIT/Apache license texts. Valox's own source is licensed under MIT OR Apache-2.0; the external NNUE model's redistribution rights remain unresolved and the model is excluded from source archives.
+- `build/valox-source-20261119.zip` (63 files, no `.nnue` files) is accompanied
+  by `build/valox-source-20261119.zip.sha256`. A fresh extraction passes 31
+  tests with the classical evaluator and builds offline; with `VALOX_NNUE_PATH`
+  pointing at the synthetic network outside the archive, it passes all 38 tests.
 - Earlier 20-game match (2026-11-12) against Stockfish 19 configured with `UCI_Elo=2000`, `Hash=256`, at `10+0`: Valox 12 wins, 6 draws, 2 losses (75%). Cute Chess reported a relative difference of `+190.8 ±151.4 Elo`; this is a small sample and not Valox's standalone rating. Valox scored 8/10 as White and 4/10 as Black. PGN contains 20 games and parses with zero errors; all terminations were mate or draw, with no time forfeits or illegal moves in the match log.
 - Match record from 2026-11-12: Valox scored 29 wins, 11 draws, 0 losses in 40 games against Stockfish 19 configured with `UCI_LimitStrength=true` and `UCI_Elo=2000`, at `15+0`. This is a short, limited-strength local result, not an official Elo estimate. `15+0` is 15 seconds initial clock per side with no increment for the entire game.
 - Current network weights are Reckless v60, not a Valox-trained network. The experimental Bullet checkpoints in `tools/training` did not outperform the current evaluator on their small correlated holdout and are not integrated.
-- Current Windows release executable SHA-256: `87EF90A88B2A629A357DE7ABB460216E5733B7130E7AC7BCE96F1C94E03951BF` (`build\valox.exe`, built 2026-11-12). This is a local candidate artifact only; no public release has been prepared.
+- Current Windows release executable SHA-256: `D1DEBC3333B42E481E94B0A4A2169CFF632F9078FA6596DB8CDAB09A38D2E958` (`build\valox-threat-ray-20261119.exe`, 2026-11-19). This is a local candidate artifact only; no public release has been prepared.
 - The exact build and network fingerprints are recorded in [`RELEASE_CANDIDATE.md`](RELEASE_CANDIDATE.md); the paired match files are in `tools\engine-match\results`.
 
 ## Reproduction commands

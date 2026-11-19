@@ -16,6 +16,10 @@
 /tools/engine-match/stockfish.zip
 /tools/engine-match/results/*.pgn
 /tools/engine-match/results/*.txt
+/tools/engine-match/results/*.etl
+/tools/engine-match/results/*.etl.NGENPDB/
+/tools/engine-match/results/*.partial.json
+/target-profile/
 /tools/training/target/
 /tools/training/data/
 /tools/training/data-*/

@@ -1,5 +1,4 @@
 use pyrrhic_rs::TableBases;
-use std::collections::HashMap;
 use std::io::{self, BufRead, Write};
 use std::sync::{
     atomic::{AtomicBool, Ordering},
@@ -10,6 +9,7 @@ use std::time::Duration;
 use valox_engine::engine::{transposition_entries_for_mb, SearchHistory, Searcher};
 use valox_engine::position::{parse_uci_move_mode, perft, Position, Side};
 use valox_engine::syzygy::ValoxAdapter;
+use valox_engine::tt::TranspositionTable;
 
 type Worker = JoinHandle<Searcher>;
 
@@ -74,8 +74,7 @@ fn run_benchmark(depth: u32) {
         };
         let signal = Arc::new(AtomicBool::new(false));
         let mut searcher = Searcher::new(
-            HashMap::new(),
-            65_536,
+            Arc::new(TranspositionTable::new(65_536)),
             signal,
             Duration::from_secs(3600),
             false,
@@ -108,9 +107,11 @@ fn main() {
     }
     let stdin = io::stdin();
     let mut position = Position::start();
-    let mut table = HashMap::new();
-    let mut search_history = SearchHistory::default();
     let mut hash_mb = 16usize;
+    let mut table = Arc::new(TranspositionTable::new(transposition_entries_for_mb(
+        hash_mb,
+    )));
+    let mut search_history = SearchHistory::default();
     let mut threads = 1usize;
     let mut chess960 = false;
     let mut tablebases = None;
@@ -132,7 +133,7 @@ fn main() {
                 if let Some(s) = finish_worker(worker.take(), true) { search_history = s.history_state(); table = s.tt; }
                 let name = words.iter().position(|w| *w == "name").and_then(|i| words.get(i+1)).copied().unwrap_or("");
                 if name == "Clear" { table.clear(); search_history = SearchHistory::default(); }
-                if name == "Hash" { if let Some(n) = command_value(&words,"value") { hash_mb = (n as usize).clamp(1,1024); table.clear(); } }
+                if name == "Hash" { if let Some(n) = command_value(&words,"value") { hash_mb = (n as usize).clamp(1,1024); table = Arc::new(TranspositionTable::new(transposition_entries_for_mb(hash_mb))); } }
                 if name == "Threads" { if let Some(n) = command_value(&words,"value") { threads = (n as usize).clamp(1,64); } }
                 if name == "UCI_Chess960" {
                     chess960 = words.iter().position(|w| *w == "value")
@@ -156,26 +157,55 @@ fn main() {
                 if let Some(s) = finish_worker(worker.take(), true) { search_history = s.history_state(); table = s.tt; }
                 let depth = command_value(&words,"depth").unwrap_or(64).clamp(1,64) as u32;
                 let node_limit = command_value(&words,"nodes").filter(|nodes| *nodes > 0);
-                let time_ms = if let Some(ms) = command_value(&words,"movetime") { ms.max(1) }
-                    else if position.side == Side::White && command_value(&words,"wtime").is_some() || position.side == Side::Black && command_value(&words,"btime").is_some() {
-                        let (time, inc) = if position.side == Side::White { (command_value(&words,"wtime").unwrap_or(1000),command_value(&words,"winc").unwrap_or(0)) } else { (command_value(&words,"btime").unwrap_or(1000),command_value(&words,"binc").unwrap_or(0)) };
-                        // Sudden-death controls usually provide no moves-to-go. Budget
-                        // against a longer game so Valox keeps time for the endgame.
-                        let divisor = command_value(&words,"movestogo").unwrap_or(60).clamp(1,100);
-                        time.saturating_div(divisor).saturating_add(inc.saturating_mul(3)/4).clamp(20,time.max(20))
+                let has_movetime = command_value(&words,"movetime").is_some();
+                let clock = if position.side == Side::White && command_value(&words,"wtime").is_some() || position.side == Side::Black && command_value(&words,"btime").is_some() {
+                    let (time, inc) = if position.side == Side::White { (command_value(&words,"wtime").unwrap_or(1000),command_value(&words,"winc").unwrap_or(0)) } else { (command_value(&words,"btime").unwrap_or(1000),command_value(&words,"binc").unwrap_or(0)) };
+                    // Sudden-death controls usually provide no moves-to-go.
+                    let divisor = command_value(&words,"movestogo").unwrap_or(40).clamp(1,100);
+                    Some((time, inc, divisor))
+                } else {
+                    None
+                };
+                let raw_time_ms = if let Some(ms) = command_value(&words,"movetime") { ms.max(1) }
+                    else if let Some((time, inc, divisor)) = clock {
+                        time.saturating_div(divisor).saturating_add(inc.saturating_mul(4)/5).clamp(20,time.max(20))
                     } else if node_limit.is_some() || words.contains(&"infinite") || words.contains(&"depth") { 86_400_000 } else { 3000 };
+                // Keep a small safety margin for UCI communication and process
+                // scheduling so a completed search does not flag on the GUI clock.
+                // Never let the margin eat more than a fifth of a very small budget.
+                let overhead = if has_movetime { 15 } else { 30 };
+                let soft_ms = raw_time_ms
+                    .saturating_sub(overhead.min(raw_time_ms / 5))
+                    .max(1);
+                // Clock games get a hard cap above the soft budget: an iteration
+                // that is already running may finish, but the engine never spends
+                // a large fraction of the remaining clock on one move. movetime,
+                // depth, nodes and infinite keep soft == hard.
+                let hard_ms = match (has_movetime, clock) {
+                    (false, Some((time, inc, _))) => {
+                        let clock_cap = time
+                            .saturating_div(8)
+                            .saturating_add(inc)
+                            .max(soft_ms);
+                        soft_ms
+                            .saturating_add((soft_ms / 3).max(1))
+                            .min(clock_cap)
+                    }
+                    _ => soft_ms,
+                };
                 let signal = Arc::new(AtomicBool::new(false));
                 let thread_signal = signal.clone();
                 let pos = position.clone();
-                let limit = transposition_entries_for_mb(hash_mb);
-                let tt = std::mem::take(&mut table);
+                let tt = Arc::clone(&table);
                 let prior_history = std::mem::take(&mut search_history);
                 let thread_count = threads;
                 let syzygy = tablebases.clone();
                 worker = Some((thread::spawn(move || {
-                    let mut searcher = Searcher::new_with_history(tt, limit, thread_signal, Duration::from_millis(time_ms), prior_history, true);
+                    let mut searcher = Searcher::new_with_history(tt, thread_signal, Duration::from_millis(hard_ms), prior_history, true);
+                    searcher.set_soft_time(Duration::from_millis(soft_ms));
                     searcher.set_tablebases(syzygy);
                     searcher.set_node_limit(node_limit);
+                    searcher.set_uci_chess960(chess960);
                     let best = searcher.search_with_threads(&pos, depth, thread_count);
                     println!("bestmove {}", best.map(|m| pos.uci_move(m, chess960)).unwrap_or_else(|| "0000".into()));
                     let _ = io::stdout().flush();

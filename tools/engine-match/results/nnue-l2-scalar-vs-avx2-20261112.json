@@ -1,0 +1,254 @@
+{
+  "dataset": "tools\\engine-match\\results\\nnue-bench-positions-20261112.tsv",
+  "eval_repeats": 1024,
+  "update_repeats": 16,
+  "runs": {
+    "scalar": [
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 952.336,
+          "evaluations_per_second": 322575.4,
+          "microseconds_per_eval": 3.1,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1399.13,
+          "pairs_per_second": 94676.0,
+          "estimated_push_pop_microseconds": 4.362,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 955.059,
+          "evaluations_per_second": 321655.7,
+          "microseconds_per_eval": 3.109,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1392.868,
+          "pairs_per_second": 95101.6,
+          "estimated_push_pop_microseconds": 4.297,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 947.783,
+          "evaluations_per_second": 324124.7,
+          "microseconds_per_eval": 3.085,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1387.447,
+          "pairs_per_second": 95473.2,
+          "estimated_push_pop_microseconds": 4.304,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 948.25,
+          "evaluations_per_second": 323965.2,
+          "microseconds_per_eval": 3.087,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1404.603,
+          "pairs_per_second": 94307.1,
+          "estimated_push_pop_microseconds": 4.43,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 947.525,
+          "evaluations_per_second": 324212.9,
+          "microseconds_per_eval": 3.084,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1403.309,
+          "pairs_per_second": 94394.0,
+          "estimated_push_pop_microseconds": 4.425,
+          "checksum": 35487680
+        }
+      }
+    ],
+    "simd": [
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 726.159,
+          "evaluations_per_second": 423048.0,
+          "microseconds_per_eval": 2.364,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1264.303,
+          "pairs_per_second": 104772.4,
+          "estimated_push_pop_microseconds": 4.817,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 718.867,
+          "evaluations_per_second": 427339.4,
+          "microseconds_per_eval": 2.34,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1187.962,
+          "pairs_per_second": 111505.3,
+          "estimated_push_pop_microseconds": 4.288,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 719.163,
+          "evaluations_per_second": 427163.4,
+          "microseconds_per_eval": 2.341,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1198.454,
+          "pairs_per_second": 110529.1,
+          "estimated_push_pop_microseconds": 4.365,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 718.892,
+          "evaluations_per_second": 427324.4,
+          "microseconds_per_eval": 2.34,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1186.938,
+          "pairs_per_second": 111601.4,
+          "estimated_push_pop_microseconds": 4.28,
+          "checksum": 35487680
+        }
+      },
+      {
+        "cpu_features": {
+          "avx2": true,
+          "fma": true
+        },
+        "eval": {
+          "positions": 300,
+          "evaluations": 307200,
+          "time_ms": 750.216,
+          "evaluations_per_second": 409482.3,
+          "microseconds_per_eval": 2.442,
+          "checksum": 2941952
+        },
+        "update": {
+          "positions": 300,
+          "push_pop_pairs": 132464,
+          "paired_eval_count": 264928,
+          "total_time_ms": 1191.904,
+          "pairs_per_second": 111136.4,
+          "estimated_push_pop_microseconds": 4.114,
+          "checksum": 35487680
+        }
+      }
+    ]
+  },
+  "summary": {
+    "scalar": {
+      "median_evaluations_per_second": 323965.2,
+      "median_microseconds_per_eval": 3.087,
+      "median_estimated_push_pop_microseconds": 4.362
+    },
+    "simd": {
+      "median_evaluations_per_second": 427163.4,
+      "median_microseconds_per_eval": 2.341,
+      "median_estimated_push_pop_microseconds": 4.288
+    }
+  },
+  "simd_eval_speedup_pct": 31.85471772894126
+}

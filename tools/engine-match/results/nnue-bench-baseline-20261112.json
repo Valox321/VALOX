@@ -1,0 +1,6612 @@
+{
+  "positions": 300,
+  "nodes_per_position": 8000,
+  "hash_mb": 64,
+  "threads": 1,
+  "dataset": "tools\\engine-match\\results\\nnue-bench-positions-20261112.tsv",
+  "baseline_executable": "build\\valox.exe",
+  "candidate_executable": "build\\valox.exe",
+  "same_bestmove_count": 300,
+  "results": [
+    {
+      "index": 0,
+      "category": "opening",
+      "fen": "r2qr1k1/2pn1pp1/p1bp1b1p/2pN4/4P3/1P1Q1N1P/P1P2PP1/1RB1R1K1 w - - 0 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1f4",
+        "nodes": 6959,
+        "reported_time_ms": 69,
+        "reported_nps": 100855,
+        "depth": 5,
+        "wall_ms": 78.99790000010398
+      },
+      "candidate": {
+        "bestmove": "c1f4",
+        "nodes": 6959,
+        "reported_time_ms": 68,
+        "reported_nps": 102338,
+        "depth": 5,
+        "wall_ms": 77.80009999987669
+      }
+    },
+    {
+      "index": 1,
+      "category": "opening",
+      "fen": "r1bqk2r/pp2bp1p/2p3p1/3pN2n/3PP3/2NB4/PP3PPP/R2Q1RK1 w kq - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4d5",
+        "nodes": 4778,
+        "reported_time_ms": 48,
+        "reported_nps": 99541,
+        "depth": 5,
+        "wall_ms": 82.86079999925278
+      },
+      "candidate": {
+        "bestmove": "e4d5",
+        "nodes": 4778,
+        "reported_time_ms": 48,
+        "reported_nps": 99541,
+        "depth": 5,
+        "wall_ms": 83.20160000039323
+      }
+    },
+    {
+      "index": 2,
+      "category": "opening",
+      "fen": "r1bqk2r/1pp1bppp/p1np1n2/4p3/B3P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 2 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4c6",
+        "nodes": 5437,
+        "reported_time_ms": 51,
+        "reported_nps": 106607,
+        "depth": 6,
+        "wall_ms": 78.7067000001116
+      },
+      "candidate": {
+        "bestmove": "a4c6",
+        "nodes": 5437,
+        "reported_time_ms": 51,
+        "reported_nps": 106607,
+        "depth": 6,
+        "wall_ms": 78.30529999955615
+      }
+    },
+    {
+      "index": 3,
+      "category": "opening",
+      "fen": "r1br1bk1/pp3p1p/n2q2p1/2p1p1B1/4P3/2N4P/PP1Q1PP1/2KR1B1R w - - 0 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2e3",
+        "nodes": 4584,
+        "reported_time_ms": 39,
+        "reported_nps": 117538,
+        "depth": 5,
+        "wall_ms": 73.3992000004946
+      },
+      "candidate": {
+        "bestmove": "d2e3",
+        "nodes": 4584,
+        "reported_time_ms": 40,
+        "reported_nps": 114600,
+        "depth": 5,
+        "wall_ms": 74.64419999996608
+      }
+    },
+    {
+      "index": 4,
+      "category": "opening",
+      "fen": "rnbq1rk1/pp2bppp/4p3/2p5/3P1Q2/2N2N2/PP2PPPP/R3KB1R w KQ c6 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4c5",
+        "nodes": 5417,
+        "reported_time_ms": 47,
+        "reported_nps": 115255,
+        "depth": 5,
+        "wall_ms": 72.56210000014107
+      },
+      "candidate": {
+        "bestmove": "d4c5",
+        "nodes": 5417,
+        "reported_time_ms": 46,
+        "reported_nps": 117760,
+        "depth": 5,
+        "wall_ms": 71.8801999992138
+      }
+    },
+    {
+      "index": 5,
+      "category": "opening",
+      "fen": "1rb1k2r/ppp1qppp/4n3/8/3p4/1P4P1/P1QPPPBP/R1BR2K1 w k - 1 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a2a4",
+        "nodes": 5236,
+        "reported_time_ms": 48,
+        "reported_nps": 109083,
+        "depth": 5,
+        "wall_ms": 75.2372999995714
+      },
+      "candidate": {
+        "bestmove": "a2a4",
+        "nodes": 5236,
+        "reported_time_ms": 48,
+        "reported_nps": 109083,
+        "depth": 5,
+        "wall_ms": 75.74489999933576
+      }
+    },
+    {
+      "index": 6,
+      "category": "opening",
+      "fen": "1rbqk2r/pp3ppp/3b4/P2pn3/3P4/6P1/1P2PPBP/R1BQ1RK1 w k - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4e5",
+        "nodes": 7472,
+        "reported_time_ms": 72,
+        "reported_nps": 103777,
+        "depth": 7,
+        "wall_ms": 77.52919999984442
+      },
+      "candidate": {
+        "bestmove": "d4e5",
+        "nodes": 7472,
+        "reported_time_ms": 72,
+        "reported_nps": 103777,
+        "depth": 7,
+        "wall_ms": 76.74549999865121
+      }
+    },
+    {
+      "index": 7,
+      "category": "opening",
+      "fen": "r2r2k1/p4p2/b5p1/1pnNp2p/3nP2P/1P1BB1P1/P2b1PKN/2R5 w - - 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1c5",
+        "nodes": 3172,
+        "reported_time_ms": 30,
+        "reported_nps": 105733,
+        "depth": 5,
+        "wall_ms": 78.16570000068168
+      },
+      "candidate": {
+        "bestmove": "c1c5",
+        "nodes": 3172,
+        "reported_time_ms": 30,
+        "reported_nps": 105733,
+        "depth": 5,
+        "wall_ms": 78.80560000012338
+      }
+    },
+    {
+      "index": 8,
+      "category": "opening",
+      "fen": "r1bqkb1r/1p1npppp/p7/3n4/3N4/3B1P2/PPP3PP/RNBQK2R w KQkq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4b3",
+        "nodes": 4875,
+        "reported_time_ms": 41,
+        "reported_nps": 118902,
+        "depth": 5,
+        "wall_ms": 71.80719999996654
+      },
+      "candidate": {
+        "bestmove": "d4b3",
+        "nodes": 4875,
+        "reported_time_ms": 40,
+        "reported_nps": 121875,
+        "depth": 5,
+        "wall_ms": 71.25050000104238
+      }
+    },
+    {
+      "index": 9,
+      "category": "opening",
+      "fen": "r1bqk2r/1ppn1ppp/1n1b4/p3p3/P2P4/2N2NP1/1P2PPBP/R1BQK2R w KQkq a6 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1g1",
+        "nodes": 6078,
+        "reported_time_ms": 63,
+        "reported_nps": 96476,
+        "depth": 6,
+        "wall_ms": 83.31290000023728
+      },
+      "candidate": {
+        "bestmove": "e1g1",
+        "nodes": 6078,
+        "reported_time_ms": 64,
+        "reported_nps": 94968,
+        "depth": 6,
+        "wall_ms": 83.7563000004593
+      }
+    },
+    {
+      "index": 10,
+      "category": "opening",
+      "fen": "rn2k2r/pp3ppp/3bpn2/3p4/3P1N2/8/PPP2PPP/R1B1KB1R w KQkq - 2 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c3",
+        "nodes": 7012,
+        "reported_time_ms": 48,
+        "reported_nps": 146083,
+        "depth": 6,
+        "wall_ms": 56.072800000038114
+      },
+      "candidate": {
+        "bestmove": "c2c3",
+        "nodes": 7012,
+        "reported_time_ms": 48,
+        "reported_nps": 146083,
+        "depth": 6,
+        "wall_ms": 55.58240000027581
+      }
+    },
+    {
+      "index": 11,
+      "category": "opening",
+      "fen": "rn1qkbnr/pp3ppb/2p1p2p/4N3/3P3P/6N1/PPP2PP1/R1BQKB1R w KQkq - 2 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1c4",
+        "nodes": 6433,
+        "reported_time_ms": 62,
+        "reported_nps": 103758,
+        "depth": 5,
+        "wall_ms": 78.62720000048284
+      },
+      "candidate": {
+        "bestmove": "f1c4",
+        "nodes": 6433,
+        "reported_time_ms": 63,
+        "reported_nps": 102111,
+        "depth": 5,
+        "wall_ms": 78.79060000050231
+      }
+    },
+    {
+      "index": 12,
+      "category": "opening",
+      "fen": "r2r2k1/pp1nqpbp/2n3p1/8/2P1P3/1QN1BP2/PP2BP1P/3R1RK1 w - - 7 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3b7",
+        "nodes": 4893,
+        "reported_time_ms": 48,
+        "reported_nps": 101937,
+        "depth": 6,
+        "wall_ms": 80.01850000073318
+      },
+      "candidate": {
+        "bestmove": "b3b7",
+        "nodes": 4893,
+        "reported_time_ms": 47,
+        "reported_nps": 104106,
+        "depth": 6,
+        "wall_ms": 79.19389999915438
+      }
+    },
+    {
+      "index": 13,
+      "category": "opening",
+      "fen": "r1bqk1nr/p1pnppbp/1p4p1/4P3/2P5/2N2N2/PP2BPPP/R1BQK2R w KQkq - 1 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1f4",
+        "nodes": 4194,
+        "reported_time_ms": 40,
+        "reported_nps": 104850,
+        "depth": 5,
+        "wall_ms": 78.94699999997101
+      },
+      "candidate": {
+        "bestmove": "c1f4",
+        "nodes": 4194,
+        "reported_time_ms": 40,
+        "reported_nps": 104850,
+        "depth": 5,
+        "wall_ms": 79.54950000021199
+      }
+    },
+    {
+      "index": 14,
+      "category": "opening",
+      "fen": "r2q1rk1/2pbbppp/p1pp1n2/8/3NP3/2NQ4/PPP2PPP/R1B2RK1 w - - 3 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1g5",
+        "nodes": 5038,
+        "reported_time_ms": 41,
+        "reported_nps": 122878,
+        "depth": 5,
+        "wall_ms": 67.38900000163994
+      },
+      "candidate": {
+        "bestmove": "c1g5",
+        "nodes": 5038,
+        "reported_time_ms": 40,
+        "reported_nps": 125950,
+        "depth": 5,
+        "wall_ms": 67.08919999982754
+      }
+    },
+    {
+      "index": 15,
+      "category": "opening",
+      "fen": "r2q1rk1/p1p2p1p/1n2p1p1/1p2P1N1/2pP1P2/2P5/P4PRP/1R1QK3 w - - 0 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b1b5",
+        "nodes": 6516,
+        "reported_time_ms": 58,
+        "reported_nps": 112344,
+        "depth": 5,
+        "wall_ms": 73.11509999999544
+      },
+      "candidate": {
+        "bestmove": "b1b5",
+        "nodes": 6516,
+        "reported_time_ms": 59,
+        "reported_nps": 110440,
+        "depth": 5,
+        "wall_ms": 73.93320000119274
+      }
+    },
+    {
+      "index": 16,
+      "category": "opening",
+      "fen": "r2qr1k1/2pbbppp/p1pp4/7n/Q3PB2/2N2N2/PPP2PPP/2KRR3 w - - 9 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4e3",
+        "nodes": 4729,
+        "reported_time_ms": 40,
+        "reported_nps": 118225,
+        "depth": 5,
+        "wall_ms": 72.24480000149924
+      },
+      "candidate": {
+        "bestmove": "f4e3",
+        "nodes": 4729,
+        "reported_time_ms": 40,
+        "reported_nps": 118225,
+        "depth": 5,
+        "wall_ms": 72.15619999988121
+      }
+    },
+    {
+      "index": 17,
+      "category": "opening",
+      "fen": "r2qkb1r/1p1b1ppp/p2ppn2/6B1/3NP3/2N5/PPP2PPP/R2QK2R w KQkq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1d3",
+        "nodes": 3835,
+        "reported_time_ms": 33,
+        "reported_nps": 116212,
+        "depth": 4,
+        "wall_ms": 70.2077999994799
+      },
+      "candidate": {
+        "bestmove": "d1d3",
+        "nodes": 3835,
+        "reported_time_ms": 33,
+        "reported_nps": 116212,
+        "depth": 4,
+        "wall_ms": 70.4729999997653
+      }
+    },
+    {
+      "index": 18,
+      "category": "opening",
+      "fen": "r1b2rk1/1pp1qppp/1n1b4/pNn5/P2N4/6P1/1PQ1PPBP/R1B2RK1 w - - 3 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2b3",
+        "nodes": 7884,
+        "reported_time_ms": 75,
+        "reported_nps": 105120,
+        "depth": 5,
+        "wall_ms": 76.8329000002268
+      },
+      "candidate": {
+        "bestmove": "b2b3",
+        "nodes": 7884,
+        "reported_time_ms": 75,
+        "reported_nps": 105120,
+        "depth": 5,
+        "wall_ms": 76.49200000014389
+      }
+    },
+    {
+      "index": 19,
+      "category": "opening",
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 4 5",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1g5",
+        "nodes": 7343,
+        "reported_time_ms": 69,
+        "reported_nps": 106420,
+        "depth": 5,
+        "wall_ms": 75.98849999885715
+      },
+      "candidate": {
+        "bestmove": "c1g5",
+        "nodes": 7343,
+        "reported_time_ms": 69,
+        "reported_nps": 106420,
+        "depth": 5,
+        "wall_ms": 75.92450000083772
+      }
+    },
+    {
+      "index": 20,
+      "category": "opening",
+      "fen": "rnbqkb1r/ppp2ppp/6n1/4p3/8/2N2NP1/PP1PPPBP/R1BQK2R w KQkq - 4 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2d4",
+        "nodes": 5425,
+        "reported_time_ms": 51,
+        "reported_nps": 106372,
+        "depth": 6,
+        "wall_ms": 77.22429999921587
+      },
+      "candidate": {
+        "bestmove": "d2d4",
+        "nodes": 5425,
+        "reported_time_ms": 51,
+        "reported_nps": 106372,
+        "depth": 6,
+        "wall_ms": 76.95640000019921
+      }
+    },
+    {
+      "index": 21,
+      "category": "opening",
+      "fen": "r3r1k1/2p2pp1/p1nqbn1p/3pp3/Pp2P3/1B1PQN1P/1PPN1PP1/R1R3K1 w - - 5 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1e1",
+        "nodes": 4005,
+        "reported_time_ms": 40,
+        "reported_nps": 100125,
+        "depth": 4,
+        "wall_ms": 82.67619999969611
+      },
+      "candidate": {
+        "bestmove": "c1e1",
+        "nodes": 4005,
+        "reported_time_ms": 41,
+        "reported_nps": 97682,
+        "depth": 4,
+        "wall_ms": 83.13660000021628
+      }
+    },
+    {
+      "index": 22,
+      "category": "opening",
+      "fen": "rn2k2r/pp2bppp/q4n2/2p2NN1/8/4B3/PPP1QPPP/R4RK1 w kq - 7 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2e1",
+        "nodes": 2846,
+        "reported_time_ms": 28,
+        "reported_nps": 101642,
+        "depth": 4,
+        "wall_ms": 81.52589999917836
+      },
+      "candidate": {
+        "bestmove": "e2e1",
+        "nodes": 2846,
+        "reported_time_ms": 28,
+        "reported_nps": 101642,
+        "depth": 4,
+        "wall_ms": 81.18739999918034
+      }
+    },
+    {
+      "index": 23,
+      "category": "opening",
+      "fen": "r1bqk2r/ppp2ppp/2n5/2b5/4p2P/2PP1NP1/P3PP2/R1BQKB1R w KQkq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3g5",
+        "nodes": 5378,
+        "reported_time_ms": 55,
+        "reported_nps": 97781,
+        "depth": 6,
+        "wall_ms": 81.83370000006107
+      },
+      "candidate": {
+        "bestmove": "f3g5",
+        "nodes": 5378,
+        "reported_time_ms": 54,
+        "reported_nps": 99592,
+        "depth": 6,
+        "wall_ms": 81.40149999962887
+      }
+    },
+    {
+      "index": 24,
+      "category": "opening",
+      "fen": "r2q1rk1/pp3pp1/3b3p/4n3/3pP1b1/2P2PP1/P3Q1BP/R1B2RK1 w - - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3d4",
+        "nodes": 4724,
+        "reported_time_ms": 42,
+        "reported_nps": 112476,
+        "depth": 7,
+        "wall_ms": 71.5598000006139
+      },
+      "candidate": {
+        "bestmove": "c3d4",
+        "nodes": 4724,
+        "reported_time_ms": 41,
+        "reported_nps": 115219,
+        "depth": 7,
+        "wall_ms": 70.97040000007837
+      }
+    },
+    {
+      "index": 25,
+      "category": "opening",
+      "fen": "rnb2rk1/pp2bppp/1q2p3/8/3p1Q2/2N1PN2/PP3PPP/2KR1B1R w - - 0 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4d4",
+        "nodes": 6203,
+        "reported_time_ms": 57,
+        "reported_nps": 108824,
+        "depth": 6,
+        "wall_ms": 75.01930000034918
+      },
+      "candidate": {
+        "bestmove": "f4d4",
+        "nodes": 6203,
+        "reported_time_ms": 57,
+        "reported_nps": 108824,
+        "depth": 6,
+        "wall_ms": 75.37690000026487
+      }
+    },
+    {
+      "index": 26,
+      "category": "opening",
+      "fen": "r2q1rk1/1p2ppbp/p2p2p1/8/3nP1bP/2N1BP2/PPPQ2P1/2KR3R w - - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3d4",
+        "nodes": 5942,
+        "reported_time_ms": 59,
+        "reported_nps": 100711,
+        "depth": 7,
+        "wall_ms": 80.02200000009907
+      },
+      "candidate": {
+        "bestmove": "e3d4",
+        "nodes": 5942,
+        "reported_time_ms": 54,
+        "reported_nps": 110037,
+        "depth": 7,
+        "wall_ms": 74.72990000132995
+      }
+    },
+    {
+      "index": 27,
+      "category": "opening",
+      "fen": "r3k2r/1pp1q1pp/p1p2p2/4Nb2/8/3P4/PPP2QPP/RN3RK1 w kq - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5f3",
+        "nodes": 3265,
+        "reported_time_ms": 23,
+        "reported_nps": 141956,
+        "depth": 5,
+        "wall_ms": 61.89449999874341
+      },
+      "candidate": {
+        "bestmove": "e5f3",
+        "nodes": 3265,
+        "reported_time_ms": 23,
+        "reported_nps": 141956,
+        "depth": 5,
+        "wall_ms": 62.17539999852306
+      }
+    },
+    {
+      "index": 28,
+      "category": "opening",
+      "fen": "r1b2rk1/1pp1q1pp/2n2p2/p3b3/8/2P2NP1/P1Q1PPBP/1RB2RK1 w - - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3e5",
+        "nodes": 5703,
+        "reported_time_ms": 54,
+        "reported_nps": 105611,
+        "depth": 5,
+        "wall_ms": 77.24030000099447
+      },
+      "candidate": {
+        "bestmove": "f3e5",
+        "nodes": 5703,
+        "reported_time_ms": 54,
+        "reported_nps": 105611,
+        "depth": 5,
+        "wall_ms": 77.08269999966433
+      }
+    },
+    {
+      "index": 29,
+      "category": "opening",
+      "fen": "r2r2k1/pp2bppb/1q2pn1p/7P/P2P1P2/5RN1/1P2B1P1/R1BQ2K1 w - - 3 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4a5",
+        "nodes": 7769,
+        "reported_time_ms": 73,
+        "reported_nps": 106424,
+        "depth": 7,
+        "wall_ms": 74.98990000021877
+      },
+      "candidate": {
+        "bestmove": "a4a5",
+        "nodes": 7769,
+        "reported_time_ms": 73,
+        "reported_nps": 106424,
+        "depth": 7,
+        "wall_ms": 75.80770000095072
+      }
+    },
+    {
+      "index": 30,
+      "category": "opening",
+      "fen": "r1bq1rk1/2ppbpp1/p1n2n1p/1p2p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w - - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3d5",
+        "nodes": 6809,
+        "reported_time_ms": 67,
+        "reported_nps": 101626,
+        "depth": 5,
+        "wall_ms": 78.8353999996616
+      },
+      "candidate": {
+        "bestmove": "c3d5",
+        "nodes": 6809,
+        "reported_time_ms": 67,
+        "reported_nps": 101626,
+        "depth": 5,
+        "wall_ms": 79.41070000015316
+      }
+    },
+    {
+      "index": 31,
+      "category": "opening",
+      "fen": "r2r2k1/pbp2pb1/1p3npp/4p3/2PnP3/2N1BN1P/PPB2PP1/2R1R1K1 w - - 3 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2a4",
+        "nodes": 6127,
+        "reported_time_ms": 61,
+        "reported_nps": 100442,
+        "depth": 4,
+        "wall_ms": 77.73440000164555
+      },
+      "candidate": {
+        "bestmove": "c2a4",
+        "nodes": 6127,
+        "reported_time_ms": 62,
+        "reported_nps": 98822,
+        "depth": 4,
+        "wall_ms": 78.93169999988459
+      }
+    },
+    {
+      "index": 32,
+      "category": "opening",
+      "fen": "r3k2r/ppqnbp2/2n1p1p1/7B/5N1P/1QP1B1P1/PP3PK1/3R1R2 w q - 0 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4e6",
+        "nodes": 6560,
+        "reported_time_ms": 66,
+        "reported_nps": 99393,
+        "depth": 5,
+        "wall_ms": 81.17490000040561
+      },
+      "candidate": {
+        "bestmove": "f4e6",
+        "nodes": 6560,
+        "reported_time_ms": 65,
+        "reported_nps": 100923,
+        "depth": 5,
+        "wall_ms": 80.22149999851536
+      }
+    },
+    {
+      "index": 33,
+      "category": "opening",
+      "fen": "2rqkb1r/1p3p2/p1npbp2/3Np3/P3P1B1/2N4p/1PP2PPP/R2Q1RK1 w k - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g4h3",
+        "nodes": 7145,
+        "reported_time_ms": 73,
+        "reported_nps": 97876,
+        "depth": 5,
+        "wall_ms": 82.94039999964298
+      },
+      "candidate": {
+        "bestmove": "g4h3",
+        "nodes": 7145,
+        "reported_time_ms": 74,
+        "reported_nps": 96554,
+        "depth": 5,
+        "wall_ms": 83.15219999894907
+      }
+    },
+    {
+      "index": 34,
+      "category": "opening",
+      "fen": "r1b1r1k1/pp2p1P1/3p2p1/2pP2pq/2P5/2N2PQ1/PP3R2/R1B3K1 w - - 0 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2h2",
+        "nodes": 2982,
+        "reported_time_ms": 26,
+        "reported_nps": 114692,
+        "depth": 4,
+        "wall_ms": 70.72450000123354
+      },
+      "candidate": {
+        "bestmove": "f2h2",
+        "nodes": 2982,
+        "reported_time_ms": 25,
+        "reported_nps": 119280,
+        "depth": 4,
+        "wall_ms": 70.21660000100383
+      }
+    },
+    {
+      "index": 35,
+      "category": "opening",
+      "fen": "2bn1rk1/r1p2pp1/1p1q1b1p/2Np4/3P4/PQ2PNP1/1P2BPP1/2R1K2R w K - 0 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c5a4",
+        "nodes": 7994,
+        "reported_time_ms": 87,
+        "reported_nps": 91885,
+        "depth": 6,
+        "wall_ms": 87.86009999857924
+      },
+      "candidate": {
+        "bestmove": "c5a4",
+        "nodes": 7994,
+        "reported_time_ms": 87,
+        "reported_nps": 91885,
+        "depth": 6,
+        "wall_ms": 88.0302000005031
+      }
+    },
+    {
+      "index": 36,
+      "category": "opening",
+      "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N2N1P/PP3PP1/R1BQKB1R w KQ c6 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4d5",
+        "nodes": 4206,
+        "reported_time_ms": 37,
+        "reported_nps": 113675,
+        "depth": 6,
+        "wall_ms": 74.92110000021057
+      },
+      "candidate": {
+        "bestmove": "d4d5",
+        "nodes": 4206,
+        "reported_time_ms": 37,
+        "reported_nps": 113675,
+        "depth": 6,
+        "wall_ms": 74.74299999921641
+      }
+    },
+    {
+      "index": 37,
+      "category": "opening",
+      "fen": "1r2kbr1/2pb1p2/2np1q1p/1p2p3/1P1PP1n1/1BP2NN1/R4PP1/2BQR1K1 w - - 2 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g3f5",
+        "nodes": 7096,
+        "reported_time_ms": 89,
+        "reported_nps": 79730,
+        "depth": 4,
+        "wall_ms": 102.10279999955674
+      },
+      "candidate": {
+        "bestmove": "g3f5",
+        "nodes": 7096,
+        "reported_time_ms": 88,
+        "reported_nps": 80636,
+        "depth": 4,
+        "wall_ms": 101.29289999895263
+      }
+    },
+    {
+      "index": 38,
+      "category": "opening",
+      "fen": "r2q1rk1/pb2bppp/1pn1pn2/8/3P1B2/PQN2N2/1P2BPPP/R3K2R w KQ - 3 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a1d1",
+        "nodes": 5235,
+        "reported_time_ms": 50,
+        "reported_nps": 104700,
+        "depth": 5,
+        "wall_ms": 79.33369999955175
+      },
+      "candidate": {
+        "bestmove": "a1d1",
+        "nodes": 5235,
+        "reported_time_ms": 49,
+        "reported_nps": 106836,
+        "depth": 5,
+        "wall_ms": 79.1786999998294
+      }
+    },
+    {
+      "index": 39,
+      "category": "opening",
+      "fen": "2rr2k1/pb2bppp/1p2p3/n7/3P4/1qPQBN2/4BPPP/2R1R1K1 w - - 6 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3d2",
+        "nodes": 6850,
+        "reported_time_ms": 64,
+        "reported_nps": 107031,
+        "depth": 5,
+        "wall_ms": 77.11980000021867
+      },
+      "candidate": {
+        "bestmove": "e3d2",
+        "nodes": 6850,
+        "reported_time_ms": 65,
+        "reported_nps": 105384,
+        "depth": 5,
+        "wall_ms": 77.52749999963271
+      }
+    },
+    {
+      "index": 40,
+      "category": "opening",
+      "fen": "rnbqk2r/ppp2pbp/3p2p1/4P2n/2P1P3/2N5/PP2BPPP/R1BQK1NR w KQkq - 1 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2g4",
+        "nodes": 6680,
+        "reported_time_ms": 55,
+        "reported_nps": 121454,
+        "depth": 6,
+        "wall_ms": 69.44520000070042
+      },
+      "candidate": {
+        "bestmove": "g2g4",
+        "nodes": 6680,
+        "reported_time_ms": 55,
+        "reported_nps": 121454,
+        "depth": 6,
+        "wall_ms": 69.04179999946791
+      }
+    },
+    {
+      "index": 41,
+      "category": "opening",
+      "fen": "r3k2r/pp1qn2p/2p1Nppb/4n3/3p4/PQ6/1P3PPP/R2K1B1R w kq - 2 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2f4",
+        "nodes": 2535,
+        "reported_time_ms": 19,
+        "reported_nps": 133421,
+        "depth": 4,
+        "wall_ms": 69.55729999936011
+      },
+      "candidate": {
+        "bestmove": "f2f4",
+        "nodes": 2535,
+        "reported_time_ms": 20,
+        "reported_nps": 126750,
+        "depth": 4,
+        "wall_ms": 69.7982999990927
+      }
+    },
+    {
+      "index": 42,
+      "category": "opening",
+      "fen": "r1bbk2r/2p2ppp/p4n2/1p2p3/B3P3/2N5/PPP2PPP/R1B2RK1 w kq - 0 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4b3",
+        "nodes": 7466,
+        "reported_time_ms": 59,
+        "reported_nps": 126542,
+        "depth": 8,
+        "wall_ms": 63.11860000096203
+      },
+      "candidate": {
+        "bestmove": "a4b3",
+        "nodes": 7466,
+        "reported_time_ms": 59,
+        "reported_nps": 126542,
+        "depth": 8,
+        "wall_ms": 62.689800000953255
+      }
+    },
+    {
+      "index": 43,
+      "category": "opening",
+      "fen": "r1b1rbk1/1p1nqp1p/p5p1/3Pp3/4P3/1Q3N2/P3BPPP/1RB2RK1 w - - 6 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1g5",
+        "nodes": 4812,
+        "reported_time_ms": 40,
+        "reported_nps": 120300,
+        "depth": 5,
+        "wall_ms": 70.9446000000753
+      },
+      "candidate": {
+        "bestmove": "c1g5",
+        "nodes": 4812,
+        "reported_time_ms": 41,
+        "reported_nps": 117365,
+        "depth": 5,
+        "wall_ms": 71.40480000089156
+      }
+    },
+    {
+      "index": 44,
+      "category": "opening",
+      "fen": "rn2kb1r/1q2pppb/p1p2n1p/7P/PP1P4/1Q3NN1/RP1B1PP1/4KB1R w Kkq - 3 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1c4",
+        "nodes": 7528,
+        "reported_time_ms": 82,
+        "reported_nps": 91804,
+        "depth": 7,
+        "wall_ms": 88.37000000130502
+      },
+      "candidate": {
+        "bestmove": "f1c4",
+        "nodes": 7528,
+        "reported_time_ms": 83,
+        "reported_nps": 90698,
+        "depth": 7,
+        "wall_ms": 89.0932000002067
+      }
+    },
+    {
+      "index": 45,
+      "category": "opening",
+      "fen": "r1b1kb1r/2p2ppp/p1n2n2/1p2p3/4P3/1BN2N2/PPP2PPP/R1BqK2R w KQkq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1d1",
+        "nodes": 7843,
+        "reported_time_ms": 73,
+        "reported_nps": 107438,
+        "depth": 7,
+        "wall_ms": 75.26719999987108
+      },
+      "candidate": {
+        "bestmove": "e1d1",
+        "nodes": 7843,
+        "reported_time_ms": 74,
+        "reported_nps": 105986,
+        "depth": 7,
+        "wall_ms": 75.93479999923147
+      }
+    },
+    {
+      "index": 46,
+      "category": "opening",
+      "fen": "3rkb1r/pp3ppp/2np4/q3p3/8/2P1N3/P1P2PPP/R1BQ1RK1 w k - 3 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3c4",
+        "nodes": 4990,
+        "reported_time_ms": 38,
+        "reported_nps": 131315,
+        "depth": 6,
+        "wall_ms": 64.19549999918672
+      },
+      "candidate": {
+        "bestmove": "c3c4",
+        "nodes": 4990,
+        "reported_time_ms": 38,
+        "reported_nps": 131315,
+        "depth": 6,
+        "wall_ms": 63.90970000029483
+      }
+    },
+    {
+      "index": 47,
+      "category": "opening",
+      "fen": "r1bqk2r/2p2p2/pn1p1p2/1P5p/B2QPP2/8/PP4PP/R1B2RK1 w kq - 1 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4d1",
+        "nodes": 6649,
+        "reported_time_ms": 61,
+        "reported_nps": 109000,
+        "depth": 6,
+        "wall_ms": 73.09239999995043
+      },
+      "candidate": {
+        "bestmove": "a4d1",
+        "nodes": 6649,
+        "reported_time_ms": 61,
+        "reported_nps": 109000,
+        "depth": 6,
+        "wall_ms": 73.52609999907145
+      }
+    },
+    {
+      "index": 48,
+      "category": "opening",
+      "fen": "rnbqk2r/ppp1bppp/4p3/8/3PP3/2n2N2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2c3",
+        "nodes": 5027,
+        "reported_time_ms": 42,
+        "reported_nps": 119690,
+        "depth": 6,
+        "wall_ms": 71.44090000110737
+      },
+      "candidate": {
+        "bestmove": "b2c3",
+        "nodes": 5027,
+        "reported_time_ms": 42,
+        "reported_nps": 119690,
+        "depth": 6,
+        "wall_ms": 71.16540000060922
+      }
+    },
+    {
+      "index": 49,
+      "category": "opening",
+      "fen": "rn2kbnr/pN3ppp/1qp5/4pb2/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 1 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b7c5",
+        "nodes": 5011,
+        "reported_time_ms": 48,
+        "reported_nps": 104395,
+        "depth": 6,
+        "wall_ms": 78.52599999932863
+      },
+      "candidate": {
+        "bestmove": "b7c5",
+        "nodes": 5011,
+        "reported_time_ms": 48,
+        "reported_nps": 104395,
+        "depth": 6,
+        "wall_ms": 78.3253000008699
+      }
+    },
+    {
+      "index": 50,
+      "category": "opening",
+      "fen": "b2q1rk1/2p2pp1/2np1n1p/1Nb1p3/4P3/1B1P1N2/1PP2PPP/2BQ1RK1 w - - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b5c3",
+        "nodes": 6332,
+        "reported_time_ms": 56,
+        "reported_nps": 113071,
+        "depth": 5,
+        "wall_ms": 72.12239999898884
+      },
+      "candidate": {
+        "bestmove": "b5c3",
+        "nodes": 6332,
+        "reported_time_ms": 56,
+        "reported_nps": 113071,
+        "depth": 5,
+        "wall_ms": 71.71390000075917
+      }
+    },
+    {
+      "index": 51,
+      "category": "opening",
+      "fen": "r4rk1/ppq3pp/1nnNbp2/8/5P2/4B1P1/PP2P1BP/2RQ1RK1 w - - 1 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6b7",
+        "nodes": 6451,
+        "reported_time_ms": 58,
+        "reported_nps": 111224,
+        "depth": 5,
+        "wall_ms": 75.37179999962973
+      },
+      "candidate": {
+        "bestmove": "d6b7",
+        "nodes": 6451,
+        "reported_time_ms": 58,
+        "reported_nps": 111224,
+        "depth": 5,
+        "wall_ms": 75.48789999964356
+      }
+    },
+    {
+      "index": 52,
+      "category": "opening",
+      "fen": "r1bqk2r/5p2/pn5p/2n1Pp2/pbPp4/3B4/4QNPP/R1B2RK1 w kq - 2 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5e6",
+        "nodes": 7163,
+        "reported_time_ms": 69,
+        "reported_nps": 103811,
+        "depth": 6,
+        "wall_ms": 78.15099999970698
+      },
+      "candidate": {
+        "bestmove": "e5e6",
+        "nodes": 7163,
+        "reported_time_ms": 68,
+        "reported_nps": 105338,
+        "depth": 6,
+        "wall_ms": 76.94169999922451
+      }
+    },
+    {
+      "index": 53,
+      "category": "opening",
+      "fen": "2q3rk/Bp3p2/p1rp4/P3p3/4Pb1p/3QNb2/1PP2PPK/R5R1 w - - 4 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2g3",
+        "nodes": 6419,
+        "reported_time_ms": 61,
+        "reported_nps": 105229,
+        "depth": 6,
+        "wall_ms": 77.06599999983155
+      },
+      "candidate": {
+        "bestmove": "g2g3",
+        "nodes": 6419,
+        "reported_time_ms": 61,
+        "reported_nps": 105229,
+        "depth": 6,
+        "wall_ms": 77.34080000045651
+      }
+    },
+    {
+      "index": 54,
+      "category": "opening",
+      "fen": "3nr1k1/rbp2pp1/1p1q1b1p/3p4/3P1N2/PQ2PNP1/1P2BPP1/2R1K2R w K - 4 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1g1",
+        "nodes": 7912,
+        "reported_time_ms": 79,
+        "reported_nps": 100151,
+        "depth": 5,
+        "wall_ms": 80.43169999837119
+      },
+      "candidate": {
+        "bestmove": "e1g1",
+        "nodes": 7912,
+        "reported_time_ms": 78,
+        "reported_nps": 101435,
+        "depth": 5,
+        "wall_ms": 80.008099999759
+      }
+    },
+    {
+      "index": 55,
+      "category": "opening",
+      "fen": "r4rk1/p4pbp/2Pq2p1/5p2/1n1Pn3/5NP1/1PP1BPKP/R1BQ3R w - - 3 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c3",
+        "nodes": 3824,
+        "reported_time_ms": 36,
+        "reported_nps": 106222,
+        "depth": 5,
+        "wall_ms": 77.71259999935864
+      },
+      "candidate": {
+        "bestmove": "c2c3",
+        "nodes": 3824,
+        "reported_time_ms": 36,
+        "reported_nps": 106222,
+        "depth": 5,
+        "wall_ms": 77.91069999984757
+      }
+    },
+    {
+      "index": 56,
+      "category": "opening",
+      "fen": "rn1q1rk1/pbp2ppp/4p3/1p2P3/2pP1P2/2P2N2/P4PBP/2RQK2R w K - 1 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h1g1",
+        "nodes": 6173,
+        "reported_time_ms": 51,
+        "reported_nps": 121039,
+        "depth": 6,
+        "wall_ms": 68.88570000046457
+      },
+      "candidate": {
+        "bestmove": "h1g1",
+        "nodes": 6173,
+        "reported_time_ms": 51,
+        "reported_nps": 121039,
+        "depth": 6,
+        "wall_ms": 68.5157000007166
+      }
+    },
+    {
+      "index": 57,
+      "category": "opening",
+      "fen": "1rbr2k1/5p1p/p1Rb1np1/1p1Pp3/4P3/4B2P/P2NBPP1/1R4K1 w - - 2 25",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3g5",
+        "nodes": 6504,
+        "reported_time_ms": 54,
+        "reported_nps": 120444,
+        "depth": 5,
+        "wall_ms": 70.1177999999345
+      },
+      "candidate": {
+        "bestmove": "e3g5",
+        "nodes": 6504,
+        "reported_time_ms": 55,
+        "reported_nps": 118254,
+        "depth": 5,
+        "wall_ms": 70.16429999930551
+      }
+    },
+    {
+      "index": 58,
+      "category": "opening",
+      "fen": "3q1rk1/rp2bppp/1N2bn2/pBPp4/3n4/4PN2/PP3PPP/2RQK2R w K - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3d4",
+        "nodes": 5164,
+        "reported_time_ms": 47,
+        "reported_nps": 109872,
+        "depth": 6,
+        "wall_ms": 76.50160000048345
+      },
+      "candidate": {
+        "bestmove": "e3d4",
+        "nodes": 5164,
+        "reported_time_ms": 47,
+        "reported_nps": 109872,
+        "depth": 6,
+        "wall_ms": 76.20580000002519
+      }
+    },
+    {
+      "index": 59,
+      "category": "opening",
+      "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/B3P3/5N2/PPPP1PPP/RNBQR1K1 w kq b6 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4b3",
+        "nodes": 5813,
+        "reported_time_ms": 54,
+        "reported_nps": 107648,
+        "depth": 7,
+        "wall_ms": 76.17349999964063
+      },
+      "candidate": {
+        "bestmove": "a4b3",
+        "nodes": 5813,
+        "reported_time_ms": 54,
+        "reported_nps": 107648,
+        "depth": 7,
+        "wall_ms": 76.60120000036841
+      }
+    },
+    {
+      "index": 60,
+      "category": "opening",
+      "fen": "1rq1kb1r/2pb1ppp/p1n5/8/2Q1PpP1/p1NR1N2/PPP2PP1/2K4R w k - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3d5",
+        "nodes": 6742,
+        "reported_time_ms": 72,
+        "reported_nps": 93638,
+        "depth": 4,
+        "wall_ms": 86.25080000092566
+      },
+      "candidate": {
+        "bestmove": "c3d5",
+        "nodes": 6742,
+        "reported_time_ms": 72,
+        "reported_nps": 93638,
+        "depth": 4,
+        "wall_ms": 86.22599999944214
+      }
+    },
+    {
+      "index": 61,
+      "category": "opening",
+      "fen": "rnbqr1k1/ppp2pbp/3p1np1/3P4/4P3/2N2N1P/PP2BPP1/R1BQ1RK1 w - - 1 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1c2",
+        "nodes": 6104,
+        "reported_time_ms": 54,
+        "reported_nps": 113037,
+        "depth": 6,
+        "wall_ms": 71.62210000024061
+      },
+      "candidate": {
+        "bestmove": "d1c2",
+        "nodes": 6104,
+        "reported_time_ms": 54,
+        "reported_nps": 113037,
+        "depth": 6,
+        "wall_ms": 71.19689999854018
+      }
+    },
+    {
+      "index": 62,
+      "category": "opening",
+      "fen": "r2qk2r/2pbbppp/p1np1n2/1p2p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq b6 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4c2",
+        "nodes": 5087,
+        "reported_time_ms": 50,
+        "reported_nps": 101740,
+        "depth": 6,
+        "wall_ms": 80.35949999975855
+      },
+      "candidate": {
+        "bestmove": "a4c2",
+        "nodes": 5087,
+        "reported_time_ms": 50,
+        "reported_nps": 101740,
+        "depth": 6,
+        "wall_ms": 79.94380000127421
+      }
+    },
+    {
+      "index": 63,
+      "category": "opening",
+      "fen": "2q1r1kr/2p3p1/p1p2p2/1pN2b1p/1P6/3P1N2/P1P2QPP/4RRK1 w - h6 0 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1e8",
+        "nodes": 7590,
+        "reported_time_ms": 54,
+        "reported_nps": 140555,
+        "depth": 5,
+        "wall_ms": 58.31209999996645
+      },
+      "candidate": {
+        "bestmove": "e1e8",
+        "nodes": 7590,
+        "reported_time_ms": 55,
+        "reported_nps": 138000,
+        "depth": 5,
+        "wall_ms": 58.644100001401966
+      }
+    },
+    {
+      "index": 64,
+      "category": "opening",
+      "fen": "r4rk1/pp2b2p/1n1p2p1/2pP1p2/3pPP2/1P1B4/P2K2PP/2R3NR w - f6 0 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4f5",
+        "nodes": 4592,
+        "reported_time_ms": 37,
+        "reported_nps": 124108,
+        "depth": 6,
+        "wall_ms": 65.464699999211
+      },
+      "candidate": {
+        "bestmove": "e4f5",
+        "nodes": 4592,
+        "reported_time_ms": 37,
+        "reported_nps": 124108,
+        "depth": 6,
+        "wall_ms": 64.99940000139759
+      }
+    },
+    {
+      "index": 65,
+      "category": "opening",
+      "fen": "r2qk2r/pp1nbppb/4pn1p/2p1N2P/3P1P2/2P3N1/PP2B1P1/R1BQK2R w KQkq - 1 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2d3",
+        "nodes": 6707,
+        "reported_time_ms": 67,
+        "reported_nps": 100104,
+        "depth": 5,
+        "wall_ms": 81.0235000008106
+      },
+      "candidate": {
+        "bestmove": "e2d3",
+        "nodes": 6707,
+        "reported_time_ms": 67,
+        "reported_nps": 100104,
+        "depth": 5,
+        "wall_ms": 80.30800000051386
+      }
+    },
+    {
+      "index": 66,
+      "category": "opening",
+      "fen": "rq1kb1r1/4b2p/p2pp3/1p1p3B/3B1P2/8/PPPQ2PP/3R1RK1 w - - 5 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h5e8",
+        "nodes": 3788,
+        "reported_time_ms": 33,
+        "reported_nps": 114787,
+        "depth": 5,
+        "wall_ms": 77.25129999926139
+      },
+      "candidate": {
+        "bestmove": "h5e8",
+        "nodes": 3788,
+        "reported_time_ms": 33,
+        "reported_nps": 114787,
+        "depth": 5,
+        "wall_ms": 77.75770000080229
+      }
+    },
+    {
+      "index": 67,
+      "category": "opening",
+      "fen": "rnb1kb1r/ppp2ppp/8/4p3/8/2P3P1/PP2PPBP/R1BqK1NR w KQkq - 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1d1",
+        "nodes": 4159,
+        "reported_time_ms": 29,
+        "reported_nps": 143413,
+        "depth": 7,
+        "wall_ms": 59.24539999978151
+      },
+      "candidate": {
+        "bestmove": "e1d1",
+        "nodes": 4159,
+        "reported_time_ms": 29,
+        "reported_nps": 143413,
+        "depth": 7,
+        "wall_ms": 58.441600000151084
+      }
+    },
+    {
+      "index": 68,
+      "category": "opening",
+      "fen": "r3r1k1/pp3pbp/2n2np1/6B1/1qP1P3/2N2b2/PPQ1BPPP/R4RK1 w - - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2f3",
+        "nodes": 4227,
+        "reported_time_ms": 41,
+        "reported_nps": 103097,
+        "depth": 5,
+        "wall_ms": 80.57299999927636
+      },
+      "candidate": {
+        "bestmove": "e2f3",
+        "nodes": 4227,
+        "reported_time_ms": 41,
+        "reported_nps": 103097,
+        "depth": 5,
+        "wall_ms": 80.13240000036603
+      }
+    },
+    {
+      "index": 69,
+      "category": "opening",
+      "fen": "1k1r3r/1pq2pp1/2pb1nb1/R3B3/2BP3P/2P2QN1/PP3PP1/2R3K1 w - - 1 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5d6",
+        "nodes": 6492,
+        "reported_time_ms": 65,
+        "reported_nps": 99876,
+        "depth": 6,
+        "wall_ms": 78.37620000100287
+      },
+      "candidate": {
+        "bestmove": "e5d6",
+        "nodes": 6492,
+        "reported_time_ms": 65,
+        "reported_nps": 99876,
+        "depth": 6,
+        "wall_ms": 78.32170000074257
+      }
+    },
+    {
+      "index": 70,
+      "category": "opening",
+      "fen": "r2r2k1/1Q1nqpbp/6p1/p7/2PRP3/2N1BP2/PP2BP1P/5RK1 w - a6 0 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4d5",
+        "nodes": 7766,
+        "reported_time_ms": 64,
+        "reported_nps": 121343,
+        "depth": 5,
+        "wall_ms": 66.96260000171605
+      },
+      "candidate": {
+        "bestmove": "d4d5",
+        "nodes": 7766,
+        "reported_time_ms": 65,
+        "reported_nps": 119476,
+        "depth": 5,
+        "wall_ms": 67.26390000039828
+      }
+    },
+    {
+      "index": 71,
+      "category": "opening",
+      "fen": "1rbqk1nr/2ppbpp1/p1n5/1p2P2p/P2p4/1B3N2/1PP2PPP/RNBQR1K1 w k h6 0 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c3",
+        "nodes": 5884,
+        "reported_time_ms": 62,
+        "reported_nps": 94903,
+        "depth": 4,
+        "wall_ms": 85.6485000003886
+      },
+      "candidate": {
+        "bestmove": "c2c3",
+        "nodes": 5884,
+        "reported_time_ms": 63,
+        "reported_nps": 93396,
+        "depth": 4,
+        "wall_ms": 86.0328999988269
+      }
+    },
+    {
+      "index": 72,
+      "category": "opening",
+      "fen": "r3b1k1/Ppr2qp1/1Rpn2Np/3p1p1P/3P4/3BP3/R4PP1/1Q4K1 w - - 21 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2g3",
+        "nodes": 6611,
+        "reported_time_ms": 59,
+        "reported_nps": 112050,
+        "depth": 4,
+        "wall_ms": 72.97420000031707
+      },
+      "candidate": {
+        "bestmove": "g2g3",
+        "nodes": 6611,
+        "reported_time_ms": 58,
+        "reported_nps": 113982,
+        "depth": 4,
+        "wall_ms": 72.28770000074292
+      }
+    },
+    {
+      "index": 73,
+      "category": "opening",
+      "fen": "rn2k2r/1bq1pp1p/3p1np1/1R6/4P3/1NN5/1PPQBPPP/5RK1 w q - 1 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2h6",
+        "nodes": 4891,
+        "reported_time_ms": 43,
+        "reported_nps": 113744,
+        "depth": 5,
+        "wall_ms": 75.57939999969676
+      },
+      "candidate": {
+        "bestmove": "d2h6",
+        "nodes": 4891,
+        "reported_time_ms": 42,
+        "reported_nps": 116452,
+        "depth": 5,
+        "wall_ms": 74.28509999954258
+      }
+    },
+    {
+      "index": 74,
+      "category": "opening",
+      "fen": "r2q1rk1/pp1b1ppp/n4b2/4p3/2pNN3/4PB2/PP3PPP/2RQK2R w K - 0 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4e2",
+        "nodes": 3879,
+        "reported_time_ms": 35,
+        "reported_nps": 110828,
+        "depth": 5,
+        "wall_ms": 75.52059999943594
+      },
+      "candidate": {
+        "bestmove": "d4e2",
+        "nodes": 3879,
+        "reported_time_ms": 34,
+        "reported_nps": 114088,
+        "depth": 5,
+        "wall_ms": 74.39640000120562
+      }
+    },
+    {
+      "index": 75,
+      "category": "opening",
+      "fen": "1rb1r1k1/1p3p1p/p2b1np1/3Pp3/4P3/2R1B3/P2NBPPP/1R4K1 w - - 4 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a2a4",
+        "nodes": 6472,
+        "reported_time_ms": 53,
+        "reported_nps": 122113,
+        "depth": 6,
+        "wall_ms": 66.80099999903177
+      },
+      "candidate": {
+        "bestmove": "a2a4",
+        "nodes": 6472,
+        "reported_time_ms": 53,
+        "reported_nps": 122113,
+        "depth": 6,
+        "wall_ms": 66.77139999919746
+      }
+    },
+    {
+      "index": 76,
+      "category": "opening",
+      "fen": "r2r4/p5k1/1p1nbp2/n1p1p1p1/2P1P3/2P1NPB1/P3B1PR/R3K3 w Q - 2 25",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3d5",
+        "nodes": 7506,
+        "reported_time_ms": 71,
+        "reported_nps": 105718,
+        "depth": 6,
+        "wall_ms": 75.90349999918544
+      },
+      "candidate": {
+        "bestmove": "e3d5",
+        "nodes": 7506,
+        "reported_time_ms": 71,
+        "reported_nps": 105718,
+        "depth": 6,
+        "wall_ms": 75.79579999946873
+      }
+    },
+    {
+      "index": 77,
+      "category": "opening",
+      "fen": "rn2k1r1/ppp2pbp/7B/3Np3/2P1P3/5N1p/PP3P1P/R3K1R1 w Q - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1g7",
+        "nodes": 5923,
+        "reported_time_ms": 46,
+        "reported_nps": 128760,
+        "depth": 5,
+        "wall_ms": 62.397200001214514
+      },
+      "candidate": {
+        "bestmove": "g1g7",
+        "nodes": 5923,
+        "reported_time_ms": 47,
+        "reported_nps": 126021,
+        "depth": 5,
+        "wall_ms": 62.78350000138744
+      }
+    },
+    {
+      "index": 78,
+      "category": "opening",
+      "fen": "rn1qkbnr/pp3ppp/2p1p1b1/8/3P3P/6N1/PPP2PP1/R1BQKBNR w KQkq - 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h4h5",
+        "nodes": 6783,
+        "reported_time_ms": 60,
+        "reported_nps": 113050,
+        "depth": 7,
+        "wall_ms": 71.1379999993369
+      },
+      "candidate": {
+        "bestmove": "h4h5",
+        "nodes": 6783,
+        "reported_time_ms": 60,
+        "reported_nps": 113050,
+        "depth": 7,
+        "wall_ms": 71.27559999935329
+      }
+    },
+    {
+      "index": 79,
+      "category": "opening",
+      "fen": "rn1qkb1r/pp1b1ppp/3p1n2/1B2p3/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b5d7",
+        "nodes": 3336,
+        "reported_time_ms": 35,
+        "reported_nps": 95314,
+        "depth": 5,
+        "wall_ms": 82.02130000063335
+      },
+      "candidate": {
+        "bestmove": "b5d7",
+        "nodes": 3336,
+        "reported_time_ms": 35,
+        "reported_nps": 95314,
+        "depth": 5,
+        "wall_ms": 81.62660000016331
+      }
+    },
+    {
+      "index": 80,
+      "category": "opening",
+      "fen": "r2qr1k1/pp2bpp1/5n1p/nN1p1b2/2pP1B2/PP2PN2/4BPPP/R2QK2R w KQ - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3c4",
+        "nodes": 5351,
+        "reported_time_ms": 55,
+        "reported_nps": 97290,
+        "depth": 5,
+        "wall_ms": 86.83730000120704
+      },
+      "candidate": {
+        "bestmove": "b3c4",
+        "nodes": 5351,
+        "reported_time_ms": 55,
+        "reported_nps": 97290,
+        "depth": 5,
+        "wall_ms": 86.89530000083323
+      }
+    },
+    {
+      "index": 81,
+      "category": "opening",
+      "fen": "rnb1kb1r/pp3ppp/2p3n1/4P3/8/2N2NP1/PP2PPBP/R1BqK2R w KQkq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3d1",
+        "nodes": 6248,
+        "reported_time_ms": 52,
+        "reported_nps": 120153,
+        "depth": 7,
+        "wall_ms": 68.50789999953122
+      },
+      "candidate": {
+        "bestmove": "c3d1",
+        "nodes": 6248,
+        "reported_time_ms": 52,
+        "reported_nps": 120153,
+        "depth": 7,
+        "wall_ms": 68.98799999908078
+      }
+    },
+    {
+      "index": 82,
+      "category": "opening",
+      "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ c6 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4d5",
+        "nodes": 7296,
+        "reported_time_ms": 66,
+        "reported_nps": 110545,
+        "depth": 7,
+        "wall_ms": 72.43039999957546
+      },
+      "candidate": {
+        "bestmove": "d4d5",
+        "nodes": 7296,
+        "reported_time_ms": 66,
+        "reported_nps": 110545,
+        "depth": 7,
+        "wall_ms": 72.12150000123074
+      }
+    },
+    {
+      "index": 83,
+      "category": "opening",
+      "fen": "rn2k1nr/pp3ppp/2pb4/q4p1P/3P4/2PB4/PP3PP1/R1BQK1NR w KQkq - 2 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1f3",
+        "nodes": 6669,
+        "reported_time_ms": 58,
+        "reported_nps": 114982,
+        "depth": 5,
+        "wall_ms": 72.03509999999369
+      },
+      "candidate": {
+        "bestmove": "g1f3",
+        "nodes": 6669,
+        "reported_time_ms": 58,
+        "reported_nps": 114982,
+        "depth": 5,
+        "wall_ms": 72.27419999981066
+      }
+    },
+    {
+      "index": 84,
+      "category": "opening",
+      "fen": "r2qkb1r/pp1b1ppp/3ppn2/4n3/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 w kq - 0 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2f4",
+        "nodes": 5817,
+        "reported_time_ms": 52,
+        "reported_nps": 111865,
+        "depth": 6,
+        "wall_ms": 72.7071999990585
+      },
+      "candidate": {
+        "bestmove": "f2f4",
+        "nodes": 5817,
+        "reported_time_ms": 52,
+        "reported_nps": 111865,
+        "depth": 6,
+        "wall_ms": 72.37499999973807
+      }
+    },
+    {
+      "index": 85,
+      "category": "opening",
+      "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N5/PPB2PPP/R1BQK1NR w KQ c6 0 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4d5",
+        "nodes": 3612,
+        "reported_time_ms": 31,
+        "reported_nps": 116516,
+        "depth": 6,
+        "wall_ms": 73.84509999974398
+      },
+      "candidate": {
+        "bestmove": "d4d5",
+        "nodes": 3612,
+        "reported_time_ms": 31,
+        "reported_nps": 116516,
+        "depth": 6,
+        "wall_ms": 74.23900000139838
+      }
+    },
+    {
+      "index": 86,
+      "category": "opening",
+      "fen": "r3kb1r/1q1npppb/p1p4p/3n3P/PPBP4/1Q3NN1/RP1B1PP1/5RK1 w kq - 7 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b4b5",
+        "nodes": 7261,
+        "reported_time_ms": 81,
+        "reported_nps": 89641,
+        "depth": 6,
+        "wall_ms": 90.220699999918
+      },
+      "candidate": {
+        "bestmove": "b4b5",
+        "nodes": 7261,
+        "reported_time_ms": 81,
+        "reported_nps": 89641,
+        "depth": 6,
+        "wall_ms": 90.06520000002638
+      }
+    },
+    {
+      "index": 87,
+      "category": "opening",
+      "fen": "r1bqk2r/ppp2ppp/2n5/2b5/4N2P/2P3P1/P3pP2/R1BQKB1R w KQkq - 0 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1e2",
+        "nodes": 6300,
+        "reported_time_ms": 55,
+        "reported_nps": 114545,
+        "depth": 6,
+        "wall_ms": 73.69159999871044
+      },
+      "candidate": {
+        "bestmove": "d1e2",
+        "nodes": 6300,
+        "reported_time_ms": 55,
+        "reported_nps": 114545,
+        "depth": 6,
+        "wall_ms": 73.70559999981197
+      }
+    },
+    {
+      "index": 88,
+      "category": "opening",
+      "fen": "1r1q1rk1/p2n1ppp/b1p1pb2/8/2N1P3/2N5/PP3PPP/2RQKB1R w K - 1 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2b3",
+        "nodes": 4132,
+        "reported_time_ms": 34,
+        "reported_nps": 121529,
+        "depth": 4,
+        "wall_ms": 68.46670000049926
+      },
+      "candidate": {
+        "bestmove": "b2b3",
+        "nodes": 4132,
+        "reported_time_ms": 33,
+        "reported_nps": 125212,
+        "depth": 4,
+        "wall_ms": 67.59170000077575
+      }
+    },
+    {
+      "index": 89,
+      "category": "opening",
+      "fen": "r1bqnrk1/1pp2pbp/3p2p1/p1nPp3/2P1P3/P1N1B3/1P1NBPPP/R2QK2R w KQ - 1 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2b4",
+        "nodes": 5997,
+        "reported_time_ms": 55,
+        "reported_nps": 109036,
+        "depth": 6,
+        "wall_ms": 74.89610000084213
+      },
+      "candidate": {
+        "bestmove": "b2b4",
+        "nodes": 5997,
+        "reported_time_ms": 55,
+        "reported_nps": 109036,
+        "depth": 6,
+        "wall_ms": 75.18449999952281
+      }
+    },
+    {
+      "index": 90,
+      "category": "opening",
+      "fen": "2rq1rk1/pp3pp1/3b3p/4n3/4P1P1/2Pp2P1/PQ4BP/R1B2RK1 w - - 2 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1h1",
+        "nodes": 4191,
+        "reported_time_ms": 33,
+        "reported_nps": 127000,
+        "depth": 6,
+        "wall_ms": 69.35990000056336
+      },
+      "candidate": {
+        "bestmove": "g1h1",
+        "nodes": 4191,
+        "reported_time_ms": 33,
+        "reported_nps": 127000,
+        "depth": 6,
+        "wall_ms": 69.21690000126546
+      }
+    },
+    {
+      "index": 91,
+      "category": "opening",
+      "fen": "r2qk1nr/1bpnppbp/pp4p1/4P3/Q1P2B2/2N2N2/PP2BPPP/R3K2R w KQkq - 0 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1c1",
+        "nodes": 3934,
+        "reported_time_ms": 39,
+        "reported_nps": 100871,
+        "depth": 5,
+        "wall_ms": 82.97060000040801
+      },
+      "candidate": {
+        "bestmove": "e1c1",
+        "nodes": 3934,
+        "reported_time_ms": 39,
+        "reported_nps": 100871,
+        "depth": 5,
+        "wall_ms": 82.90129999841156
+      }
+    },
+    {
+      "index": 92,
+      "category": "opening",
+      "fen": "r2q1rk1/pp2bppp/4b3/4p3/2N1N3/4PB2/nP3PPP/2RQ1RK1 w - - 0 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1c2",
+        "nodes": 7956,
+        "reported_time_ms": 70,
+        "reported_nps": 113657,
+        "depth": 6,
+        "wall_ms": 71.18930000069668
+      },
+      "candidate": {
+        "bestmove": "c1c2",
+        "nodes": 7956,
+        "reported_time_ms": 70,
+        "reported_nps": 113657,
+        "depth": 6,
+        "wall_ms": 71.33669999893755
+      }
+    },
+    {
+      "index": 93,
+      "category": "opening",
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1f3",
+        "nodes": 6289,
+        "reported_time_ms": 51,
+        "reported_nps": 123313,
+        "depth": 5,
+        "wall_ms": 64.87180000112858
+      },
+      "candidate": {
+        "bestmove": "g1f3",
+        "nodes": 6289,
+        "reported_time_ms": 51,
+        "reported_nps": 123313,
+        "depth": 5,
+        "wall_ms": 65.4621000012412
+      }
+    },
+    {
+      "index": 94,
+      "category": "opening",
+      "fen": "r1bqk2r/ppp1bppp/4n3/3N4/3p4/6P1/PPQPPPBP/R1BR2K1 w kq - 2 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5e7",
+        "nodes": 5465,
+        "reported_time_ms": 52,
+        "reported_nps": 105096,
+        "depth": 4,
+        "wall_ms": 78.6841999997705
+      },
+      "candidate": {
+        "bestmove": "d5e7",
+        "nodes": 5465,
+        "reported_time_ms": 52,
+        "reported_nps": 105096,
+        "depth": 4,
+        "wall_ms": 78.30769999964104
+      }
+    },
+    {
+      "index": 95,
+      "category": "opening",
+      "fen": "rnbqk2r/ppp2ppp/3b4/4p3/8/2P3P1/P2PPPBP/R1BQK1NR w KQkq - 1 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1f3",
+        "nodes": 5244,
+        "reported_time_ms": 45,
+        "reported_nps": 116533,
+        "depth": 6,
+        "wall_ms": 69.3195999992895
+      },
+      "candidate": {
+        "bestmove": "g1f3",
+        "nodes": 5244,
+        "reported_time_ms": 44,
+        "reported_nps": 119181,
+        "depth": 6,
+        "wall_ms": 68.02739999875485
+      }
+    },
+    {
+      "index": 96,
+      "category": "opening",
+      "fen": "rnbqk2r/ppp2ppp/3b1n2/3p4/3P1B2/2N2N2/PP2PPPP/R2QKB1R w KQkq - 2 7",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4d6",
+        "nodes": 5508,
+        "reported_time_ms": 50,
+        "reported_nps": 110160,
+        "depth": 5,
+        "wall_ms": 74.7654999995575
+      },
+      "candidate": {
+        "bestmove": "f4d6",
+        "nodes": 5508,
+        "reported_time_ms": 49,
+        "reported_nps": 112408,
+        "depth": 5,
+        "wall_ms": 73.98220000141009
+      }
+    },
+    {
+      "index": 97,
+      "category": "opening",
+      "fen": "r2qkbnr/pp1npppb/2p5/7p/3P1N1P/6N1/PPP2PP1/R1BQKB1R w KQkq - 4 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4h5",
+        "nodes": 5068,
+        "reported_time_ms": 46,
+        "reported_nps": 110173,
+        "depth": 5,
+        "wall_ms": 75.17929999994521
+      },
+      "candidate": {
+        "bestmove": "f4h5",
+        "nodes": 5068,
+        "reported_time_ms": 46,
+        "reported_nps": 110173,
+        "depth": 5,
+        "wall_ms": 75.51210000019637
+      }
+    },
+    {
+      "index": 98,
+      "category": "opening",
+      "fen": "rn2kb1r/pp3ppp/2p1pn2/3q4/3P4/5Q2/PPP1NPPP/R1B1KB1R w KQkq - 3 9",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3b3",
+        "nodes": 4226,
+        "reported_time_ms": 34,
+        "reported_nps": 124294,
+        "depth": 5,
+        "wall_ms": 67.0010000012553
+      },
+      "candidate": {
+        "bestmove": "f3b3",
+        "nodes": 4226,
+        "reported_time_ms": 33,
+        "reported_nps": 128060,
+        "depth": 5,
+        "wall_ms": 66.69160000092234
+      }
+    },
+    {
+      "index": 99,
+      "category": "opening",
+      "fen": "r1bq1rk1/1p2ppbp/p1np2p1/8/3NP1nP/2N1B3/PPPQBPP1/2KR3R w - - 1 11",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2g4",
+        "nodes": 5209,
+        "reported_time_ms": 53,
+        "reported_nps": 98283,
+        "depth": 7,
+        "wall_ms": 81.44979999997304
+      },
+      "candidate": {
+        "bestmove": "e2g4",
+        "nodes": 5209,
+        "reported_time_ms": 53,
+        "reported_nps": 98283,
+        "depth": 7,
+        "wall_ms": 81.38709999911953
+      }
+    },
+    {
+      "index": 100,
+      "category": "middlegame",
+      "fen": "8/1p5p/5k1n/p1bp1p1P/P4P2/1p4P1/4K3/1B2N3 w - - 2 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1d3",
+        "nodes": 5619,
+        "reported_time_ms": 39,
+        "reported_nps": 144076,
+        "depth": 7,
+        "wall_ms": 58.388200000990764
+      },
+      "candidate": {
+        "bestmove": "e1d3",
+        "nodes": 5619,
+        "reported_time_ms": 38,
+        "reported_nps": 147868,
+        "depth": 7,
+        "wall_ms": 57.89419999928214
+      }
+    },
+    {
+      "index": 101,
+      "category": "middlegame",
+      "fen": "3k4/p2r1pp1/1p4pr/8/1Rp2P2/4b2P/PRP3P1/5n1K w - - 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b4c4",
+        "nodes": 2912,
+        "reported_time_ms": 18,
+        "reported_nps": 161777,
+        "depth": 4,
+        "wall_ms": 53.430399999342626
+      },
+      "candidate": {
+        "bestmove": "b4c4",
+        "nodes": 2912,
+        "reported_time_ms": 19,
+        "reported_nps": 153263,
+        "depth": 4,
+        "wall_ms": 53.887599999143276
+      }
+    },
+    {
+      "index": 102,
+      "category": "middlegame",
+      "fen": "8/3b1kpp/r2P1b2/p1P5/1p3R2/1P3pP1/1P2r3/3RB1K1 w - - 5 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4f3",
+        "nodes": 5812,
+        "reported_time_ms": 42,
+        "reported_nps": 138380,
+        "depth": 6,
+        "wall_ms": 59.331399999791756
+      },
+      "candidate": {
+        "bestmove": "f4f3",
+        "nodes": 5812,
+        "reported_time_ms": 41,
+        "reported_nps": 141756,
+        "depth": 6,
+        "wall_ms": 58.89459999889368
+      }
+    },
+    {
+      "index": 103,
+      "category": "middlegame",
+      "fen": "r2n2k1/2p3p1/p4p1p/R3NP2/Pp3R2/1r5P/6PK/8 w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5g6",
+        "nodes": 6854,
+        "reported_time_ms": 47,
+        "reported_nps": 145829,
+        "depth": 7,
+        "wall_ms": 57.30799999946612
+      },
+      "candidate": {
+        "bestmove": "e5g6",
+        "nodes": 6854,
+        "reported_time_ms": 47,
+        "reported_nps": 145829,
+        "depth": 7,
+        "wall_ms": 57.219399999667075
+      }
+    },
+    {
+      "index": 104,
+      "category": "middlegame",
+      "fen": "8/2p3pk/7p/p7/P7/6p1/1p4rr/1R1R2K1 w - - 10 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1f1",
+        "nodes": 3566,
+        "reported_time_ms": 22,
+        "reported_nps": 162090,
+        "depth": 6,
+        "wall_ms": 50.621700000192504
+      },
+      "candidate": {
+        "bestmove": "g1f1",
+        "nodes": 3566,
+        "reported_time_ms": 21,
+        "reported_nps": 169809,
+        "depth": 6,
+        "wall_ms": 49.85640000086278
+      }
+    },
+    {
+      "index": 105,
+      "category": "middlegame",
+      "fen": "8/6pk/R4R1p/r1B2p2/1P2p3/1P3q2/8/5K2 w - - 4 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c5f2",
+        "nodes": 6339,
+        "reported_time_ms": 44,
+        "reported_nps": 144068,
+        "depth": 4,
+        "wall_ms": 55.823799999416224
+      },
+      "candidate": {
+        "bestmove": "c5f2",
+        "nodes": 6339,
+        "reported_time_ms": 44,
+        "reported_nps": 144068,
+        "depth": 4,
+        "wall_ms": 56.256200001371326
+      }
+    },
+    {
+      "index": 106,
+      "category": "middlegame",
+      "fen": "6k1/8/6p1/6P1/5P1p/1P5R/q4BQP/5N1K w - - 13 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2d5",
+        "nodes": 4305,
+        "reported_time_ms": 30,
+        "reported_nps": 143500,
+        "depth": 4,
+        "wall_ms": 56.416199999148375
+      },
+      "candidate": {
+        "bestmove": "g2d5",
+        "nodes": 4305,
+        "reported_time_ms": 30,
+        "reported_nps": 143500,
+        "depth": 4,
+        "wall_ms": 56.096799999068025
+      }
+    },
+    {
+      "index": 107,
+      "category": "middlegame",
+      "fen": "Q1B3r1/5p1b/2Nkpp1p/2n1b2P/5B2/8/1P3PP1/R5K1 w - - 5 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a8b8",
+        "nodes": 7006,
+        "reported_time_ms": 56,
+        "reported_nps": 125107,
+        "depth": 4,
+        "wall_ms": 65.0234000004275
+      },
+      "candidate": {
+        "bestmove": "a8b8",
+        "nodes": 7006,
+        "reported_time_ms": 56,
+        "reported_nps": 125107,
+        "depth": 4,
+        "wall_ms": 65.24270000045362
+      }
+    },
+    {
+      "index": 108,
+      "category": "middlegame",
+      "fen": "r1k5/ppp2p1p/2n2B2/3Np3/2P1P3/5N1p/PP3P1P/3RK3 w - - 5 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3e5",
+        "nodes": 3121,
+        "reported_time_ms": 19,
+        "reported_nps": 164263,
+        "depth": 4,
+        "wall_ms": 51.22980000123789
+      },
+      "candidate": {
+        "bestmove": "f3e5",
+        "nodes": 3121,
+        "reported_time_ms": 19,
+        "reported_nps": 164263,
+        "depth": 4,
+        "wall_ms": 50.837200000387384
+      }
+    },
+    {
+      "index": 109,
+      "category": "middlegame",
+      "fen": "8/4r1p1/p5k1/2Npp2p/5p2/P4P2/1K4P1/4R3 w - - 0 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1d1",
+        "nodes": 3552,
+        "reported_time_ms": 23,
+        "reported_nps": 154434,
+        "depth": 5,
+        "wall_ms": 54.480699998748605
+      },
+      "candidate": {
+        "bestmove": "e1d1",
+        "nodes": 3552,
+        "reported_time_ms": 23,
+        "reported_nps": 154434,
+        "depth": 5,
+        "wall_ms": 54.65920000096958
+      }
+    },
+    {
+      "index": 110,
+      "category": "middlegame",
+      "fen": "k1r2b1r/p3p2p/1np1Rp2/3n1p2/1p5P/P1NP4/1P1B2P1/5R1K w - - 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a3b4",
+        "nodes": 5960,
+        "reported_time_ms": 45,
+        "reported_nps": 132444,
+        "depth": 5,
+        "wall_ms": 60.83570000009786
+      },
+      "candidate": {
+        "bestmove": "a3b4",
+        "nodes": 5960,
+        "reported_time_ms": 45,
+        "reported_nps": 132444,
+        "depth": 5,
+        "wall_ms": 60.77210000148625
+      }
+    },
+    {
+      "index": 111,
+      "category": "middlegame",
+      "fen": "8/7p/5k2/ppbp1p1P/P4Pn1/1p1K2P1/6N1/1B6 w - b6 0 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4b5",
+        "nodes": 4539,
+        "reported_time_ms": 31,
+        "reported_nps": 146419,
+        "depth": 7,
+        "wall_ms": 58.21330000071612
+      },
+      "candidate": {
+        "bestmove": "a4b5",
+        "nodes": 4539,
+        "reported_time_ms": 32,
+        "reported_nps": 141843,
+        "depth": 7,
+        "wall_ms": 58.39150000065274
+      }
+    },
+    {
+      "index": 112,
+      "category": "middlegame",
+      "fen": "3r2k1/R4pp1/2p1rb2/2R1p2p/P2nP2P/6B1/5PPK/8 w - - 1 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4a5",
+        "nodes": 7683,
+        "reported_time_ms": 53,
+        "reported_nps": 144962,
+        "depth": 7,
+        "wall_ms": 55.92120000073919
+      },
+      "candidate": {
+        "bestmove": "a4a5",
+        "nodes": 7683,
+        "reported_time_ms": 53,
+        "reported_nps": 144962,
+        "depth": 7,
+        "wall_ms": 55.41380000067875
+      }
+    },
+    {
+      "index": 113,
+      "category": "middlegame",
+      "fen": "r7/kb4pp/p7/2NB4/1p6/6Q1/PpP2PPP/1R3RK1 w - - 0 25",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g3e3",
+        "nodes": 2312,
+        "reported_time_ms": 15,
+        "reported_nps": 154133,
+        "depth": 4,
+        "wall_ms": 58.641800000259536
+      },
+      "candidate": {
+        "bestmove": "g3e3",
+        "nodes": 2312,
+        "reported_time_ms": 15,
+        "reported_nps": 154133,
+        "depth": 4,
+        "wall_ms": 58.89310000020487
+      }
+    },
+    {
+      "index": 114,
+      "category": "middlegame",
+      "fen": "5k2/2pb1pp1/8/3PP1p1/1p5P/1Pp5/6P1/1r2NNK1 w - - 1 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5e6",
+        "nodes": 7506,
+        "reported_time_ms": 41,
+        "reported_nps": 183073,
+        "depth": 5,
+        "wall_ms": 44.74900000059279
+      },
+      "candidate": {
+        "bestmove": "e5e6",
+        "nodes": 7506,
+        "reported_time_ms": 46,
+        "reported_nps": 163173,
+        "depth": 5,
+        "wall_ms": 49.24120000032417
+      }
+    },
+    {
+      "index": 115,
+      "category": "middlegame",
+      "fen": "k1r2b1r/p3p2p/1np1Rp2/5p2/7P/3n4/1P1BN1P1/5R1K w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2a5",
+        "nodes": 5753,
+        "reported_time_ms": 36,
+        "reported_nps": 159805,
+        "depth": 4,
+        "wall_ms": 52.641799999037175
+      },
+      "candidate": {
+        "bestmove": "d2a5",
+        "nodes": 5753,
+        "reported_time_ms": 37,
+        "reported_nps": 155486,
+        "depth": 4,
+        "wall_ms": 53.47470000015164
+      }
+    },
+    {
+      "index": 116,
+      "category": "middlegame",
+      "fen": "r6k/1p3Bp1/2p1Pp2/7p/pb3B1P/6P1/PP6/2KRR3 w - - 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1c2",
+        "nodes": 778,
+        "reported_time_ms": 4,
+        "reported_nps": 194500,
+        "depth": 3,
+        "wall_ms": 43.63849999936065
+      },
+      "candidate": {
+        "bestmove": "c1c2",
+        "nodes": 778,
+        "reported_time_ms": 4,
+        "reported_nps": 194500,
+        "depth": 3,
+        "wall_ms": 43.69349999979022
+      }
+    },
+    {
+      "index": 117,
+      "category": "middlegame",
+      "fen": "6B1/8/6pp/p3bb2/1p6/1P2kNK1/P3p1P1/8 w - - 6 47",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g3h4",
+        "nodes": 4230,
+        "reported_time_ms": 24,
+        "reported_nps": 176250,
+        "depth": 5,
+        "wall_ms": 46.94290000043111
+      },
+      "candidate": {
+        "bestmove": "g3h4",
+        "nodes": 4230,
+        "reported_time_ms": 24,
+        "reported_nps": 176250,
+        "depth": 5,
+        "wall_ms": 47.09999999977299
+      }
+    },
+    {
+      "index": 118,
+      "category": "middlegame",
+      "fen": "1r1qk2r/p2b1ppp/1P6/3p4/Q4b2/6P1/1P2PPBP/R4RK1 w k - 1 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4f4",
+        "nodes": 7901,
+        "reported_time_ms": 69,
+        "reported_nps": 114507,
+        "depth": 6,
+        "wall_ms": 70.39269999950193
+      },
+      "candidate": {
+        "bestmove": "a4f4",
+        "nodes": 7901,
+        "reported_time_ms": 68,
+        "reported_nps": 116191,
+        "depth": 6,
+        "wall_ms": 69.7610999995959
+      }
+    },
+    {
+      "index": 119,
+      "category": "middlegame",
+      "fen": "2k5/1pp3pp/5p2/P3p3/8/K1P3PP/3rbPB1/4R3 w - - 0 25",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2f4",
+        "nodes": 6366,
+        "reported_time_ms": 42,
+        "reported_nps": 151571,
+        "depth": 6,
+        "wall_ms": 54.297099999530474
+      },
+      "candidate": {
+        "bestmove": "f2f4",
+        "nodes": 6366,
+        "reported_time_ms": 43,
+        "reported_nps": 148046,
+        "depth": 6,
+        "wall_ms": 54.63210000016261
+      }
+    },
+    {
+      "index": 120,
+      "category": "middlegame",
+      "fen": "8/2p4k/p1p2p2/1p4pp/1P6/2Pq1N1P/P4Q2/4R2K w - g6 0 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h3h4",
+        "nodes": 5974,
+        "reported_time_ms": 40,
+        "reported_nps": 149350,
+        "depth": 4,
+        "wall_ms": 55.96800000057556
+      },
+      "candidate": {
+        "bestmove": "h3h4",
+        "nodes": 5974,
+        "reported_time_ms": 40,
+        "reported_nps": 149350,
+        "depth": 4,
+        "wall_ms": 55.57540000154404
+      }
+    },
+    {
+      "index": 121,
+      "category": "middlegame",
+      "fen": "2r5/p4bR1/4kp1R/p3p1p1/2p1P1P1/8/6PK/2r2B2 w - - 2 45",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1e2",
+        "nodes": 6388,
+        "reported_time_ms": 49,
+        "reported_nps": 130367,
+        "depth": 6,
+        "wall_ms": 61.676400000578724
+      },
+      "candidate": {
+        "bestmove": "f1e2",
+        "nodes": 6388,
+        "reported_time_ms": 49,
+        "reported_nps": 130367,
+        "depth": 6,
+        "wall_ms": 61.68649999926856
+      }
+    },
+    {
+      "index": 122,
+      "category": "middlegame",
+      "fen": "1rk3r1/2p1qp2/b1Bp1p2/5P2/2nQPB1p/7P/PP3RP1/R5K1 w - - 6 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a1c1",
+        "nodes": 3102,
+        "reported_time_ms": 31,
+        "reported_nps": 100064,
+        "depth": 4,
+        "wall_ms": 82.13559999967401
+      },
+      "candidate": {
+        "bestmove": "a1c1",
+        "nodes": 3102,
+        "reported_time_ms": 31,
+        "reported_nps": 100064,
+        "depth": 4,
+        "wall_ms": 82.68860000134737
+      }
+    },
+    {
+      "index": 123,
+      "category": "middlegame",
+      "fen": "6k1/p4p1p/1p1bp1p1/3r4/2rP1Q1P/2q1BP2/5P2/1R2R1K1 w - - 3 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4f6",
+        "nodes": 3290,
+        "reported_time_ms": 31,
+        "reported_nps": 106129,
+        "depth": 5,
+        "wall_ms": 76.20169999972859
+      },
+      "candidate": {
+        "bestmove": "f4f6",
+        "nodes": 3290,
+        "reported_time_ms": 30,
+        "reported_nps": 109666,
+        "depth": 5,
+        "wall_ms": 75.86649999939254
+      }
+    },
+    {
+      "index": 124,
+      "category": "middlegame",
+      "fen": "1r4k1/pp3pb1/1qppN1p1/6Pp/2P5/2P2NPB/P4P2/1b2R1K1 w - - 2 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e6g7",
+        "nodes": 4891,
+        "reported_time_ms": 37,
+        "reported_nps": 132189,
+        "depth": 4,
+        "wall_ms": 60.98830000155431
+      },
+      "candidate": {
+        "bestmove": "e6g7",
+        "nodes": 4891,
+        "reported_time_ms": 37,
+        "reported_nps": 132189,
+        "depth": 4,
+        "wall_ms": 60.710499999913736
+      }
+    },
+    {
+      "index": 125,
+      "category": "middlegame",
+      "fen": "r2n1r1k/1p4p1/2p2q2/p3p3/2Q1B3/2P1B1Pb/P3PP1P/1R1R2K1 w - - 4 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4d3",
+        "nodes": 7337,
+        "reported_time_ms": 61,
+        "reported_nps": 120278,
+        "depth": 5,
+        "wall_ms": 68.41480000002775
+      },
+      "candidate": {
+        "bestmove": "e4d3",
+        "nodes": 7337,
+        "reported_time_ms": 62,
+        "reported_nps": 118338,
+        "depth": 5,
+        "wall_ms": 69.05540000116162
+      }
+    },
+    {
+      "index": 126,
+      "category": "middlegame",
+      "fen": "r1bb3r/5kpp/p4p2/1p1Pp3/8/1P2B3/1PP2PPP/R3R1K1 w - - 2 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c4",
+        "nodes": 4300,
+        "reported_time_ms": 23,
+        "reported_nps": 186956,
+        "depth": 5,
+        "wall_ms": 44.63489999943704
+      },
+      "candidate": {
+        "bestmove": "c2c4",
+        "nodes": 4300,
+        "reported_time_ms": 23,
+        "reported_nps": 186956,
+        "depth": 5,
+        "wall_ms": 44.3197999993572
+      }
+    },
+    {
+      "index": 127,
+      "category": "middlegame",
+      "fen": "6k1/1p3pp1/p3p2p/P6P/1b4P1/3BRn2/1r6/5K2 w - - 0 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3f3",
+        "nodes": 2792,
+        "reported_time_ms": 18,
+        "reported_nps": 155111,
+        "depth": 6,
+        "wall_ms": 51.56170000009297
+      },
+      "candidate": {
+        "bestmove": "e3f3",
+        "nodes": 2792,
+        "reported_time_ms": 18,
+        "reported_nps": 155111,
+        "depth": 6,
+        "wall_ms": 51.98740000014368
+      }
+    },
+    {
+      "index": 128,
+      "category": "middlegame",
+      "fen": "r5k1/1p4pp/2p5/3p4/3P1B1P/1BP4b/P6P/R3RNK1 w - - 1 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1e7",
+        "nodes": 4678,
+        "reported_time_ms": 28,
+        "reported_nps": 167071,
+        "depth": 4,
+        "wall_ms": 51.72620000121242
+      },
+      "candidate": {
+        "bestmove": "e1e7",
+        "nodes": 4678,
+        "reported_time_ms": 28,
+        "reported_nps": 167071,
+        "depth": 4,
+        "wall_ms": 51.3649999993504
+      }
+    },
+    {
+      "index": 129,
+      "category": "middlegame",
+      "fen": "3q2k1/5p1p/2P3p1/p7/1b2PP2/1Q2B3/P3BP1P/5K2 w - - 3 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c6c7",
+        "nodes": 6102,
+        "reported_time_ms": 42,
+        "reported_nps": 145285,
+        "depth": 4,
+        "wall_ms": 56.604800000059186
+      },
+      "candidate": {
+        "bestmove": "c6c7",
+        "nodes": 6102,
+        "reported_time_ms": 42,
+        "reported_nps": 145285,
+        "depth": 4,
+        "wall_ms": 56.81119999826478
+      }
+    },
+    {
+      "index": 130,
+      "category": "middlegame",
+      "fen": "1r6/6pk/4R2p/1PB2p2/1P2pq1b/1P6/6K1/4R1N1 w - - 0 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1e2",
+        "nodes": 3713,
+        "reported_time_ms": 25,
+        "reported_nps": 148520,
+        "depth": 4,
+        "wall_ms": 55.36519999986922
+      },
+      "candidate": {
+        "bestmove": "e1e2",
+        "nodes": 3713,
+        "reported_time_ms": 25,
+        "reported_nps": 148520,
+        "depth": 4,
+        "wall_ms": 54.9141999999847
+      }
+    },
+    {
+      "index": 131,
+      "category": "middlegame",
+      "fen": "4r3/1qk1p3/2NpQ1p1/1b1P4/1R6/7P/1PP2PP1/6K1 w - - 3 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c4",
+        "nodes": 5315,
+        "reported_time_ms": 42,
+        "reported_nps": 126547,
+        "depth": 4,
+        "wall_ms": 64.89819999842439
+      },
+      "candidate": {
+        "bestmove": "c2c4",
+        "nodes": 5315,
+        "reported_time_ms": 43,
+        "reported_nps": 123604,
+        "depth": 4,
+        "wall_ms": 64.93149999914749
+      }
+    },
+    {
+      "index": 132,
+      "category": "middlegame",
+      "fen": "4r1k1/2p2pp1/2np1q1p/2p2P2/4P3/1P2Q2P/R4P2/2B3K1 w - - 1 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1b2",
+        "nodes": 4613,
+        "reported_time_ms": 38,
+        "reported_nps": 121394,
+        "depth": 6,
+        "wall_ms": 67.20859999950335
+      },
+      "candidate": {
+        "bestmove": "c1b2",
+        "nodes": 4613,
+        "reported_time_ms": 37,
+        "reported_nps": 124675,
+        "depth": 6,
+        "wall_ms": 65.9973000001628
+      }
+    },
+    {
+      "index": 133,
+      "category": "middlegame",
+      "fen": "6k1/2q5/6p1/6P1/5P1p/1P3Q1R/7P/4BN1K w - - 9 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h1g2",
+        "nodes": 4912,
+        "reported_time_ms": 34,
+        "reported_nps": 144470,
+        "depth": 4,
+        "wall_ms": 58.402399999977206
+      },
+      "candidate": {
+        "bestmove": "h1g2",
+        "nodes": 4912,
+        "reported_time_ms": 35,
+        "reported_nps": 140342,
+        "depth": 4,
+        "wall_ms": 58.46120000023802
+      }
+    },
+    {
+      "index": 134,
+      "category": "middlegame",
+      "fen": "1k2rb2/1b3Npp/p7/1p1Bn3/8/5Q2/PpP2PPP/1R3RK1 w - - 4 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3g3",
+        "nodes": 5883,
+        "reported_time_ms": 40,
+        "reported_nps": 147075,
+        "depth": 4,
+        "wall_ms": 58.071000001291395
+      },
+      "candidate": {
+        "bestmove": "f3g3",
+        "nodes": 5883,
+        "reported_time_ms": 40,
+        "reported_nps": 147075,
+        "depth": 4,
+        "wall_ms": 57.96550000013667
+      }
+    },
+    {
+      "index": 135,
+      "category": "middlegame",
+      "fen": "r2r4/p3kb1R/1p1n1p1R/2p1p1p1/4P1P1/2P2KB1/P3B1P1/8 w - - 3 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3e3",
+        "nodes": 7532,
+        "reported_time_ms": 63,
+        "reported_nps": 119555,
+        "depth": 5,
+        "wall_ms": 67.25999999980559
+      },
+      "candidate": {
+        "bestmove": "f3e3",
+        "nodes": 7532,
+        "reported_time_ms": 63,
+        "reported_nps": 119555,
+        "depth": 5,
+        "wall_ms": 67.52229999983683
+      }
+    },
+    {
+      "index": 136,
+      "category": "middlegame",
+      "fen": "4bk2/5pp1/3pP3/6P1/1p6/8/2N3N1/1r4K1 w - - 1 45",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1h2",
+        "nodes": 6839,
+        "reported_time_ms": 38,
+        "reported_nps": 179973,
+        "depth": 6,
+        "wall_ms": 44.19950000010431
+      },
+      "candidate": {
+        "bestmove": "g1h2",
+        "nodes": 6839,
+        "reported_time_ms": 37,
+        "reported_nps": 184837,
+        "depth": 6,
+        "wall_ms": 43.94430000138527
+      }
+    },
+    {
+      "index": 137,
+      "category": "middlegame",
+      "fen": "8/6pk/R4R1p/r1B2p2/1P2p3/1P6/2q1K3/8 w - - 8 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2e1",
+        "nodes": 7129,
+        "reported_time_ms": 53,
+        "reported_nps": 134509,
+        "depth": 4,
+        "wall_ms": 59.247299999697134
+      },
+      "candidate": {
+        "bestmove": "e2e1",
+        "nodes": 7129,
+        "reported_time_ms": 52,
+        "reported_nps": 137096,
+        "depth": 4,
+        "wall_ms": 59.00569999903382
+      }
+    },
+    {
+      "index": 138,
+      "category": "middlegame",
+      "fen": "1q3r2/p4p1k/2pN2p1/4Pp1p/P1pP4/6R1/2K4P/8 w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6f7",
+        "nodes": 5742,
+        "reported_time_ms": 36,
+        "reported_nps": 159500,
+        "depth": 5,
+        "wall_ms": 52.554600000803475
+      },
+      "candidate": {
+        "bestmove": "d6f7",
+        "nodes": 5742,
+        "reported_time_ms": 36,
+        "reported_nps": 159500,
+        "depth": 5,
+        "wall_ms": 52.25649999920279
+      }
+    },
+    {
+      "index": 139,
+      "category": "middlegame",
+      "fen": "Q5nk/6p1/8/pq5p/2N2PP1/1P2B3/P6P/4RRK1 w - a6 0 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a8d8",
+        "nodes": 3335,
+        "reported_time_ms": 23,
+        "reported_nps": 145000,
+        "depth": 3,
+        "wall_ms": 60.059699999328586
+      },
+      "candidate": {
+        "bestmove": "a8d8",
+        "nodes": 3335,
+        "reported_time_ms": 23,
+        "reported_nps": 145000,
+        "depth": 3,
+        "wall_ms": 60.18720000065514
+      }
+    },
+    {
+      "index": 140,
+      "category": "middlegame",
+      "fen": "8/5ppk/pp2p2p/3b4/8/1P1R2Pq/P1P2P1P/1K2Q3 w - - 7 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1g1",
+        "nodes": 7923,
+        "reported_time_ms": 62,
+        "reported_nps": 127790,
+        "depth": 6,
+        "wall_ms": 63.48959999922954
+      },
+      "candidate": {
+        "bestmove": "e1g1",
+        "nodes": 7923,
+        "reported_time_ms": 61,
+        "reported_nps": 129885,
+        "depth": 6,
+        "wall_ms": 62.61190000077477
+      }
+    },
+    {
+      "index": 141,
+      "category": "middlegame",
+      "fen": "3r1rk1/2p2pp1/p7/7p/3n3R/1b4Q1/1PP2PPP/2B1R1K1 w - - 2 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h4d4",
+        "nodes": 4477,
+        "reported_time_ms": 32,
+        "reported_nps": 139906,
+        "depth": 5,
+        "wall_ms": 63.8928999997006
+      },
+      "candidate": {
+        "bestmove": "h4d4",
+        "nodes": 4477,
+        "reported_time_ms": 32,
+        "reported_nps": 139906,
+        "depth": 5,
+        "wall_ms": 64.36359999861452
+      }
+    },
+    {
+      "index": 142,
+      "category": "middlegame",
+      "fen": "3N1R2/7k/1p4p1/6Pp/P5nP/1B6/1b6/7K w - - 1 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a4a5",
+        "nodes": 4015,
+        "reported_time_ms": 23,
+        "reported_nps": 174565,
+        "depth": 4,
+        "wall_ms": 48.41360000136774
+      },
+      "candidate": {
+        "bestmove": "a4a5",
+        "nodes": 4015,
+        "reported_time_ms": 23,
+        "reported_nps": 174565,
+        "depth": 4,
+        "wall_ms": 48.39370000081544
+      }
+    },
+    {
+      "index": 143,
+      "category": "middlegame",
+      "fen": "6k1/p4p2/2p1p1p1/1p3q2/8/2P5/PPK5/1B2R3 w - - 6 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c1",
+        "nodes": 5261,
+        "reported_time_ms": 32,
+        "reported_nps": 164406,
+        "depth": 4,
+        "wall_ms": 50.181300000986084
+      },
+      "candidate": {
+        "bestmove": "c2c1",
+        "nodes": 5261,
+        "reported_time_ms": 32,
+        "reported_nps": 164406,
+        "depth": 4,
+        "wall_ms": 49.44520000026387
+      }
+    },
+    {
+      "index": 144,
+      "category": "middlegame",
+      "fen": "8/2p1k3/1p2b3/p2B4/P1P3pn/KP3p2/4r3/3N1R2 w - - 0 47",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5e6",
+        "nodes": 4545,
+        "reported_time_ms": 30,
+        "reported_nps": 151500,
+        "depth": 5,
+        "wall_ms": 53.067400000145426
+      },
+      "candidate": {
+        "bestmove": "d5e6",
+        "nodes": 4545,
+        "reported_time_ms": 30,
+        "reported_nps": 151500,
+        "depth": 5,
+        "wall_ms": 52.65959999996994
+      }
+    },
+    {
+      "index": 145,
+      "category": "middlegame",
+      "fen": "r2r4/p5k1/1p1nbp2/2p1p1p1/4P3/2P1nPB1/P3BKPR/7R w - - 0 27",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h2h7",
+        "nodes": 5476,
+        "reported_time_ms": 50,
+        "reported_nps": 109520,
+        "depth": 6,
+        "wall_ms": 72.55939999959082
+      },
+      "candidate": {
+        "bestmove": "h2h7",
+        "nodes": 5476,
+        "reported_time_ms": 50,
+        "reported_nps": 109520,
+        "depth": 6,
+        "wall_ms": 72.33059999998659
+      }
+    },
+    {
+      "index": 146,
+      "category": "middlegame",
+      "fen": "3q2r1/R4p2/4bnkp/2p1p1p1/4P3/1BP1Q2P/2PB1PP1/6K1 w - - 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3e6",
+        "nodes": 2966,
+        "reported_time_ms": 26,
+        "reported_nps": 114076,
+        "depth": 5,
+        "wall_ms": 74.89259999965725
+      },
+      "candidate": {
+        "bestmove": "b3e6",
+        "nodes": 2966,
+        "reported_time_ms": 26,
+        "reported_nps": 114076,
+        "depth": 5,
+        "wall_ms": 74.56009999987145
+      }
+    },
+    {
+      "index": 147,
+      "category": "middlegame",
+      "fen": "6k1/2p3p1/2p1b2p/4p3/7P/P2Pn1r1/NP2Pr2/2R4K w - - 6 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a2b4",
+        "nodes": 844,
+        "reported_time_ms": 5,
+        "reported_nps": 168800,
+        "depth": 3,
+        "wall_ms": 5.537299999559764
+      },
+      "candidate": {
+        "bestmove": "a2b4",
+        "nodes": 844,
+        "reported_time_ms": 5,
+        "reported_nps": 168800,
+        "depth": 3,
+        "wall_ms": 5.746599999838509
+      }
+    },
+    {
+      "index": 148,
+      "category": "middlegame",
+      "fen": "4bk2/5pp1/3p4/4P1p1/1p5P/1Pp5/5KP1/1r2NN2 w - - 2 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e5d6",
+        "nodes": 6787,
+        "reported_time_ms": 36,
+        "reported_nps": 188527,
+        "depth": 4,
+        "wall_ms": 43.989899999360205
+      },
+      "candidate": {
+        "bestmove": "e5d6",
+        "nodes": 6787,
+        "reported_time_ms": 36,
+        "reported_nps": 188527,
+        "depth": 4,
+        "wall_ms": 43.660799999997835
+      }
+    },
+    {
+      "index": 149,
+      "category": "middlegame",
+      "fen": "6k1/5Np1/n1r1pn2/7p/8/1P2P3/1B3PPP/R5K1 w - - 0 27",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7g5",
+        "nodes": 7401,
+        "reported_time_ms": 48,
+        "reported_nps": 154187,
+        "depth": 8,
+        "wall_ms": 53.25530000118306
+      },
+      "candidate": {
+        "bestmove": "f7g5",
+        "nodes": 7401,
+        "reported_time_ms": 48,
+        "reported_nps": 154187,
+        "depth": 8,
+        "wall_ms": 53.48009999943315
+      }
+    },
+    {
+      "index": 150,
+      "category": "middlegame",
+      "fen": "3N3k/5R2/1p4p1/6Pp/7P/1B2n3/Pb6/7K w - - 0 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7f8",
+        "nodes": 3334,
+        "reported_time_ms": 17,
+        "reported_nps": 196117,
+        "depth": 4,
+        "wall_ms": 45.415099999445374
+      },
+      "candidate": {
+        "bestmove": "f7f8",
+        "nodes": 3334,
+        "reported_time_ms": 17,
+        "reported_nps": 196117,
+        "depth": 4,
+        "wall_ms": 45.09640000105719
+      }
+    },
+    {
+      "index": 151,
+      "category": "middlegame",
+      "fen": "b1kbN3/7p/8/pBBP1P2/4K1P1/1P5P/2n5/8 w - - 1 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f5f6",
+        "nodes": 6362,
+        "reported_time_ms": 39,
+        "reported_nps": 163128,
+        "depth": 4,
+        "wall_ms": 50.522400000772905
+      },
+      "candidate": {
+        "bestmove": "f5f6",
+        "nodes": 6362,
+        "reported_time_ms": 38,
+        "reported_nps": 167421,
+        "depth": 4,
+        "wall_ms": 50.1550999997562
+      }
+    },
+    {
+      "index": 152,
+      "category": "middlegame",
+      "fen": "4r2k/p2b1qpp/1bp5/p4p2/3PB1r1/5Q2/1B2RP1P/4R2K w - - 0 35",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4c6",
+        "nodes": 7284,
+        "reported_time_ms": 69,
+        "reported_nps": 105565,
+        "depth": 6,
+        "wall_ms": 76.69990000067628
+      },
+      "candidate": {
+        "bestmove": "e4c6",
+        "nodes": 7284,
+        "reported_time_ms": 68,
+        "reported_nps": 107117,
+        "depth": 6,
+        "wall_ms": 75.8970999995654
+      }
+    },
+    {
+      "index": 153,
+      "category": "middlegame",
+      "fen": "bk6/8/4N2p/P1BP4/2B1K1P1/7P/2n5/2b5 w - - 3 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h3h4",
+        "nodes": 4933,
+        "reported_time_ms": 28,
+        "reported_nps": 176178,
+        "depth": 4,
+        "wall_ms": 46.738399998503155
+      },
+      "candidate": {
+        "bestmove": "h3h4",
+        "nodes": 4933,
+        "reported_time_ms": 28,
+        "reported_nps": 176178,
+        "depth": 4,
+        "wall_ms": 47.01369999929739
+      }
+    },
+    {
+      "index": 154,
+      "category": "middlegame",
+      "fen": "3R4/p1r2p1k/6pp/8/P2P1b1N/7b/1r3PKP/8 w - - 4 35",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2h3",
+        "nodes": 5369,
+        "reported_time_ms": 34,
+        "reported_nps": 157911,
+        "depth": 5,
+        "wall_ms": 52.881600000546314
+      },
+      "candidate": {
+        "bestmove": "g2h3",
+        "nodes": 5369,
+        "reported_time_ms": 34,
+        "reported_nps": 157911,
+        "depth": 5,
+        "wall_ms": 52.53110000012384
+      }
+    },
+    {
+      "index": 155,
+      "category": "middlegame",
+      "fen": "1r4k1/8/2p1R1p1/p3p3/8/1BP1B1P1/P3PP1P/6K1 w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e6c6",
+        "nodes": 6480,
+        "reported_time_ms": 42,
+        "reported_nps": 154285,
+        "depth": 4,
+        "wall_ms": 52.49240000011923
+      },
+      "candidate": {
+        "bestmove": "e6c6",
+        "nodes": 6480,
+        "reported_time_ms": 43,
+        "reported_nps": 150697,
+        "depth": 4,
+        "wall_ms": 53.294899998945766
+      }
+    },
+    {
+      "index": 156,
+      "category": "middlegame",
+      "fen": "8/5pk1/p5p1/P1PK4/3RN2p/1q1r3P/8/8 w - - 10 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5c6",
+        "nodes": 4420,
+        "reported_time_ms": 30,
+        "reported_nps": 147333,
+        "depth": 5,
+        "wall_ms": 55.189799999425304
+      },
+      "candidate": {
+        "bestmove": "d5c6",
+        "nodes": 4420,
+        "reported_time_ms": 30,
+        "reported_nps": 147333,
+        "depth": 5,
+        "wall_ms": 54.75459999979648
+      }
+    },
+    {
+      "index": 157,
+      "category": "middlegame",
+      "fen": "rn3k1r/pp2pp1p/5n2/3p4/4b3/5N2/PP3PPP/5RK1 w - - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1e1",
+        "nodes": 7301,
+        "reported_time_ms": 43,
+        "reported_nps": 169790,
+        "depth": 5,
+        "wall_ms": 47.88099999859696
+      },
+      "candidate": {
+        "bestmove": "f1e1",
+        "nodes": 7301,
+        "reported_time_ms": 43,
+        "reported_nps": 169790,
+        "depth": 5,
+        "wall_ms": 48.465800000485615
+      }
+    },
+    {
+      "index": 158,
+      "category": "middlegame",
+      "fen": "k1r2b1r/p3p2p/1np1Rp2/5p2/2nN3P/8/3B2P1/2R4K w - - 2 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2f4",
+        "nodes": 5146,
+        "reported_time_ms": 34,
+        "reported_nps": 151352,
+        "depth": 5,
+        "wall_ms": 56.501000000935164
+      },
+      "candidate": {
+        "bestmove": "d2f4",
+        "nodes": 5146,
+        "reported_time_ms": 33,
+        "reported_nps": 155939,
+        "depth": 5,
+        "wall_ms": 56.241899999804446
+      }
+    },
+    {
+      "index": 159,
+      "category": "middlegame",
+      "fen": "r6k/1p2Brpp/2p5/3p4/3P1P1P/1BP4b/P6P/R3RNK1 w - - 1 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e7c5",
+        "nodes": 6648,
+        "reported_time_ms": 47,
+        "reported_nps": 141446,
+        "depth": 5,
+        "wall_ms": 56.672700000490295
+      },
+      "candidate": {
+        "bestmove": "e7c5",
+        "nodes": 6648,
+        "reported_time_ms": 47,
+        "reported_nps": 141446,
+        "depth": 5,
+        "wall_ms": 56.948699999338714
+      }
+    },
+    {
+      "index": 160,
+      "category": "middlegame",
+      "fen": "7k/8/8/p1p1p3/2B5/2P1B1P1/P3PPKP/3r4 w - - 8 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h2h4",
+        "nodes": 3825,
+        "reported_time_ms": 21,
+        "reported_nps": 182142,
+        "depth": 4,
+        "wall_ms": 45.60900000069523
+      },
+      "candidate": {
+        "bestmove": "h2h4",
+        "nodes": 3825,
+        "reported_time_ms": 21,
+        "reported_nps": 182142,
+        "depth": 4,
+        "wall_ms": 45.72320000079344
+      }
+    },
+    {
+      "index": 161,
+      "category": "middlegame",
+      "fen": "1r6/2k1b2p/p6P/1P1B4/3P1p2/5nP1/2K1RP1n/1R6 w - - 0 43",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5f3",
+        "nodes": 4433,
+        "reported_time_ms": 35,
+        "reported_nps": 126657,
+        "depth": 5,
+        "wall_ms": 66.39719999839144
+      },
+      "candidate": {
+        "bestmove": "d5f3",
+        "nodes": 4433,
+        "reported_time_ms": 34,
+        "reported_nps": 130382,
+        "depth": 5,
+        "wall_ms": 65.8147000012832
+      }
+    },
+    {
+      "index": 162,
+      "category": "middlegame",
+      "fen": "6k1/N4p2/p4Pp1/P2N2P1/7P/1n2P3/4K3/8 w - - 3 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a7c8",
+        "nodes": 7496,
+        "reported_time_ms": 44,
+        "reported_nps": 170363,
+        "depth": 6,
+        "wall_ms": 47.77190000095288
+      },
+      "candidate": {
+        "bestmove": "a7c8",
+        "nodes": 7496,
+        "reported_time_ms": 44,
+        "reported_nps": 170363,
+        "depth": 6,
+        "wall_ms": 47.49480000100448
+      }
+    },
+    {
+      "index": 163,
+      "category": "middlegame",
+      "fen": "r1bR1Q2/1p3ppk/p3p2p/8/2q5/8/PPP2PPP/2KR4 w - - 1 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f8f7",
+        "nodes": 3661,
+        "reported_time_ms": 27,
+        "reported_nps": 135592,
+        "depth": 5,
+        "wall_ms": 64.7796000012022
+      },
+      "candidate": {
+        "bestmove": "f8f7",
+        "nodes": 3661,
+        "reported_time_ms": 27,
+        "reported_nps": 135592,
+        "depth": 5,
+        "wall_ms": 65.23580000066431
+      }
+    },
+    {
+      "index": 164,
+      "category": "middlegame",
+      "fen": "r7/p4kpb/Pp2pn1p/7P/2B4r/bP3RN1/6P1/R5K1 w - - 0 27",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a1a3",
+        "nodes": 7814,
+        "reported_time_ms": 66,
+        "reported_nps": 118393,
+        "depth": 6,
+        "wall_ms": 68.23770000119112
+      },
+      "candidate": {
+        "bestmove": "a1a3",
+        "nodes": 7814,
+        "reported_time_ms": 65,
+        "reported_nps": 120215,
+        "depth": 6,
+        "wall_ms": 67.7953999984311
+      }
+    },
+    {
+      "index": 165,
+      "category": "middlegame",
+      "fen": "4k3/R5p1/4n3/2n4p/4N2P/1P2P1B1/5PPK/2r5 w - - 11 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4d6",
+        "nodes": 3948,
+        "reported_time_ms": 25,
+        "reported_nps": 157920,
+        "depth": 5,
+        "wall_ms": 52.87110000062967
+      },
+      "candidate": {
+        "bestmove": "e4d6",
+        "nodes": 3948,
+        "reported_time_ms": 25,
+        "reported_nps": 157920,
+        "depth": 5,
+        "wall_ms": 53.22089999935997
+      }
+    },
+    {
+      "index": 166,
+      "category": "middlegame",
+      "fen": "2r5/p4R1R/3k1p2/p3p1p1/2p1P1P1/8/6PK/5r2 w - - 1 47",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7a7",
+        "nodes": 7329,
+        "reported_time_ms": 48,
+        "reported_nps": 152687,
+        "depth": 6,
+        "wall_ms": 54.06489999950281
+      },
+      "candidate": {
+        "bestmove": "f7a7",
+        "nodes": 7329,
+        "reported_time_ms": 48,
+        "reported_nps": 152687,
+        "depth": 6,
+        "wall_ms": 53.7942999999359
+      }
+    },
+    {
+      "index": 167,
+      "category": "middlegame",
+      "fen": "6k1/5pp1/r1pbr3/7R/3pP2P/7K/6P1/4B3 w - - 4 47",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4e5",
+        "nodes": 2671,
+        "reported_time_ms": 16,
+        "reported_nps": 166937,
+        "depth": 4,
+        "wall_ms": 51.930400000856025
+      },
+      "candidate": {
+        "bestmove": "e4e5",
+        "nodes": 2671,
+        "reported_time_ms": 17,
+        "reported_nps": 157117,
+        "depth": 4,
+        "wall_ms": 52.487200000541634
+      }
+    },
+    {
+      "index": 168,
+      "category": "middlegame",
+      "fen": "4kb1r/Q3p3/1N1p3p/5pp1/8/8/PPPB1q1P/2K1Rb2 w - - 0 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a7d7",
+        "nodes": 4921,
+        "reported_time_ms": 46,
+        "reported_nps": 106978,
+        "depth": 5,
+        "wall_ms": 75.88690000011411
+      },
+      "candidate": {
+        "bestmove": "a7d7",
+        "nodes": 4921,
+        "reported_time_ms": 46,
+        "reported_nps": 106978,
+        "depth": 5,
+        "wall_ms": 75.98479999978736
+      }
+    },
+    {
+      "index": 169,
+      "category": "middlegame",
+      "fen": "8/2p3pk/7p/p6r/P5p1/2r3K1/1p6/1R1R4 w - - 6 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1d3",
+        "nodes": 6793,
+        "reported_time_ms": 36,
+        "reported_nps": 188694,
+        "depth": 5,
+        "wall_ms": 44.05570000017178
+      },
+      "candidate": {
+        "bestmove": "d1d3",
+        "nodes": 6793,
+        "reported_time_ms": 37,
+        "reported_nps": 183594,
+        "depth": 5,
+        "wall_ms": 44.15069999959087
+      }
+    },
+    {
+      "index": 170,
+      "category": "middlegame",
+      "fen": "r1q5/1n2pk1N/pp1b2p1/2pP4/8/2QB4/PP1R1PPP/2K1R3 w - - 1 25",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1e6",
+        "nodes": 3678,
+        "reported_time_ms": 31,
+        "reported_nps": 118645,
+        "depth": 3,
+        "wall_ms": 73.50199999928009
+      },
+      "candidate": {
+        "bestmove": "e1e6",
+        "nodes": 3678,
+        "reported_time_ms": 31,
+        "reported_nps": 118645,
+        "depth": 3,
+        "wall_ms": 73.84780000029423
+      }
+    },
+    {
+      "index": 171,
+      "category": "middlegame",
+      "fen": "6k1/4bp1p/p5p1/8/1pB1bP2/1P2p2P/P3N1P1/6K1 w - - 0 27",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c4a6",
+        "nodes": 7891,
+        "reported_time_ms": 53,
+        "reported_nps": 148886,
+        "depth": 7,
+        "wall_ms": 54.901599998629536
+      },
+      "candidate": {
+        "bestmove": "c4a6",
+        "nodes": 7891,
+        "reported_time_ms": 53,
+        "reported_nps": 148886,
+        "depth": 7,
+        "wall_ms": 55.07630000101926
+      }
+    },
+    {
+      "index": 172,
+      "category": "middlegame",
+      "fen": "8/2p1k3/1p2r3/p7/P1P3p1/KP3p2/6n1/3N2R1 w - - 0 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1f1",
+        "nodes": 5796,
+        "reported_time_ms": 32,
+        "reported_nps": 181125,
+        "depth": 4,
+        "wall_ms": 45.16609999882348
+      },
+      "candidate": {
+        "bestmove": "g1f1",
+        "nodes": 5796,
+        "reported_time_ms": 31,
+        "reported_nps": 186967,
+        "depth": 4,
+        "wall_ms": 44.76020000038261
+      }
+    },
+    {
+      "index": 173,
+      "category": "middlegame",
+      "fen": "3r3r/ppk2pp1/q4n2/4RN2/3B1Pp1/2P5/PP4PP/R2Q2K1 w - - 3 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1e1",
+        "nodes": 3872,
+        "reported_time_ms": 32,
+        "reported_nps": 121000,
+        "depth": 3,
+        "wall_ms": 67.85619999936898
+      },
+      "candidate": {
+        "bestmove": "d1e1",
+        "nodes": 3872,
+        "reported_time_ms": 32,
+        "reported_nps": 121000,
+        "depth": 3,
+        "wall_ms": 68.24220000089554
+      }
+    },
+    {
+      "index": 174,
+      "category": "middlegame",
+      "fen": "rn3k2/pp2pp1p/5n2/3p4/4N3/8/PP3Pr1/5RK1 w - - 2 19",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1h1",
+        "nodes": 5959,
+        "reported_time_ms": 35,
+        "reported_nps": 170257,
+        "depth": 6,
+        "wall_ms": 48.33089999920048
+      },
+      "candidate": {
+        "bestmove": "g1h1",
+        "nodes": 5959,
+        "reported_time_ms": 35,
+        "reported_nps": 170257,
+        "depth": 6,
+        "wall_ms": 48.12830000082613
+      }
+    },
+    {
+      "index": 175,
+      "category": "middlegame",
+      "fen": "4r1k1/2p2pp1/3p3p/2p2P2/3nPP1q/1P2Q2P/RB6/6K1 w - - 1 35",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2d4",
+        "nodes": 6033,
+        "reported_time_ms": 49,
+        "reported_nps": 123122,
+        "depth": 5,
+        "wall_ms": 65.16390000069805
+      },
+      "candidate": {
+        "bestmove": "b2d4",
+        "nodes": 6033,
+        "reported_time_ms": 49,
+        "reported_nps": 123122,
+        "depth": 5,
+        "wall_ms": 65.57679999968968
+      }
+    },
+    {
+      "index": 176,
+      "category": "middlegame",
+      "fen": "r6r/4k1pp/2p2p2/2n1pb2/1p6/1P3N1P/P3BPP1/R2R2K1 w - - 1 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a1c1",
+        "nodes": 3824,
+        "reported_time_ms": 28,
+        "reported_nps": 136571,
+        "depth": 5,
+        "wall_ms": 63.81579999833775
+      },
+      "candidate": {
+        "bestmove": "a1c1",
+        "nodes": 3824,
+        "reported_time_ms": 28,
+        "reported_nps": 136571,
+        "depth": 5,
+        "wall_ms": 63.430299998799455
+      }
+    },
+    {
+      "index": 177,
+      "category": "middlegame",
+      "fen": "5knQ/pp3pp1/4p3/2p1P3/8/P1BK4/1P4q1/8 w - - 0 27",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2b4",
+        "nodes": 2800,
+        "reported_time_ms": 20,
+        "reported_nps": 140000,
+        "depth": 3,
+        "wall_ms": 57.568000000173924
+      },
+      "candidate": {
+        "bestmove": "b2b4",
+        "nodes": 2800,
+        "reported_time_ms": 20,
+        "reported_nps": 140000,
+        "depth": 3,
+        "wall_ms": 57.563100001061684
+      }
+    },
+    {
+      "index": 178,
+      "category": "middlegame",
+      "fen": "8/5pk1/p5p1/P1P5/R2KN2p/1r5P/1q6/8 w - - 6 47",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d4c4",
+        "nodes": 2653,
+        "reported_time_ms": 17,
+        "reported_nps": 156058,
+        "depth": 4,
+        "wall_ms": 54.744699998991564
+      },
+      "candidate": {
+        "bestmove": "d4c4",
+        "nodes": 2653,
+        "reported_time_ms": 17,
+        "reported_nps": 156058,
+        "depth": 4,
+        "wall_ms": 54.737200000090525
+      }
+    },
+    {
+      "index": 179,
+      "category": "middlegame",
+      "fen": "6k1/5p2/p2Rn2p/1p4p1/bP1B4/P4N1P/4rPP1/6K1 w - - 1 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6a6",
+        "nodes": 3702,
+        "reported_time_ms": 25,
+        "reported_nps": 148080,
+        "depth": 5,
+        "wall_ms": 59.32260000008682
+      },
+      "candidate": {
+        "bestmove": "d6a6",
+        "nodes": 3702,
+        "reported_time_ms": 26,
+        "reported_nps": 142384,
+        "depth": 5,
+        "wall_ms": 59.63819999851694
+      }
+    },
+    {
+      "index": 180,
+      "category": "middlegame",
+      "fen": "2b3k1/6p1/p1Pp4/3P3p/3P4/P1p4P/3b2P1/1B2rR1K w - - 2 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1e1",
+        "nodes": 6035,
+        "reported_time_ms": 35,
+        "reported_nps": 172428,
+        "depth": 7,
+        "wall_ms": 46.445500000118045
+      },
+      "candidate": {
+        "bestmove": "f1e1",
+        "nodes": 6035,
+        "reported_time_ms": 34,
+        "reported_nps": 177500,
+        "depth": 7,
+        "wall_ms": 45.98280000027444
+      }
+    },
+    {
+      "index": 181,
+      "category": "middlegame",
+      "fen": "8/2p1k3/8/p1p1r3/P7/KP2npp1/8/5R1N w - - 2 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1f3",
+        "nodes": 6377,
+        "reported_time_ms": 36,
+        "reported_nps": 177138,
+        "depth": 5,
+        "wall_ms": 46.94510000081209
+      },
+      "candidate": {
+        "bestmove": "f1f3",
+        "nodes": 6377,
+        "reported_time_ms": 37,
+        "reported_nps": 172351,
+        "depth": 5,
+        "wall_ms": 47.200000000884756
+      }
+    },
+    {
+      "index": 182,
+      "category": "middlegame",
+      "fen": "1k5r/1p2RBp1/q1p5/8/1P1Pn2r/2P1Q1N1/P1b2PP1/4R1K1 w - - 3 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e7e8",
+        "nodes": 5324,
+        "reported_time_ms": 52,
+        "reported_nps": 102384,
+        "depth": 5,
+        "wall_ms": 79.06580000053509
+      },
+      "candidate": {
+        "bestmove": "e7e8",
+        "nodes": 5324,
+        "reported_time_ms": 52,
+        "reported_nps": 102384,
+        "depth": 5,
+        "wall_ms": 79.3943999997282
+      }
+    },
+    {
+      "index": 183,
+      "category": "middlegame",
+      "fen": "1r1q1r2/p4pk1/2p3pp/1R1nPp2/P1pPN3/2P4Q/5PRP/4K3 w - - 0 23",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4d6",
+        "nodes": 7559,
+        "reported_time_ms": 79,
+        "reported_nps": 95683,
+        "depth": 5,
+        "wall_ms": 84.41710000079183
+      },
+      "candidate": {
+        "bestmove": "e4d6",
+        "nodes": 7559,
+        "reported_time_ms": 81,
+        "reported_nps": 93320,
+        "depth": 5,
+        "wall_ms": 86.45619999879273
+      }
+    },
+    {
+      "index": 184,
+      "category": "middlegame",
+      "fen": "8/7R/R4p2/p3p1p1/k1p1P1P1/1r6/2r2KP1/8 w - - 13 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2g1",
+        "nodes": 6293,
+        "reported_time_ms": 37,
+        "reported_nps": 170081,
+        "depth": 6,
+        "wall_ms": 47.14679999960936
+      },
+      "candidate": {
+        "bestmove": "f2g1",
+        "nodes": 6293,
+        "reported_time_ms": 36,
+        "reported_nps": 174805,
+        "depth": 6,
+        "wall_ms": 46.82829999910609
+      }
+    },
+    {
+      "index": 185,
+      "category": "middlegame",
+      "fen": "2b5/2P1k3/p2p4/P2Pb1p1/4B3/2p3pP/6K1/8 w - - 0 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4c2",
+        "nodes": 7824,
+        "reported_time_ms": 45,
+        "reported_nps": 173866,
+        "depth": 6,
+        "wall_ms": 47.34760000064853
+      },
+      "candidate": {
+        "bestmove": "e4c2",
+        "nodes": 7824,
+        "reported_time_ms": 45,
+        "reported_nps": 173866,
+        "depth": 6,
+        "wall_ms": 47.28149999937159
+      }
+    },
+    {
+      "index": 186,
+      "category": "middlegame",
+      "fen": "r7/Ppr2qpk/1Rp4p/R2b1p1P/1QpP1N2/4PPP1/6K1/8 w - - 3 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a5a1",
+        "nodes": 6977,
+        "reported_time_ms": 67,
+        "reported_nps": 104134,
+        "depth": 5,
+        "wall_ms": 78.50359999974899
+      },
+      "candidate": {
+        "bestmove": "a5a1",
+        "nodes": 6977,
+        "reported_time_ms": 67,
+        "reported_nps": 104134,
+        "depth": 5,
+        "wall_ms": 78.41699999880802
+      }
+    },
+    {
+      "index": 187,
+      "category": "middlegame",
+      "fen": "1r4k1/R4pp1/2p1rb2/PnR1p2p/4P2P/5PB1/6PK/8 w - - 1 35",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a7a6",
+        "nodes": 5989,
+        "reported_time_ms": 42,
+        "reported_nps": 142595,
+        "depth": 6,
+        "wall_ms": 59.57990000024438
+      },
+      "candidate": {
+        "bestmove": "a7a6",
+        "nodes": 5989,
+        "reported_time_ms": 42,
+        "reported_nps": 142595,
+        "depth": 6,
+        "wall_ms": 59.53929999850516
+      }
+    },
+    {
+      "index": 188,
+      "category": "middlegame",
+      "fen": "8/3Nr1p1/p3p1k1/r2p3p/5p2/P1R2P2/1K4P1/4R3 w - - 1 35",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d7e5",
+        "nodes": 5676,
+        "reported_time_ms": 40,
+        "reported_nps": 141900,
+        "depth": 5,
+        "wall_ms": 58.603699999366654
+      },
+      "candidate": {
+        "bestmove": "d7e5",
+        "nodes": 5676,
+        "reported_time_ms": 40,
+        "reported_nps": 141900,
+        "depth": 5,
+        "wall_ms": 58.91469999914989
+      }
+    },
+    {
+      "index": 189,
+      "category": "middlegame",
+      "fen": "3r2k1/2pr4/p7/6p1/7B/1bQ4P/1PP2PP1/4R1K1 w - g6 0 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h4g5",
+        "nodes": 3645,
+        "reported_time_ms": 23,
+        "reported_nps": 158478,
+        "depth": 3,
+        "wall_ms": 53.888000000370084
+      },
+      "candidate": {
+        "bestmove": "h4g5",
+        "nodes": 3645,
+        "reported_time_ms": 24,
+        "reported_nps": 151875,
+        "depth": 3,
+        "wall_ms": 54.376599999159225
+      }
+    },
+    {
+      "index": 190,
+      "category": "middlegame",
+      "fen": "r4r1k/1p2pp1p/p2p3Q/3P2pP/8/5P2/PPP3P1/2K4R w - - 1 21",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h1e1",
+        "nodes": 4643,
+        "reported_time_ms": 28,
+        "reported_nps": 165821,
+        "depth": 5,
+        "wall_ms": 54.16440000044531
+      },
+      "candidate": {
+        "bestmove": "h1e1",
+        "nodes": 4643,
+        "reported_time_ms": 28,
+        "reported_nps": 165821,
+        "depth": 5,
+        "wall_ms": 53.834899999856134
+      }
+    },
+    {
+      "index": 191,
+      "category": "middlegame",
+      "fen": "1r4k1/6p1/6Rp/1PB1ppb1/1P4q1/1P6/4N3/4R2K w - - 5 33",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c5f2",
+        "nodes": 3981,
+        "reported_time_ms": 26,
+        "reported_nps": 153115,
+        "depth": 3,
+        "wall_ms": 55.1011000006838
+      },
+      "candidate": {
+        "bestmove": "c5f2",
+        "nodes": 3981,
+        "reported_time_ms": 26,
+        "reported_nps": 153115,
+        "depth": 3,
+        "wall_ms": 55.441100001189625
+      }
+    },
+    {
+      "index": 192,
+      "category": "middlegame",
+      "fen": "6k1/p4p2/1p4pp/4n3/4P1P1/1r3BP1/2p1K2P/5R2 w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2d2",
+        "nodes": 6466,
+        "reported_time_ms": 44,
+        "reported_nps": 146954,
+        "depth": 6,
+        "wall_ms": 53.91109999982291
+      },
+      "candidate": {
+        "bestmove": "e2d2",
+        "nodes": 6466,
+        "reported_time_ms": 50,
+        "reported_nps": 129320,
+        "depth": 6,
+        "wall_ms": 64.72140000005311
+      }
+    },
+    {
+      "index": 193,
+      "category": "middlegame",
+      "fen": "7k/4b2q/p6Q/P2pP3/3P3p/5N1P/5K2/8 w - - 2 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h6a6",
+        "nodes": 6624,
+        "reported_time_ms": 46,
+        "reported_nps": 144000,
+        "depth": 7,
+        "wall_ms": 55.86070000026666
+      },
+      "candidate": {
+        "bestmove": "h6a6",
+        "nodes": 6624,
+        "reported_time_ms": 54,
+        "reported_nps": 122666,
+        "depth": 7,
+        "wall_ms": 66.7076999998244
+      }
+    },
+    {
+      "index": 194,
+      "category": "middlegame",
+      "fen": "1rbqk2r/pp3ppp/8/P2p4/5b2/6P1/1P2PPBP/R2Q1RK1 w k - 0 15",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1a4",
+        "nodes": 7558,
+        "reported_time_ms": 65,
+        "reported_nps": 116276,
+        "depth": 7,
+        "wall_ms": 70.04479999886826
+      },
+      "candidate": {
+        "bestmove": "d1a4",
+        "nodes": 7558,
+        "reported_time_ms": 65,
+        "reported_nps": 116276,
+        "depth": 7,
+        "wall_ms": 69.82839999909629
+      }
+    },
+    {
+      "index": 195,
+      "category": "middlegame",
+      "fen": "8/3k3p/2R5/p2B1P2/5P2/1P5r/P1P5/6K1 w - - 9 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c4",
+        "nodes": 6695,
+        "reported_time_ms": 41,
+        "reported_nps": 163292,
+        "depth": 5,
+        "wall_ms": 49.095200000010664
+      },
+      "candidate": {
+        "bestmove": "c2c4",
+        "nodes": 6695,
+        "reported_time_ms": 41,
+        "reported_nps": 163292,
+        "depth": 5,
+        "wall_ms": 49.60729999947944
+      }
+    },
+    {
+      "index": 196,
+      "category": "middlegame",
+      "fen": "r1b2k2/pp2p3/3p2Qr/3P4/1pP1N3/5P2/P7/R5K1 w - - 0 31",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g6h6",
+        "nodes": 3386,
+        "reported_time_ms": 23,
+        "reported_nps": 147217,
+        "depth": 4,
+        "wall_ms": 56.09069999991334
+      },
+      "candidate": {
+        "bestmove": "g6h6",
+        "nodes": 3386,
+        "reported_time_ms": 23,
+        "reported_nps": 147217,
+        "depth": 4,
+        "wall_ms": 55.620299999645795
+      }
+    },
+    {
+      "index": 197,
+      "category": "middlegame",
+      "fen": "r4rk1/3b1ppp/p3p3/2q1P3/1p1NQ3/8/PPP3PP/R4RK1 w - - 3 17",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1f2",
+        "nodes": 7673,
+        "reported_time_ms": 62,
+        "reported_nps": 123758,
+        "depth": 5,
+        "wall_ms": 65.48470000052475
+      },
+      "candidate": {
+        "bestmove": "f1f2",
+        "nodes": 7673,
+        "reported_time_ms": 62,
+        "reported_nps": 123758,
+        "depth": 5,
+        "wall_ms": 65.61929999952554
+      }
+    },
+    {
+      "index": 198,
+      "category": "middlegame",
+      "fen": "rnb2rk1/pp3pPp/4p3/q7/2B5/5N2/Pp3PPP/2RQK2R w K - 1 13",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3d2",
+        "nodes": 5832,
+        "reported_time_ms": 55,
+        "reported_nps": 106036,
+        "depth": 7,
+        "wall_ms": 77.1535000003496
+      },
+      "candidate": {
+        "bestmove": "f3d2",
+        "nodes": 5832,
+        "reported_time_ms": 54,
+        "reported_nps": 108000,
+        "depth": 7,
+        "wall_ms": 75.8722000009584
+      }
+    },
+    {
+      "index": 199,
+      "category": "middlegame",
+      "fen": "b6k/p1q1b1pp/4Bn2/6N1/3P4/3QBP1P/P5P1/6K1 w - - 1 29",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e6c4",
+        "nodes": 6781,
+        "reported_time_ms": 53,
+        "reported_nps": 127943,
+        "depth": 5,
+        "wall_ms": 64.24850000075821
+      },
+      "candidate": {
+        "bestmove": "e6c4",
+        "nodes": 6781,
+        "reported_time_ms": 53,
+        "reported_nps": 127943,
+        "depth": 5,
+        "wall_ms": 64.58240000029036
+      }
+    },
+    {
+      "index": 200,
+      "category": "endgame",
+      "fen": "R7/1P6/8/2KP4/1P2k3/8/8/8 w - - 3 75",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5d6",
+        "nodes": 3909,
+        "reported_time_ms": 20,
+        "reported_nps": 195450,
+        "depth": 5,
+        "wall_ms": 42.387900000903755
+      },
+      "candidate": {
+        "bestmove": "d5d6",
+        "nodes": 3909,
+        "reported_time_ms": 20,
+        "reported_nps": 195450,
+        "depth": 5,
+        "wall_ms": 42.070999999850756
+      }
+    },
+    {
+      "index": 201,
+      "category": "endgame",
+      "fen": "7R/8/5k2/5p2/r4Pp1/7p/8/5K2 w - - 3 75",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h8h6",
+        "nodes": 6787,
+        "reported_time_ms": 36,
+        "reported_nps": 188527,
+        "depth": 5,
+        "wall_ms": 42.60309999881429
+      },
+      "candidate": {
+        "bestmove": "h8h6",
+        "nodes": 6787,
+        "reported_time_ms": 36,
+        "reported_nps": 188527,
+        "depth": 5,
+        "wall_ms": 42.66040000038629
+      }
+    },
+    {
+      "index": 202,
+      "category": "endgame",
+      "fen": "8/5k2/b7/p5P1/5p2/1K6/3qp3/8 w - - 0 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g5g6",
+        "nodes": 5845,
+        "reported_time_ms": 31,
+        "reported_nps": 188548,
+        "depth": 4,
+        "wall_ms": 32.22060000007332
+      },
+      "candidate": {
+        "bestmove": "g5g6",
+        "nodes": 5845,
+        "reported_time_ms": 31,
+        "reported_nps": 188548,
+        "depth": 4,
+        "wall_ms": 31.916399999317946
+      }
+    },
+    {
+      "index": 203,
+      "category": "endgame",
+      "fen": "6r1/1P3k2/3R4/3P4/8/2P5/3K4/8 w - - 3 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6e6",
+        "nodes": 2665,
+        "reported_time_ms": 13,
+        "reported_nps": 205000,
+        "depth": 3,
+        "wall_ms": 40.53120000025956
+      },
+      "candidate": {
+        "bestmove": "d6e6",
+        "nodes": 2665,
+        "reported_time_ms": 12,
+        "reported_nps": 222083,
+        "depth": 3,
+        "wall_ms": 40.47840000021097
+      }
+    },
+    {
+      "index": 204,
+      "category": "endgame",
+      "fen": "6kB/7p/4bp2/4b3/6P1/P1r5/8/1K6 w - - 0 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g4g5",
+        "nodes": 4875,
+        "reported_time_ms": 29,
+        "reported_nps": 168103,
+        "depth": 4,
+        "wall_ms": 48.983500000758795
+      },
+      "candidate": {
+        "bestmove": "g4g5",
+        "nodes": 4875,
+        "reported_time_ms": 29,
+        "reported_nps": 168103,
+        "depth": 4,
+        "wall_ms": 48.94670000066981
+      }
+    },
+    {
+      "index": 205,
+      "category": "endgame",
+      "fen": "8/7k/1P4p1/2P5/4r3/7P/5Rp1/6K1 w - - 0 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2f7",
+        "nodes": 5835,
+        "reported_time_ms": 29,
+        "reported_nps": 201206,
+        "depth": 5,
+        "wall_ms": 40.72670000095968
+      },
+      "candidate": {
+        "bestmove": "f2f7",
+        "nodes": 5835,
+        "reported_time_ms": 29,
+        "reported_nps": 201206,
+        "depth": 5,
+        "wall_ms": 41.05650000019523
+      }
+    },
+    {
+      "index": 206,
+      "category": "endgame",
+      "fen": "8/8/8/1R5p/Pp2k2K/6P1/5P2/1r6 w - - 6 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h4h5",
+        "nodes": 7208,
+        "reported_time_ms": 46,
+        "reported_nps": 156695,
+        "depth": 7,
+        "wall_ms": 51.38179999994463
+      },
+      "candidate": {
+        "bestmove": "h4h5",
+        "nodes": 7208,
+        "reported_time_ms": 45,
+        "reported_nps": 160177,
+        "depth": 7,
+        "wall_ms": 51.229000000603264
+      }
+    },
+    {
+      "index": 207,
+      "category": "endgame",
+      "fen": "8/7p/4bpk1/8/8/K6p/8/2q5 w - - 0 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a3a4",
+        "nodes": 6368,
+        "reported_time_ms": 32,
+        "reported_nps": 199000,
+        "depth": 6,
+        "wall_ms": 40.960300000733696
+      },
+      "candidate": {
+        "bestmove": "a3a4",
+        "nodes": 6368,
+        "reported_time_ms": 32,
+        "reported_nps": 199000,
+        "depth": 6,
+        "wall_ms": 41.29029999967315
+      }
+    },
+    {
+      "index": 208,
+      "category": "endgame",
+      "fen": "2N5/3PR3/3r2k1/6p1/6P1/7P/7K/8 w - - 2 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c8d6",
+        "nodes": 1761,
+        "reported_time_ms": 10,
+        "reported_nps": 176100,
+        "depth": 5,
+        "wall_ms": 48.061400000733556
+      },
+      "candidate": {
+        "bestmove": "c8d6",
+        "nodes": 1761,
+        "reported_time_ms": 10,
+        "reported_nps": 176100,
+        "depth": 5,
+        "wall_ms": 47.75839999820164
+      }
+    },
+    {
+      "index": 209,
+      "category": "endgame",
+      "fen": "8/1nR5/8/6B1/1r4pP/3kP1K1/5P2/8 w - - 2 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g5e7",
+        "nodes": 3179,
+        "reported_time_ms": 18,
+        "reported_nps": 176611,
+        "depth": 5,
+        "wall_ms": 48.03110000102606
+      },
+      "candidate": {
+        "bestmove": "g5e7",
+        "nodes": 3179,
+        "reported_time_ms": 18,
+        "reported_nps": 176611,
+        "depth": 5,
+        "wall_ms": 48.49140000078478
+      }
+    },
+    {
+      "index": 210,
+      "category": "endgame",
+      "fen": "8/8/1k6/4P1p1/8/5KP1/4p3/4B3 w - - 2 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3f2",
+        "nodes": 3641,
+        "reported_time_ms": 18,
+        "reported_nps": 202277,
+        "depth": 5,
+        "wall_ms": 42.293300000892486
+      },
+      "candidate": {
+        "bestmove": "f3f2",
+        "nodes": 3641,
+        "reported_time_ms": 17,
+        "reported_nps": 214176,
+        "depth": 5,
+        "wall_ms": 41.91309999987425
+      }
+    },
+    {
+      "index": 211,
+      "category": "endgame",
+      "fen": "8/1p1k2p1/p3R1P1/b7/8/6p1/1r6/5K2 w - - 1 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e6e2",
+        "nodes": 5131,
+        "reported_time_ms": 28,
+        "reported_nps": 183250,
+        "depth": 5,
+        "wall_ms": 45.33190000074683
+      },
+      "candidate": {
+        "bestmove": "e6e2",
+        "nodes": 5131,
+        "reported_time_ms": 28,
+        "reported_nps": 183250,
+        "depth": 5,
+        "wall_ms": 45.71570000007341
+      }
+    },
+    {
+      "index": 212,
+      "category": "endgame",
+      "fen": "1N6/7p/4b3/4pk1p/8/K1p3P1/8/8 w - - 8 43",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b8d7",
+        "nodes": 4499,
+        "reported_time_ms": 22,
+        "reported_nps": 204500,
+        "depth": 5,
+        "wall_ms": 42.579000000841916
+      },
+      "candidate": {
+        "bestmove": "b8d7",
+        "nodes": 4499,
+        "reported_time_ms": 22,
+        "reported_nps": 204500,
+        "depth": 5,
+        "wall_ms": 42.31259999869508
+      }
+    },
+    {
+      "index": 213,
+      "category": "endgame",
+      "fen": "8/8/3k4/3P2r1/2P5/3R2p1/6P1/5BK1 w - - 1 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d3b3",
+        "nodes": 6941,
+        "reported_time_ms": 33,
+        "reported_nps": 210333,
+        "depth": 5,
+        "wall_ms": 38.27079999973648
+      },
+      "candidate": {
+        "bestmove": "d3b3",
+        "nodes": 6941,
+        "reported_time_ms": 33,
+        "reported_nps": 210333,
+        "depth": 5,
+        "wall_ms": 38.48120000111521
+      }
+    },
+    {
+      "index": 214,
+      "category": "endgame",
+      "fen": "8/3k4/8/6Q1/8/6P1/5B2/3K4 w - - 5 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g5d2",
+        "nodes": 3111,
+        "reported_time_ms": 13,
+        "reported_nps": 239307,
+        "depth": 4,
+        "wall_ms": 38.13029999946593
+      },
+      "candidate": {
+        "bestmove": "g5d2",
+        "nodes": 3111,
+        "reported_time_ms": 13,
+        "reported_nps": 239307,
+        "depth": 4,
+        "wall_ms": 37.91139999884763
+      }
+    },
+    {
+      "index": 215,
+      "category": "endgame",
+      "fen": "8/2k3P1/8/1p4QK/8/P7/6P1/3q4 w - - 3 85",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h5h6",
+        "nodes": 5857,
+        "reported_time_ms": 36,
+        "reported_nps": 162694,
+        "depth": 3,
+        "wall_ms": 50.1561999990372
+      },
+      "candidate": {
+        "bestmove": "h5h6",
+        "nodes": 5857,
+        "reported_time_ms": 36,
+        "reported_nps": 162694,
+        "depth": 3,
+        "wall_ms": 50.46740000034333
+      }
+    },
+    {
+      "index": 216,
+      "category": "endgame",
+      "fen": "R7/5p2/6pp/8/3pk1P1/6P1/6PK/1r6 w - - 2 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a8e8",
+        "nodes": 7113,
+        "reported_time_ms": 38,
+        "reported_nps": 187184,
+        "depth": 6,
+        "wall_ms": 44.45510000005015
+      },
+      "candidate": {
+        "bestmove": "a8e8",
+        "nodes": 7113,
+        "reported_time_ms": 37,
+        "reported_nps": 192243,
+        "depth": 6,
+        "wall_ms": 42.97000000042317
+      }
+    },
+    {
+      "index": 217,
+      "category": "endgame",
+      "fen": "8/1k6/3R4/8/2P5/6p1/4B1P1/6K1 w - - 1 71",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2f3",
+        "nodes": 7886,
+        "reported_time_ms": 36,
+        "reported_nps": 219055,
+        "depth": 6,
+        "wall_ms": 37.61610000037763
+      },
+      "candidate": {
+        "bestmove": "e2f3",
+        "nodes": 7886,
+        "reported_time_ms": 36,
+        "reported_nps": 219055,
+        "depth": 6,
+        "wall_ms": 37.62529999949038
+      }
+    },
+    {
+      "index": 218,
+      "category": "endgame",
+      "fen": "3K4/8/4k1p1/5q1q/8/8/8/8 w - - 16 83",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d8c8",
+        "nodes": 2680,
+        "reported_time_ms": 11,
+        "reported_nps": 243636,
+        "depth": 4,
+        "wall_ms": 35.31300000031479
+      },
+      "candidate": {
+        "bestmove": "d8c8",
+        "nodes": 2680,
+        "reported_time_ms": 11,
+        "reported_nps": 243636,
+        "depth": 4,
+        "wall_ms": 34.81429999919783
+      }
+    },
+    {
+      "index": 219,
+      "category": "endgame",
+      "fen": "Q7/8/7R/4B3/2k1P3/8/5PK1/8 w - - 9 91",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a8d5",
+        "nodes": 3437,
+        "reported_time_ms": 16,
+        "reported_nps": 214812,
+        "depth": 4,
+        "wall_ms": 39.366300001347554
+      },
+      "candidate": {
+        "bestmove": "a8d5",
+        "nodes": 3437,
+        "reported_time_ms": 16,
+        "reported_nps": 214812,
+        "depth": 4,
+        "wall_ms": 39.49780000039027
+      }
+    },
+    {
+      "index": 220,
+      "category": "endgame",
+      "fen": "5k2/p7/6p1/qP3p2/8/8/1P6/1BKq4 w - - 0 71",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1d1",
+        "nodes": 6879,
+        "reported_time_ms": 38,
+        "reported_nps": 181026,
+        "depth": 5,
+        "wall_ms": 44.826999999713735
+      },
+      "candidate": {
+        "bestmove": "c1d1",
+        "nodes": 6879,
+        "reported_time_ms": 38,
+        "reported_nps": 181026,
+        "depth": 5,
+        "wall_ms": 44.85509999904025
+      }
+    },
+    {
+      "index": 221,
+      "category": "endgame",
+      "fen": "8/4k1p1/1p2p3/p2nN3/2R5/6K1/6P1/1r6 w - - 7 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c4c7",
+        "nodes": 4768,
+        "reported_time_ms": 27,
+        "reported_nps": 176592,
+        "depth": 4,
+        "wall_ms": 46.10089999914635
+      },
+      "candidate": {
+        "bestmove": "c4c7",
+        "nodes": 4768,
+        "reported_time_ms": 28,
+        "reported_nps": 170285,
+        "depth": 4,
+        "wall_ms": 46.532800000932184
+      }
+    },
+    {
+      "index": 222,
+      "category": "endgame",
+      "fen": "8/5k2/b7/p4pP1/8/2K5/4p3/3q4 w - - 1 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3b2",
+        "nodes": 3657,
+        "reported_time_ms": 22,
+        "reported_nps": 166227,
+        "depth": 5,
+        "wall_ms": 50.06690000118397
+      },
+      "candidate": {
+        "bestmove": "c3b2",
+        "nodes": 3657,
+        "reported_time_ms": 22,
+        "reported_nps": 166227,
+        "depth": 5,
+        "wall_ms": 50.1098999993701
+      }
+    },
+    {
+      "index": 223,
+      "category": "endgame",
+      "fen": "8/5R2/1P4pk/2P5/1r6/7P/6K1/8 w - - 1 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7c7",
+        "nodes": 4662,
+        "reported_time_ms": 21,
+        "reported_nps": 222000,
+        "depth": 4,
+        "wall_ms": 39.74639999978535
+      },
+      "candidate": {
+        "bestmove": "f7c7",
+        "nodes": 4662,
+        "reported_time_ms": 22,
+        "reported_nps": 211909,
+        "depth": 4,
+        "wall_ms": 40.46610000114015
+      }
+    },
+    {
+      "index": 224,
+      "category": "endgame",
+      "fen": "7k/8/B7/p5p1/1P6/8/2K2p2/4q3 w - - 1 95",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a6d3",
+        "nodes": 7346,
+        "reported_time_ms": 43,
+        "reported_nps": 170837,
+        "depth": 3,
+        "wall_ms": 47.972399999707704
+      },
+      "candidate": {
+        "bestmove": "a6d3",
+        "nodes": 7346,
+        "reported_time_ms": 43,
+        "reported_nps": 170837,
+        "depth": 3,
+        "wall_ms": 47.73659999955271
+      }
+    },
+    {
+      "index": 225,
+      "category": "endgame",
+      "fen": "8/6k1/8/p1r3rp/4K3/2p3P1/2B2P2/3R4 w - - 16 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1d7",
+        "nodes": 7157,
+        "reported_time_ms": 42,
+        "reported_nps": 170404,
+        "depth": 5,
+        "wall_ms": 48.15299999972922
+      },
+      "candidate": {
+        "bestmove": "d1d7",
+        "nodes": 7157,
+        "reported_time_ms": 42,
+        "reported_nps": 170404,
+        "depth": 5,
+        "wall_ms": 47.97760000110429
+      }
+    },
+    {
+      "index": 226,
+      "category": "endgame",
+      "fen": "6k1/8/2pn3p/3r3P/N7/3K4/pp6/5R2 w - - 6 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d3c2",
+        "nodes": 5410,
+        "reported_time_ms": 36,
+        "reported_nps": 150277,
+        "depth": 4,
+        "wall_ms": 53.56810000012047
+      },
+      "candidate": {
+        "bestmove": "d3c2",
+        "nodes": 5410,
+        "reported_time_ms": 36,
+        "reported_nps": 150277,
+        "depth": 4,
+        "wall_ms": 53.28170000029786
+      }
+    },
+    {
+      "index": 227,
+      "category": "endgame",
+      "fen": "5k2/N6p/7P/8/p4P2/1K6/6p1/r1b5 w - - 0 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3c4",
+        "nodes": 3731,
+        "reported_time_ms": 21,
+        "reported_nps": 177666,
+        "depth": 6,
+        "wall_ms": 48.227000001134
+      },
+      "candidate": {
+        "bestmove": "b3c4",
+        "nodes": 3731,
+        "reported_time_ms": 20,
+        "reported_nps": 186550,
+        "depth": 6,
+        "wall_ms": 48.054699998829165
+      }
+    },
+    {
+      "index": 228,
+      "category": "endgame",
+      "fen": "8/5pk1/3R3p/5r2/5P2/8/5P1P/6K1 w - - 1 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6d4",
+        "nodes": 6452,
+        "reported_time_ms": 30,
+        "reported_nps": 215066,
+        "depth": 6,
+        "wall_ms": 37.631400000464055
+      },
+      "candidate": {
+        "bestmove": "d6d4",
+        "nodes": 6452,
+        "reported_time_ms": 29,
+        "reported_nps": 222482,
+        "depth": 6,
+        "wall_ms": 37.483500000234926
+      }
+    },
+    {
+      "index": 229,
+      "category": "endgame",
+      "fen": "8/5k1p/4p3/5p1P/8/2r3P1/pp3PK1/8 w - - 1 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2h2",
+        "nodes": 5906,
+        "reported_time_ms": 34,
+        "reported_nps": 173705,
+        "depth": 4,
+        "wall_ms": 47.928800000590854
+      },
+      "candidate": {
+        "bestmove": "g2h2",
+        "nodes": 5906,
+        "reported_time_ms": 35,
+        "reported_nps": 168742,
+        "depth": 4,
+        "wall_ms": 48.2560000000376
+      }
+    },
+    {
+      "index": 230,
+      "category": "endgame",
+      "fen": "1k6/8/8/6Q1/8/6P1/K4B2/8 w - - 13 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g5d8",
+        "nodes": 2841,
+        "reported_time_ms": 12,
+        "reported_nps": 236750,
+        "depth": 4,
+        "wall_ms": 36.16189999956987
+      },
+      "candidate": {
+        "bestmove": "g5d8",
+        "nodes": 2841,
+        "reported_time_ms": 18,
+        "reported_nps": 157833,
+        "depth": 4,
+        "wall_ms": 47.57340000105614
+      }
+    },
+    {
+      "index": 231,
+      "category": "endgame",
+      "fen": "R7/8/8/1nk1n2p/5brP/8/6P1/3K4 w - - 11 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a8a5",
+        "nodes": 7644,
+        "reported_time_ms": 45,
+        "reported_nps": 169866,
+        "depth": 5,
+        "wall_ms": 48.45969999951194
+      },
+      "candidate": {
+        "bestmove": "a8a5",
+        "nodes": 7644,
+        "reported_time_ms": 46,
+        "reported_nps": 166173,
+        "depth": 5,
+        "wall_ms": 49.05979999966803
+      }
+    },
+    {
+      "index": 232,
+      "category": "endgame",
+      "fen": "1QR5/1P6/8/8/8/8/8/K6k w - - 27 109",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c8h8",
+        "nodes": 4170,
+        "reported_time_ms": 21,
+        "reported_nps": 198571,
+        "depth": 5,
+        "wall_ms": 43.15949999909208
+      },
+      "candidate": {
+        "bestmove": "c8h8",
+        "nodes": 4170,
+        "reported_time_ms": 21,
+        "reported_nps": 198571,
+        "depth": 5,
+        "wall_ms": 42.77180000099179
+      }
+    },
+    {
+      "index": 233,
+      "category": "endgame",
+      "fen": "3k4/p7/n4r1K/7p/1P6/P7/4p3/6r1 w - - 4 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h6h7",
+        "nodes": 3831,
+        "reported_time_ms": 19,
+        "reported_nps": 201631,
+        "depth": 6,
+        "wall_ms": 43.004799999835086
+      },
+      "candidate": {
+        "bestmove": "h6h7",
+        "nodes": 3831,
+        "reported_time_ms": 19,
+        "reported_nps": 201631,
+        "depth": 6,
+        "wall_ms": 42.94060000029276
+      }
+    },
+    {
+      "index": 234,
+      "category": "endgame",
+      "fen": "8/8/8/3p1Q2/3P3p/b3kN1P/8/7K w - - 2 77",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h1g2",
+        "nodes": 7513,
+        "reported_time_ms": 47,
+        "reported_nps": 159851,
+        "depth": 5,
+        "wall_ms": 50.63060000065889
+      },
+      "candidate": {
+        "bestmove": "h1g2",
+        "nodes": 7513,
+        "reported_time_ms": 47,
+        "reported_nps": 159851,
+        "depth": 5,
+        "wall_ms": 50.90149999887217
+      }
+    },
+    {
+      "index": 235,
+      "category": "endgame",
+      "fen": "8/k1P2r1p/4B3/8/p7/1P6/P7/3R2K1 w - - 0 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1d7",
+        "nodes": 5188,
+        "reported_time_ms": 31,
+        "reported_nps": 167354,
+        "depth": 4,
+        "wall_ms": 49.30679999961285
+      },
+      "candidate": {
+        "bestmove": "d1d7",
+        "nodes": 5188,
+        "reported_time_ms": 32,
+        "reported_nps": 162125,
+        "depth": 4,
+        "wall_ms": 49.65310000079626
+      }
+    },
+    {
+      "index": 236,
+      "category": "endgame",
+      "fen": "2k5/8/8/7R/1P6/p1K5/P7/8 w - - 1 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3b3",
+        "nodes": 3285,
+        "reported_time_ms": 14,
+        "reported_nps": 234642,
+        "depth": 5,
+        "wall_ms": 37.929199999780394
+      },
+      "candidate": {
+        "bestmove": "c3b3",
+        "nodes": 3285,
+        "reported_time_ms": 14,
+        "reported_nps": 234642,
+        "depth": 5,
+        "wall_ms": 37.708899999415735
+      }
+    },
+    {
+      "index": 237,
+      "category": "endgame",
+      "fen": "5b2/7p/4k1p1/B3P3/8/7P/P4P2/3B1K2 w - - 1 43",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1a4",
+        "nodes": 7461,
+        "reported_time_ms": 33,
+        "reported_nps": 226090,
+        "depth": 4,
+        "wall_ms": 36.39389999989362
+      },
+      "candidate": {
+        "bestmove": "d1a4",
+        "nodes": 7461,
+        "reported_time_ms": 34,
+        "reported_nps": 219441,
+        "depth": 4,
+        "wall_ms": 36.70109999984561
+      }
+    },
+    {
+      "index": 238,
+      "category": "endgame",
+      "fen": "8/2p5/5Np1/2K2kP1/2P5/8/3Bpp2/6r1 w - - 6 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2e3",
+        "nodes": 1471,
+        "reported_time_ms": 10,
+        "reported_nps": 147100,
+        "depth": 3,
+        "wall_ms": 54.12839999917196
+      },
+      "candidate": {
+        "bestmove": "d2e3",
+        "nodes": 1471,
+        "reported_time_ms": 9,
+        "reported_nps": 163444,
+        "depth": 3,
+        "wall_ms": 54.011099999115686
+      }
+    },
+    {
+      "index": 239,
+      "category": "endgame",
+      "fen": "8/6r1/2K5/8/8/8/4R3/1k6 w - - 34 81",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c6b5",
+        "nodes": 2872,
+        "reported_time_ms": 10,
+        "reported_nps": 287200,
+        "depth": 4,
+        "wall_ms": 28.98789999926521
+      },
+      "candidate": {
+        "bestmove": "c6b5",
+        "nodes": 2872,
+        "reported_time_ms": 10,
+        "reported_nps": 287200,
+        "depth": 4,
+        "wall_ms": 29.23480000026757
+      }
+    },
+    {
+      "index": 240,
+      "category": "endgame",
+      "fen": "8/3R1p2/5k2/8/5PK1/r4P1P/8/8 w - - 3 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h3h4",
+        "nodes": 5610,
+        "reported_time_ms": 26,
+        "reported_nps": 215769,
+        "depth": 5,
+        "wall_ms": 37.47130000010657
+      },
+      "candidate": {
+        "bestmove": "h3h4",
+        "nodes": 5610,
+        "reported_time_ms": 25,
+        "reported_nps": 224400,
+        "depth": 5,
+        "wall_ms": 37.157000000661355
+      }
+    },
+    {
+      "index": 241,
+      "category": "endgame",
+      "fen": "1QR5/1P6/8/8/8/8/8/K6k w - - 23 107",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c8h8",
+        "nodes": 4170,
+        "reported_time_ms": 21,
+        "reported_nps": 198571,
+        "depth": 5,
+        "wall_ms": 42.66480000114825
+      },
+      "candidate": {
+        "bestmove": "c8h8",
+        "nodes": 4170,
+        "reported_time_ms": 21,
+        "reported_nps": 198571,
+        "depth": 5,
+        "wall_ms": 42.75929999857908
+      }
+    },
+    {
+      "index": 242,
+      "category": "endgame",
+      "fen": "8/4Rpk1/5bp1/7p/1r6/8/1p2KP2/1R6 w - - 8 53",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e7e3",
+        "nodes": 3097,
+        "reported_time_ms": 17,
+        "reported_nps": 182176,
+        "depth": 4,
+        "wall_ms": 45.88599999988219
+      },
+      "candidate": {
+        "bestmove": "e7e3",
+        "nodes": 3097,
+        "reported_time_ms": 17,
+        "reported_nps": 182176,
+        "depth": 4,
+        "wall_ms": 45.446500000252854
+      }
+    },
+    {
+      "index": 243,
+      "category": "endgame",
+      "fen": "4k3/6p1/3Bp3/5P1p/8/1r6/4K3/8 w - - 0 59",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6e5",
+        "nodes": 4597,
+        "reported_time_ms": 22,
+        "reported_nps": 208954,
+        "depth": 4,
+        "wall_ms": 40.03539999939676
+      },
+      "candidate": {
+        "bestmove": "d6e5",
+        "nodes": 4597,
+        "reported_time_ms": 22,
+        "reported_nps": 208954,
+        "depth": 4,
+        "wall_ms": 40.206099998613354
+      }
+    },
+    {
+      "index": 244,
+      "category": "endgame",
+      "fen": "8/4Q3/8/3p4/3P1b1p/3k1N1P/6K1/8 w - - 14 83",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g2h1",
+        "nodes": 2594,
+        "reported_time_ms": 14,
+        "reported_nps": 185285,
+        "depth": 3,
+        "wall_ms": 48.40359999980137
+      },
+      "candidate": {
+        "bestmove": "g2h1",
+        "nodes": 2594,
+        "reported_time_ms": 14,
+        "reported_nps": 185285,
+        "depth": 3,
+        "wall_ms": 48.20370000015828
+      }
+    },
+    {
+      "index": 245,
+      "category": "endgame",
+      "fen": "8/k7/8/7R/PP6/8/8/K7 w - - 9 75",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h5h8",
+        "nodes": 3908,
+        "reported_time_ms": 15,
+        "reported_nps": 260533,
+        "depth": 5,
+        "wall_ms": 32.71309999945515
+      },
+      "candidate": {
+        "bestmove": "h5h8",
+        "nodes": 3908,
+        "reported_time_ms": 15,
+        "reported_nps": 260533,
+        "depth": 5,
+        "wall_ms": 32.97999999995227
+      }
+    },
+    {
+      "index": 246,
+      "category": "endgame",
+      "fen": "3R4/5ppk/2p5/4b3/7P/3p2r1/7K/8 w - - 4 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d8d3",
+        "nodes": 5746,
+        "reported_time_ms": 30,
+        "reported_nps": 191533,
+        "depth": 5,
+        "wall_ms": 40.22169999916514
+      },
+      "candidate": {
+        "bestmove": "d8d3",
+        "nodes": 5746,
+        "reported_time_ms": 30,
+        "reported_nps": 191533,
+        "depth": 5,
+        "wall_ms": 40.486199999577366
+      }
+    },
+    {
+      "index": 247,
+      "category": "endgame",
+      "fen": "3k4/8/3q2P1/1p5K/8/P3Q3/6P1/8 w - - 3 83",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g6g7",
+        "nodes": 4756,
+        "reported_time_ms": 30,
+        "reported_nps": 158533,
+        "depth": 4,
+        "wall_ms": 50.336299998889444
+      },
+      "candidate": {
+        "bestmove": "g6g7",
+        "nodes": 4756,
+        "reported_time_ms": 30,
+        "reported_nps": 158533,
+        "depth": 4,
+        "wall_ms": 50.8378000013181
+      }
+    },
+    {
+      "index": 248,
+      "category": "endgame",
+      "fen": "8/8/6k1/5p2/7r/8/7K/8 w - - 1 85",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h2g2",
+        "nodes": 4872,
+        "reported_time_ms": 19,
+        "reported_nps": 256421,
+        "depth": 6,
+        "wall_ms": 32.238699999652454
+      },
+      "candidate": {
+        "bestmove": "h2g2",
+        "nodes": 4872,
+        "reported_time_ms": 19,
+        "reported_nps": 256421,
+        "depth": 6,
+        "wall_ms": 31.959599999026977
+      }
+    },
+    {
+      "index": 249,
+      "category": "endgame",
+      "fen": "1k1b4/8/1n1n4/7p/2r4P/2p5/2R3P1/6K1 w - - 5 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2c3",
+        "nodes": 4595,
+        "reported_time_ms": 27,
+        "reported_nps": 170185,
+        "depth": 5,
+        "wall_ms": 49.285799999779556
+      },
+      "candidate": {
+        "bestmove": "c2c3",
+        "nodes": 4595,
+        "reported_time_ms": 27,
+        "reported_nps": 170185,
+        "depth": 5,
+        "wall_ms": 49.35289999957604
+      }
+    },
+    {
+      "index": 250,
+      "category": "endgame",
+      "fen": "8/p7/8/5p2/4nRp1/2P4k/1PB1R3/5K2 w - - 1 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c2e4",
+        "nodes": 3419,
+        "reported_time_ms": 22,
+        "reported_nps": 155409,
+        "depth": 5,
+        "wall_ms": 54.03949999890756
+      },
+      "candidate": {
+        "bestmove": "c2e4",
+        "nodes": 3419,
+        "reported_time_ms": 22,
+        "reported_nps": 155409,
+        "depth": 5,
+        "wall_ms": 54.01700000038545
+      }
+    },
+    {
+      "index": 251,
+      "category": "endgame",
+      "fen": "8/r4p2/7k/5P2/5PK1/7P/8/2R5 w - - 5 59",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c1c6",
+        "nodes": 7679,
+        "reported_time_ms": 33,
+        "reported_nps": 232696,
+        "depth": 6,
+        "wall_ms": 35.417700000834884
+      },
+      "candidate": {
+        "bestmove": "c1c6",
+        "nodes": 7679,
+        "reported_time_ms": 33,
+        "reported_nps": 232696,
+        "depth": 6,
+        "wall_ms": 35.615700000562356
+      }
+    },
+    {
+      "index": 252,
+      "category": "endgame",
+      "fen": "8/8/3k4/4n2p/3n2rP/3K2b1/6P1/2R5 w - - 3 63",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d3c3",
+        "nodes": 3145,
+        "reported_time_ms": 19,
+        "reported_nps": 165526,
+        "depth": 5,
+        "wall_ms": 54.1523000010784
+      },
+      "candidate": {
+        "bestmove": "d3c3",
+        "nodes": 3145,
+        "reported_time_ms": 19,
+        "reported_nps": 165526,
+        "depth": 5,
+        "wall_ms": 53.79529999845545
+      }
+    },
+    {
+      "index": 253,
+      "category": "endgame",
+      "fen": "1QR5/1P6/8/8/8/K7/8/6k1 w - - 11 101",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b8f4",
+        "nodes": 4651,
+        "reported_time_ms": 24,
+        "reported_nps": 193791,
+        "depth": 5,
+        "wall_ms": 40.66240000065591
+      },
+      "candidate": {
+        "bestmove": "b8f4",
+        "nodes": 4651,
+        "reported_time_ms": 24,
+        "reported_nps": 193791,
+        "depth": 5,
+        "wall_ms": 40.87050000089221
+      }
+    },
+    {
+      "index": 254,
+      "category": "endgame",
+      "fen": "6k1/2B2pp1/8/4PP1p/8/7r/2K5/8 w - - 0 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c7d6",
+        "nodes": 4500,
+        "reported_time_ms": 21,
+        "reported_nps": 214285,
+        "depth": 5,
+        "wall_ms": 39.28020000057586
+      },
+      "candidate": {
+        "bestmove": "c7d6",
+        "nodes": 4500,
+        "reported_time_ms": 21,
+        "reported_nps": 214285,
+        "depth": 5,
+        "wall_ms": 39.15640000013809
+      }
+    },
+    {
+      "index": 255,
+      "category": "endgame",
+      "fen": "8/4k3/3rP1K1/6p1/8/8/7p/8 w - - 0 77",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g6g5",
+        "nodes": 3505,
+        "reported_time_ms": 18,
+        "reported_nps": 194722,
+        "depth": 5,
+        "wall_ms": 42.402700000820914
+      },
+      "candidate": {
+        "bestmove": "g6g5",
+        "nodes": 3505,
+        "reported_time_ms": 18,
+        "reported_nps": 194722,
+        "depth": 5,
+        "wall_ms": 42.57850000067265
+      }
+    },
+    {
+      "index": 256,
+      "category": "endgame",
+      "fen": "8/7b/3K1n2/7k/6p1/8/1p6/q3r3 w - - 0 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6c7",
+        "nodes": 4434,
+        "reported_time_ms": 25,
+        "reported_nps": 177360,
+        "depth": 4,
+        "wall_ms": 47.352699999464676
+      },
+      "candidate": {
+        "bestmove": "d6c7",
+        "nodes": 4434,
+        "reported_time_ms": 24,
+        "reported_nps": 184750,
+        "depth": 4,
+        "wall_ms": 46.93299999962619
+      }
+    },
+    {
+      "index": 257,
+      "category": "endgame",
+      "fen": "8/8/3k4/7R/1P6/K7/P7/8 w - - 1 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h5h3",
+        "nodes": 5367,
+        "reported_time_ms": 22,
+        "reported_nps": 243954,
+        "depth": 5,
+        "wall_ms": 34.56030000052124
+      },
+      "candidate": {
+        "bestmove": "h5h3",
+        "nodes": 5367,
+        "reported_time_ms": 22,
+        "reported_nps": 243954,
+        "depth": 5,
+        "wall_ms": 34.92779999942286
+      }
+    },
+    {
+      "index": 258,
+      "category": "endgame",
+      "fen": "8/8/3Rn1k1/4r3/2P2R2/4B1P1/r4PK1/8 w - - 6 41",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f4f3",
+        "nodes": 7547,
+        "reported_time_ms": 52,
+        "reported_nps": 145134,
+        "depth": 5,
+        "wall_ms": 55.4415999995399
+      },
+      "candidate": {
+        "bestmove": "f4f3",
+        "nodes": 7547,
+        "reported_time_ms": 52,
+        "reported_nps": 145134,
+        "depth": 5,
+        "wall_ms": 55.56069999875035
+      }
+    },
+    {
+      "index": 259,
+      "category": "endgame",
+      "fen": "8/6p1/2q4p/k7/7P/1Q6/PP3KP1/3R4 w - - 11 39",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3a3",
+        "nodes": 2274,
+        "reported_time_ms": 13,
+        "reported_nps": 174923,
+        "depth": 3,
+        "wall_ms": 49.324499999784166
+      },
+      "candidate": {
+        "bestmove": "b3a3",
+        "nodes": 2274,
+        "reported_time_ms": 13,
+        "reported_nps": 174923,
+        "depth": 3,
+        "wall_ms": 49.76360000000568
+      }
+    },
+    {
+      "index": 260,
+      "category": "endgame",
+      "fen": "7k/8/B7/p7/1P4p1/K7/8/4qq2 w - - 0 97",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a6f1",
+        "nodes": 6886,
+        "reported_time_ms": 40,
+        "reported_nps": 172150,
+        "depth": 5,
+        "wall_ms": 46.537300000636606
+      },
+      "candidate": {
+        "bestmove": "a6f1",
+        "nodes": 6886,
+        "reported_time_ms": 39,
+        "reported_nps": 176564,
+        "depth": 5,
+        "wall_ms": 46.18540000046778
+      }
+    },
+    {
+      "index": 261,
+      "category": "endgame",
+      "fen": "8/3Q2p1/2N2krp/5p1P/8/1K6/8/8 w - - 4 89",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d7e7",
+        "nodes": 99,
+        "reported_time_ms": 1,
+        "reported_nps": 99000,
+        "depth": 1,
+        "wall_ms": 0.8780999996815808
+      },
+      "candidate": {
+        "bestmove": "d7e7",
+        "nodes": 99,
+        "reported_time_ms": 1,
+        "reported_nps": 99000,
+        "depth": 1,
+        "wall_ms": 1.0220000003755558
+      }
+    },
+    {
+      "index": 262,
+      "category": "endgame",
+      "fen": "8/4k3/7r/3K4/8/8/8/8 w - - 21 93",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d5d4",
+        "nodes": 5371,
+        "reported_time_ms": 20,
+        "reported_nps": 268550,
+        "depth": 6,
+        "wall_ms": 32.25810000003548
+      },
+      "candidate": {
+        "bestmove": "d5d4",
+        "nodes": 5371,
+        "reported_time_ms": 20,
+        "reported_nps": 268550,
+        "depth": 6,
+        "wall_ms": 32.17600000061793
+      }
+    },
+    {
+      "index": 263,
+      "category": "endgame",
+      "fen": "5k2/8/6R1/p6p/8/1Bp3P1/4r1r1/6K1 w - - 2 67",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g1h1",
+        "nodes": 7287,
+        "reported_time_ms": 41,
+        "reported_nps": 177731,
+        "depth": 7,
+        "wall_ms": 45.9381000000576
+      },
+      "candidate": {
+        "bestmove": "g1h1",
+        "nodes": 7287,
+        "reported_time_ms": 42,
+        "reported_nps": 173500,
+        "depth": 7,
+        "wall_ms": 46.44200000075216
+      }
+    },
+    {
+      "index": 264,
+      "category": "endgame",
+      "fen": "8/8/4B3/5P1p/P3k2P/2b5/4KB2/8 w - - 3 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2g1",
+        "nodes": 2469,
+        "reported_time_ms": 10,
+        "reported_nps": 246900,
+        "depth": 4,
+        "wall_ms": 38.76169999966805
+      },
+      "candidate": {
+        "bestmove": "f2g1",
+        "nodes": 2469,
+        "reported_time_ms": 10,
+        "reported_nps": 246900,
+        "depth": 4,
+        "wall_ms": 38.393500000893255
+      }
+    },
+    {
+      "index": 265,
+      "category": "endgame",
+      "fen": "6R1/8/5k2/5pp1/8/4KP1p/8/r7 w - - 6 71",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g8h8",
+        "nodes": 7712,
+        "reported_time_ms": 42,
+        "reported_nps": 183619,
+        "depth": 6,
+        "wall_ms": 44.195700000273064
+      },
+      "candidate": {
+        "bestmove": "g8h8",
+        "nodes": 7712,
+        "reported_time_ms": 42,
+        "reported_nps": 183619,
+        "depth": 6,
+        "wall_ms": 44.22090000116441
+      }
+    },
+    {
+      "index": 266,
+      "category": "endgame",
+      "fen": "7K/2k3PQ/8/1p6/6P1/P7/1q6/8 w - - 7 93",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h7g6",
+        "nodes": 7618,
+        "reported_time_ms": 46,
+        "reported_nps": 165608,
+        "depth": 3,
+        "wall_ms": 49.11259999971662
+      },
+      "candidate": {
+        "bestmove": "h7g6",
+        "nodes": 7618,
+        "reported_time_ms": 46,
+        "reported_nps": 165608,
+        "depth": 3,
+        "wall_ms": 48.87310000049183
+      }
+    },
+    {
+      "index": 267,
+      "category": "endgame",
+      "fen": "8/7k/6p1/8/p3R3/1p6/r7/2K5 w - - 16 49",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4a4",
+        "nodes": 3561,
+        "reported_time_ms": 16,
+        "reported_nps": 222562,
+        "depth": 5,
+        "wall_ms": 38.82330000124057
+      },
+      "candidate": {
+        "bestmove": "e4a4",
+        "nodes": 3561,
+        "reported_time_ms": 17,
+        "reported_nps": 209470,
+        "depth": 5,
+        "wall_ms": 39.071299999704934
+      }
+    },
+    {
+      "index": 268,
+      "category": "endgame",
+      "fen": "4k3/p6p/q2P4/b7/8/Pp2BPK1/8/8 w - - 3 45",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e3b6",
+        "nodes": 6850,
+        "reported_time_ms": 41,
+        "reported_nps": 167073,
+        "depth": 3,
+        "wall_ms": 48.14290000103938
+      },
+      "candidate": {
+        "bestmove": "e3b6",
+        "nodes": 6850,
+        "reported_time_ms": 41,
+        "reported_nps": 167073,
+        "depth": 3,
+        "wall_ms": 47.970099998565274
+      }
+    },
+    {
+      "index": 269,
+      "category": "endgame",
+      "fen": "8/3R1PP1/8/8/8/2k5/8/1K6 w - - 23 83",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7f8q",
+        "nodes": 5640,
+        "reported_time_ms": 28,
+        "reported_nps": 201428,
+        "depth": 5,
+        "wall_ms": 40.769299999737996
+      },
+      "candidate": {
+        "bestmove": "f7f8q",
+        "nodes": 5640,
+        "reported_time_ms": 28,
+        "reported_nps": 201428,
+        "depth": 5,
+        "wall_ms": 40.91399999924761
+      }
+    },
+    {
+      "index": 270,
+      "category": "endgame",
+      "fen": "KQR5/8/1P6/8/8/7k/8/8 w - - 1 95",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c8g8",
+        "nodes": 4647,
+        "reported_time_ms": 22,
+        "reported_nps": 211227,
+        "depth": 5,
+        "wall_ms": 22.64830000058282
+      },
+      "candidate": {
+        "bestmove": "c8g8",
+        "nodes": 4647,
+        "reported_time_ms": 22,
+        "reported_nps": 211227,
+        "depth": 5,
+        "wall_ms": 22.452399998655892
+      }
+    },
+    {
+      "index": 271,
+      "category": "endgame",
+      "fen": "2QNk3/6p1/6Rp/5p1P/8/1K4r1/8/8 w - - 0 85",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g6g3",
+        "nodes": 6790,
+        "reported_time_ms": 45,
+        "reported_nps": 150888,
+        "depth": 4,
+        "wall_ms": 54.08259999967413
+      },
+      "candidate": {
+        "bestmove": "g6g3",
+        "nodes": 6790,
+        "reported_time_ms": 45,
+        "reported_nps": 150888,
+        "depth": 4,
+        "wall_ms": 54.277400000501075
+      }
+    },
+    {
+      "index": 272,
+      "category": "endgame",
+      "fen": "2R5/1P6/5k2/3P4/8/2P5/8/3K2r1 w - - 11 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d1e2",
+        "nodes": 5173,
+        "reported_time_ms": 28,
+        "reported_nps": 184750,
+        "depth": 4,
+        "wall_ms": 44.22659999909229
+      },
+      "candidate": {
+        "bestmove": "d1e2",
+        "nodes": 5173,
+        "reported_time_ms": 28,
+        "reported_nps": 184750,
+        "depth": 4,
+        "wall_ms": 44.33219999918947
+      }
+    },
+    {
+      "index": 273,
+      "category": "endgame",
+      "fen": "8/5k2/p3pp2/2B5/4n3/8/1Kq5/8 w - - 0 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b2c2",
+        "nodes": 4219,
+        "reported_time_ms": 18,
+        "reported_nps": 234388,
+        "depth": 6,
+        "wall_ms": 36.482399998931214
+      },
+      "candidate": {
+        "bestmove": "b2c2",
+        "nodes": 4219,
+        "reported_time_ms": 18,
+        "reported_nps": 234388,
+        "depth": 6,
+        "wall_ms": 36.700000000564614
+      }
+    },
+    {
+      "index": 274,
+      "category": "endgame",
+      "fen": "4R3/8/8/p7/4B1p1/2P4k/1P2R3/5K2 w - - 0 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e4d5",
+        "nodes": 5448,
+        "reported_time_ms": 26,
+        "reported_nps": 209538,
+        "depth": 5,
+        "wall_ms": 40.53579999890644
+      },
+      "candidate": {
+        "bestmove": "e4d5",
+        "nodes": 5448,
+        "reported_time_ms": 26,
+        "reported_nps": 209538,
+        "depth": 5,
+        "wall_ms": 40.2100999999675
+      }
+    },
+    {
+      "index": 275,
+      "category": "endgame",
+      "fen": "8/6k1/1p3pp1/pB2n3/4P1p1/2K3P1/8/8 w - - 14 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3d4",
+        "nodes": 4308,
+        "reported_time_ms": 21,
+        "reported_nps": 205142,
+        "depth": 5,
+        "wall_ms": 40.80620000058843
+      },
+      "candidate": {
+        "bestmove": "c3d4",
+        "nodes": 4308,
+        "reported_time_ms": 22,
+        "reported_nps": 195818,
+        "depth": 5,
+        "wall_ms": 41.408299999602605
+      }
+    },
+    {
+      "index": 276,
+      "category": "endgame",
+      "fen": "8/4k1p1/1p2pn2/p7/8/R4N2/2r1K1P1/8 w - - 19 59",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e2d3",
+        "nodes": 5924,
+        "reported_time_ms": 34,
+        "reported_nps": 174235,
+        "depth": 5,
+        "wall_ms": 46.133300000292365
+      },
+      "candidate": {
+        "bestmove": "e2d3",
+        "nodes": 5924,
+        "reported_time_ms": 33,
+        "reported_nps": 179515,
+        "depth": 5,
+        "wall_ms": 45.74800000045798
+      }
+    },
+    {
+      "index": 277,
+      "category": "endgame",
+      "fen": "8/6k1/6p1/pp6/6R1/2p5/r4P2/2K5 w - - 0 37",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2f3",
+        "nodes": 2682,
+        "reported_time_ms": 13,
+        "reported_nps": 206307,
+        "depth": 4,
+        "wall_ms": 41.463599998678546
+      },
+      "candidate": {
+        "bestmove": "f2f3",
+        "nodes": 2682,
+        "reported_time_ms": 13,
+        "reported_nps": 206307,
+        "depth": 4,
+        "wall_ms": 41.42109999884269
+      }
+    },
+    {
+      "index": 278,
+      "category": "endgame",
+      "fen": "8/3k4/2pn3p/5r1P/8/1pNK4/p7/4R3 w - - 2 63",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "e1a1",
+        "nodes": 5945,
+        "reported_time_ms": 32,
+        "reported_nps": 185781,
+        "depth": 4,
+        "wall_ms": 45.286599999599275
+      },
+      "candidate": {
+        "bestmove": "e1a1",
+        "nodes": 5945,
+        "reported_time_ms": 32,
+        "reported_nps": 185781,
+        "depth": 4,
+        "wall_ms": 45.134299998608185
+      }
+    },
+    {
+      "index": 279,
+      "category": "endgame",
+      "fen": "8/1B1k4/1B3b2/5P1p/7P/8/P7/5K2 w - - 3 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b6f2",
+        "nodes": 3606,
+        "reported_time_ms": 14,
+        "reported_nps": 257571,
+        "depth": 4,
+        "wall_ms": 34.87850000055914
+      },
+      "candidate": {
+        "bestmove": "b6f2",
+        "nodes": 3606,
+        "reported_time_ms": 15,
+        "reported_nps": 240400,
+        "depth": 4,
+        "wall_ms": 35.01450000112527
+      }
+    },
+    {
+      "index": 280,
+      "category": "endgame",
+      "fen": "8/3R1PP1/8/1k6/8/8/K7/8 w - - 31 87",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f7f8q",
+        "nodes": 6606,
+        "reported_time_ms": 35,
+        "reported_nps": 188742,
+        "depth": 5,
+        "wall_ms": 42.404899999382906
+      },
+      "candidate": {
+        "bestmove": "f7f8q",
+        "nodes": 6606,
+        "reported_time_ms": 34,
+        "reported_nps": 194294,
+        "depth": 5,
+        "wall_ms": 42.14219999994384
+      }
+    },
+    {
+      "index": 281,
+      "category": "endgame",
+      "fen": "8/8/1R6/5k1p/Pp6/1r4PK/5P2/8 w - - 2 55",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h3h4",
+        "nodes": 3155,
+        "reported_time_ms": 19,
+        "reported_nps": 166052,
+        "depth": 5,
+        "wall_ms": 49.01559999962046
+      },
+      "candidate": {
+        "bestmove": "h3h4",
+        "nodes": 3155,
+        "reported_time_ms": 19,
+        "reported_nps": 166052,
+        "depth": 5,
+        "wall_ms": 49.078000000008615
+      }
+    },
+    {
+      "index": 282,
+      "category": "endgame",
+      "fen": "3k4/8/8/5pp1/6p1/pBn3P1/Kp6/8 w - - 2 73",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a2a3",
+        "nodes": 3573,
+        "reported_time_ms": 20,
+        "reported_nps": 178650,
+        "depth": 6,
+        "wall_ms": 46.30089999955089
+      },
+      "candidate": {
+        "bestmove": "a2a3",
+        "nodes": 3573,
+        "reported_time_ms": 20,
+        "reported_nps": 178650,
+        "depth": 6,
+        "wall_ms": 46.14109999965876
+      }
+    },
+    {
+      "index": 283,
+      "category": "endgame",
+      "fen": "5R2/2Rb2k1/3B4/1pp5/8/7P/1P4PK/8 w - - 13 59",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c7d7",
+        "nodes": 1969,
+        "reported_time_ms": 11,
+        "reported_nps": 179000,
+        "depth": 4,
+        "wall_ms": 48.48570000103791
+      },
+      "candidate": {
+        "bestmove": "c7d7",
+        "nodes": 1969,
+        "reported_time_ms": 12,
+        "reported_nps": 164083,
+        "depth": 4,
+        "wall_ms": 49.167400000442285
+      }
+    },
+    {
+      "index": 284,
+      "category": "endgame",
+      "fen": "2R5/8/8/3kn2p/3n1brP/8/3K2P1/8 w - - 7 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d2d1",
+        "nodes": 6025,
+        "reported_time_ms": 39,
+        "reported_nps": 154487,
+        "depth": 5,
+        "wall_ms": 54.07259999992675
+      },
+      "candidate": {
+        "bestmove": "d2d1",
+        "nodes": 6025,
+        "reported_time_ms": 39,
+        "reported_nps": 154487,
+        "depth": 5,
+        "wall_ms": 54.369299999962095
+      }
+    },
+    {
+      "index": 285,
+      "category": "endgame",
+      "fen": "8/8/1k6/7R/KP6/P7/8/8 w - - 1 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h5b5",
+        "nodes": 6220,
+        "reported_time_ms": 25,
+        "reported_nps": 248800,
+        "depth": 5,
+        "wall_ms": 33.54549999858136
+      },
+      "candidate": {
+        "bestmove": "h5b5",
+        "nodes": 6220,
+        "reported_time_ms": 25,
+        "reported_nps": 248800,
+        "depth": 5,
+        "wall_ms": 33.60969999994268
+      }
+    },
+    {
+      "index": 286,
+      "category": "endgame",
+      "fen": "2k5/3R4/1PP3p1/2K5/4p3/6P1/5P2/8 w - - 0 63",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b6b7",
+        "nodes": 2007,
+        "reported_time_ms": 10,
+        "reported_nps": 200700,
+        "depth": 4,
+        "wall_ms": 11.268100000961567
+      },
+      "candidate": {
+        "bestmove": "b6b7",
+        "nodes": 2007,
+        "reported_time_ms": 11,
+        "reported_nps": 182454,
+        "depth": 4,
+        "wall_ms": 11.383099999875412
+      }
+    },
+    {
+      "index": 287,
+      "category": "endgame",
+      "fen": "2k5/8/8/1p6/2q5/P3QKP1/6P1/8 w - - 13 75",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "g3g4",
+        "nodes": 4172,
+        "reported_time_ms": 22,
+        "reported_nps": 189636,
+        "depth": 5,
+        "wall_ms": 44.32919999999285
+      },
+      "candidate": {
+        "bestmove": "g3g4",
+        "nodes": 4172,
+        "reported_time_ms": 23,
+        "reported_nps": 181391,
+        "depth": 5,
+        "wall_ms": 44.729999999617576
+      }
+    },
+    {
+      "index": 288,
+      "category": "endgame",
+      "fen": "8/4N3/1Kp1k1p1/6P1/1q6/8/5p2/2B5 w - - 2 69",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b6c7",
+        "nodes": 2734,
+        "reported_time_ms": 16,
+        "reported_nps": 170875,
+        "depth": 4,
+        "wall_ms": 47.44840000057593
+      },
+      "candidate": {
+        "bestmove": "b6c7",
+        "nodes": 2734,
+        "reported_time_ms": 16,
+        "reported_nps": 170875,
+        "depth": 4,
+        "wall_ms": 47.23740000008547
+      }
+    },
+    {
+      "index": 289,
+      "category": "endgame",
+      "fen": "2r3k1/5p2/3R1P1K/8/5P1P/8/8/8 w - - 5 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "d6d1",
+        "nodes": 6933,
+        "reported_time_ms": 31,
+        "reported_nps": 223645,
+        "depth": 7,
+        "wall_ms": 37.6189999988128
+      },
+      "candidate": {
+        "bestmove": "d6d1",
+        "nodes": 6933,
+        "reported_time_ms": 32,
+        "reported_nps": 216656,
+        "depth": 7,
+        "wall_ms": 37.81359999993583
+      }
+    },
+    {
+      "index": 290,
+      "category": "endgame",
+      "fen": "8/r7/8/1K6/8/8/7R/1k6 w - - 18 73",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h2e2",
+        "nodes": 3516,
+        "reported_time_ms": 12,
+        "reported_nps": 293000,
+        "depth": 4,
+        "wall_ms": 29.468700000506942
+      },
+      "candidate": {
+        "bestmove": "h2e2",
+        "nodes": 3516,
+        "reported_time_ms": 12,
+        "reported_nps": 293000,
+        "depth": 4,
+        "wall_ms": 29.313799999727053
+      }
+    },
+    {
+      "index": 291,
+      "category": "endgame",
+      "fen": "8/2R5/1P4p1/2P5/8/4k2P/5r2/5K2 w - - 33 57",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f1e1",
+        "nodes": 5960,
+        "reported_time_ms": 30,
+        "reported_nps": 198666,
+        "depth": 6,
+        "wall_ms": 41.68559999925492
+      },
+      "candidate": {
+        "bestmove": "f1e1",
+        "nodes": 5960,
+        "reported_time_ms": 30,
+        "reported_nps": 198666,
+        "depth": 6,
+        "wall_ms": 42.00049999963085
+      }
+    },
+    {
+      "index": 292,
+      "category": "endgame",
+      "fen": "8/8/6r1/2kP4/2P5/2R3p1/6P1/5BK1 w - - 5 63",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "c3f3",
+        "nodes": 7732,
+        "reported_time_ms": 39,
+        "reported_nps": 198256,
+        "depth": 6,
+        "wall_ms": 40.63109999879089
+      },
+      "candidate": {
+        "bestmove": "c3f3",
+        "nodes": 7732,
+        "reported_time_ms": 39,
+        "reported_nps": 198256,
+        "depth": 6,
+        "wall_ms": 40.76789999999164
+      }
+    },
+    {
+      "index": 293,
+      "category": "endgame",
+      "fen": "1k6/8/1n6/7p/3n2rP/6b1/2p2KP1/2R5 w - - 6 59",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f2e3",
+        "nodes": 7088,
+        "reported_time_ms": 48,
+        "reported_nps": 147666,
+        "depth": 5,
+        "wall_ms": 55.43550000038522
+      },
+      "candidate": {
+        "bestmove": "f2e3",
+        "nodes": 7088,
+        "reported_time_ms": 49,
+        "reported_nps": 144653,
+        "depth": 5,
+        "wall_ms": 55.755400000634836
+      }
+    },
+    {
+      "index": 294,
+      "category": "endgame",
+      "fen": "5k2/2r5/8/p3r2p/3R4/2p2KP1/2B2P2/8 w - - 28 61",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3g2",
+        "nodes": 6670,
+        "reported_time_ms": 36,
+        "reported_nps": 185277,
+        "depth": 4,
+        "wall_ms": 43.041699998866534
+      },
+      "candidate": {
+        "bestmove": "f3g2",
+        "nodes": 6670,
+        "reported_time_ms": 35,
+        "reported_nps": 190571,
+        "depth": 4,
+        "wall_ms": 42.84139999981562
+      }
+    },
+    {
+      "index": 295,
+      "category": "endgame",
+      "fen": "8/3k4/8/B1b1P2p/7P/8/P4P2/5K1B w - - 2 51",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "a5e1",
+        "nodes": 5395,
+        "reported_time_ms": 23,
+        "reported_nps": 234565,
+        "depth": 4,
+        "wall_ms": 36.172500000247965
+      },
+      "candidate": {
+        "bestmove": "a5e1",
+        "nodes": 5395,
+        "reported_time_ms": 23,
+        "reported_nps": 234565,
+        "depth": 4,
+        "wall_ms": 36.14700000071025
+      }
+    },
+    {
+      "index": 296,
+      "category": "endgame",
+      "fen": "8/6PK/2k5/1p5Q/6P1/P7/2q5/8 w - - 11 95",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "h7h8",
+        "nodes": 5711,
+        "reported_time_ms": 33,
+        "reported_nps": 173060,
+        "depth": 4,
+        "wall_ms": 47.52080000071146
+      },
+      "candidate": {
+        "bestmove": "h7h8",
+        "nodes": 5711,
+        "reported_time_ms": 32,
+        "reported_nps": 178468,
+        "depth": 4,
+        "wall_ms": 47.21149999932095
+      }
+    },
+    {
+      "index": 297,
+      "category": "endgame",
+      "fen": "8/5Q2/4P3/3p2b1/3Pk2p/5N1P/8/7K w - - 1 73",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "f3g1",
+        "nodes": 3487,
+        "reported_time_ms": 20,
+        "reported_nps": 174350,
+        "depth": 3,
+        "wall_ms": 49.808800000391784
+      },
+      "candidate": {
+        "bestmove": "f3g1",
+        "nodes": 3487,
+        "reported_time_ms": 20,
+        "reported_nps": 174350,
+        "depth": 3,
+        "wall_ms": 50.11999999987893
+      }
+    },
+    {
+      "index": 298,
+      "category": "endgame",
+      "fen": "8/3r4/5P1K/8/2k5/1R4P1/8/8 w - - 5 65",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b3e3",
+        "nodes": 4485,
+        "reported_time_ms": 19,
+        "reported_nps": 236052,
+        "depth": 4,
+        "wall_ms": 36.29379999983939
+      },
+      "candidate": {
+        "bestmove": "b3e3",
+        "nodes": 4485,
+        "reported_time_ms": 19,
+        "reported_nps": 236052,
+        "depth": 4,
+        "wall_ms": 36.0499999987951
+      }
+    },
+    {
+      "index": 299,
+      "category": "endgame",
+      "fen": "6k1/8/6p1/8/pR6/1p6/r7/1K6 w - - 44 63",
+      "same_bestmove": true,
+      "baseline": {
+        "bestmove": "b4g4",
+        "nodes": 6361,
+        "reported_time_ms": 33,
+        "reported_nps": 192757,
+        "depth": 6,
+        "wall_ms": 42.63179999907152
+      },
+      "candidate": {
+        "bestmove": "b4g4",
+        "nodes": 6361,
+        "reported_time_ms": 33,
+        "reported_nps": 192757,
+        "depth": 6,
+        "wall_ms": 42.92960000020685
+      }
+    }
+  ]
+}

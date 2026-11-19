@@ -30,6 +30,40 @@ jobs:
         if: runner.os == 'Linux'
         run: python3 tools/engine-match/stress-uci.py target/release/valox --games 10
 
+  linux-nnue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+      - name: Generate synthetic NNUE for the NNUE code path
+        run: python3 tools/make-synthetic-net.py target/synthetic.nnue
+      - name: Native Linux tests with NNUE
+        env:
+          VALOX_NNUE_PATH: ${{ github.workspace }}/target/synthetic.nnue
+        run: cargo test --release
+      - name: Install musl linker
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: Build static musl binary
+        env:
+          VALOX_NNUE_PATH: ${{ github.workspace }}/target/synthetic.nnue
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER: musl-gcc
+        run: cargo build --release --target x86_64-unknown-linux-musl
+      - name: Verify static linking
+        run: |
+          file target/x86_64-unknown-linux-musl/release/valox
+          output=$(ldd target/x86_64-unknown-linux-musl/release/valox 2>&1 || true)
+          echo "$output"
+          case "$output" in
+            *"not a dynamic executable"*|*"statically linked"*) echo "static binary confirmed" ;;
+            *) echo "musl binary is not static"; exit 1 ;;
+          esac
+      - name: UCI smoke (musl)
+        run: python3 tools/engine-match/stress-uci.py target/x86_64-unknown-linux-musl/release/valox --games 4
+      - name: Benchmark (musl)
+        run: target/x86_64-unknown-linux-musl/release/valox --bench 10
+
   wasm:
     runs-on: ubuntu-latest
     steps:
