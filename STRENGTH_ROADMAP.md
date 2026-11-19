@@ -303,11 +303,16 @@ runtime.
 - Valox source is dual-licensed under MIT OR Apache-2.0. The Reckless v60 model
   rights remain unresolved; do not distribute binaries, archives, or CI
   artifacts that contain the weights.
+- Weight-free builds can load a compatible model at runtime through the UCI
+  `EvalFile` option, `--evalfile`, or `VALOX_EVALFILE`. This path is
+  performance-neutral and keeps the third-party weights out of release
+  archives.
 - Linux x86_64 musl cross-builds are available and produce a static ELF. The
-  `linux-nnue` CI job tests the NNUE path with a synthetic same-layout network
-  and exercises the static binary without third-party weights.
-- Use `tools/build-release.py` for release archives. It defaults to the
-  classical evaluator and refuses to package a network build without
+  `linux-nnue` CI job tests the NNUE path with a synthetic same-layout network,
+  compares a runtime-loaded build against the embedded build, and exercises the
+  static binary without third-party weights.
+- Use `tools/build-release.py` for release archives. It defaults to a
+  weight-free binary and refuses to package an embedded network without
   `--allow-network-redistribution`.
 - Update `docs/CCC_READINESS.md` with pinned artifacts and reproducible results.
 - Do not contact or submit to CCC without the user's explicit authorization and

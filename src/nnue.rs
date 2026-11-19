@@ -2,6 +2,7 @@
 //! The feature extraction and forward pass are implemented in Valox.
 
 use crate::position::{Piece, Position, Side, Undo};
+use std::sync::atomic::{AtomicPtr, Ordering};
 use std::sync::OnceLock;
 
 #[inline]
@@ -10,12 +11,58 @@ fn inside_board(file: i8, rank: i8) -> bool {
 }
 
 // Model weights are intentionally not tracked in the public source repository.
-// `build.rs` embeds a local copy (default path or `VALOX_NNUE_PATH`); source-only
-// builds use the classical evaluator.
+// `build.rs` can embed a local copy (default path or `VALOX_NNUE_PATH`); a
+// release build can instead ship without weights and load them at runtime.
 #[cfg(valox_nnue_weights)]
-const MODEL: &[u8] = include!(concat!(env!("OUT_DIR"), "/nnue_model.rs"));
+const EMBEDDED_MODEL: &[u8] = include!(concat!(env!("OUT_DIR"), "/nnue_model.rs"));
 #[cfg(not(valox_nnue_weights))]
-const MODEL: &[u8] = &[];
+const EMBEDDED_MODEL: &[u8] = &[];
+
+/// Weights loaded at runtime from a file. They take precedence over the model
+/// embedded at build time, so a weight-free binary can use an external network.
+struct ModelHandle {
+    bytes: Box<[u8]>,
+}
+
+static EXTERNAL_MODEL: AtomicPtr<ModelHandle> = AtomicPtr::new(std::ptr::null_mut());
+
+/// Load a same-layout NNUE file. The handle is leaked because evaluators hold a
+/// `'static` view of the bytes; a reload leaks the previous handle so an
+/// in-flight evaluator can finish safely.
+pub fn load_model(path: &std::path::Path) -> Result<usize, String> {
+    let data =
+        std::fs::read(path).map_err(|error| format!("cannot read {}: {error}", path.display()))?;
+    if data.len() != MODEL_BYTES {
+        return Err(format!(
+            "{} is {} bytes, expected {MODEL_BYTES}",
+            path.display(),
+            data.len()
+        ));
+    }
+    let length = data.len();
+    let handle = Box::new(ModelHandle {
+        bytes: data.into_boxed_slice(),
+    });
+    EXTERNAL_MODEL.swap(Box::into_raw(handle), Ordering::AcqRel);
+    Ok(length)
+}
+
+/// The active weights: the runtime model when present, otherwise the embedded
+/// one. An empty slice selects the classical evaluator.
+#[inline]
+pub fn model() -> &'static [u8] {
+    let handle = EXTERNAL_MODEL.load(Ordering::Acquire);
+    if handle.is_null() {
+        return EMBEDDED_MODEL;
+    }
+    // SAFETY: every handle stored in EXTERNAL_MODEL is leaked and never freed.
+    unsafe { &(*handle).bytes }
+}
+
+/// Whether the active model has the expected layout and can be evaluated.
+pub fn weights_available() -> bool {
+    model().len() == MODEL_BYTES
+}
 const FEATURES: usize = 768;
 const THREAT_FEATURES: usize = 66_864;
 const PIECE_MARK_WORDS: usize = INPUT_BUCKETS * FEATURES / 64;
@@ -327,20 +374,20 @@ fn threat_feature_index(attacker: usize, from: usize, to: usize, attacked: usize
     (index < THREAT_FEATURES).then_some(index)
 }
 
-fn model_i8(offset: usize) -> i32 {
-    MODEL[offset] as i8 as i32
+fn model_i8(model: &[u8], offset: usize) -> i32 {
+    model[offset] as i8 as i32
 }
 
-fn model_i16(offset: usize) -> i32 {
-    i16::from_le_bytes([MODEL[offset], MODEL[offset + 1]]) as i32
+fn model_i16(model: &[u8], offset: usize) -> i32 {
+    i16::from_le_bytes([model[offset], model[offset + 1]]) as i32
 }
 
-fn model_f32(offset: usize) -> f32 {
+fn model_f32(model: &[u8], offset: usize) -> f32 {
     f32::from_le_bytes([
-        MODEL[offset],
-        MODEL[offset + 1],
-        MODEL[offset + 2],
-        MODEL[offset + 3],
+        model[offset],
+        model[offset + 1],
+        model[offset + 2],
+        model[offset + 3],
     ])
 }
 
@@ -677,7 +724,8 @@ impl NnueEvaluator {
     pub fn reset(&mut self, position: &Position) -> bool {
         self.depth = 0;
         self.ready = false;
-        if MODEL.len() != MODEL_BYTES {
+        let model = model();
+        if model.len() != MODEL_BYTES {
             return false;
         }
         self.piece_marks = [0; PIECE_MARK_WORDS];
@@ -692,12 +740,12 @@ impl NnueEvaluator {
             // final range; the incremental updates below rely on that bound.
             let mut accumulator = [0i32; FEATURES];
             for (i, value) in accumulator.iter_mut().enumerate() {
-                *value = model_i16(BIAS_OFFSET + i * 2);
+                *value = model_i16(model, BIAS_OFFSET + i * 2);
             }
             piece_feature_indices(position, perspective, king, &mut self.old_features);
-            apply_features(&mut accumulator, &self.old_features, true);
+            apply_features(model, &mut accumulator, &self.old_features, true);
             threat_feature_indices(position, perspective, king, &mut self.old_features);
-            apply_features(&mut accumulator, &self.old_features, false);
+            apply_features(model, &mut accumulator, &self.old_features, false);
             for (slot, value) in self.accumulators[perspective].iter_mut().zip(accumulator) {
                 debug_assert!(i16::try_from(value).is_ok(), "NNUE accumulator overflow");
                 *slot = value as i16;
@@ -711,6 +759,7 @@ impl NnueEvaluator {
         if !self.ready {
             return;
         }
+        let model = model();
         if self.frames.len() == self.depth {
             self.frames.push(AccumulatorFrame::new());
         }
@@ -798,6 +847,7 @@ impl NnueEvaluator {
                 &mut frame.piece_delta[perspective],
             );
             apply_delta(
+                model,
                 &mut self.accumulators[perspective],
                 &frame.piece_delta[perspective],
                 true,
@@ -913,6 +963,7 @@ impl NnueEvaluator {
                 &mut frame.threat_delta[perspective],
             );
             apply_delta(
+                model,
                 &mut self.accumulators[perspective],
                 &frame.threat_delta[perspective],
                 false,
@@ -926,16 +977,19 @@ impl NnueEvaluator {
         if !self.ready || self.depth == 0 {
             return;
         }
+        let model = model();
         self.depth -= 1;
         let frame = &mut self.frames[self.depth];
         for perspective in 0..2 {
             apply_delta(
+                model,
                 &mut self.accumulators[perspective],
                 &frame.piece_delta[perspective],
                 true,
                 false,
             );
             apply_delta(
+                model,
                 &mut self.accumulators[perspective],
                 &frame.threat_delta[perspective],
                 false,
@@ -1000,7 +1054,12 @@ fn mark_changed(square: u8, changed: &mut [bool; 64], list: &mut [u8; 8], len: &
     }
 }
 
-fn apply_features(accumulator: &mut [i32; FEATURES], features: &[usize], piece: bool) {
+fn apply_features(
+    model: &[u8],
+    accumulator: &mut [i32; FEATURES],
+    features: &[usize],
+    piece: bool,
+) {
     for &feature in features {
         let row = if piece {
             PIECE_OFFSET + feature * FEATURES * 2
@@ -1009,15 +1068,16 @@ fn apply_features(accumulator: &mut [i32; FEATURES], features: &[usize], piece: 
         };
         for (i, value) in accumulator.iter_mut().enumerate() {
             *value += if piece {
-                model_i16(row + i * 2)
+                model_i16(model, row + i * 2)
             } else {
-                model_i8(row + i)
+                model_i8(model, row + i)
             };
         }
     }
 }
 
 fn apply_delta(
+    model: &[u8],
     accumulator: &mut [i16; FEATURES],
     delta: &FeatureDelta,
     piece: bool,
@@ -1025,29 +1085,35 @@ fn apply_delta(
 ) {
     if forward {
         for &feature in &delta.removed {
-            apply_feature(accumulator, feature, piece, -1);
+            apply_feature(model, accumulator, feature, piece, -1);
         }
         for &feature in &delta.added {
-            apply_feature(accumulator, feature, piece, 1);
+            apply_feature(model, accumulator, feature, piece, 1);
         }
     } else {
         for &feature in &delta.added {
-            apply_feature(accumulator, feature, piece, -1);
+            apply_feature(model, accumulator, feature, piece, -1);
         }
         for &feature in &delta.removed {
-            apply_feature(accumulator, feature, piece, 1);
+            apply_feature(model, accumulator, feature, piece, 1);
         }
     }
 }
 
-fn apply_feature(accumulator: &mut [i16; FEATURES], feature: usize, piece: bool, sign: i32) {
+fn apply_feature(
+    model: &[u8],
+    accumulator: &mut [i16; FEATURES],
+    feature: usize,
+    piece: bool,
+    sign: i32,
+) {
     #[cfg(target_arch = "x86_64")]
     if avx2_feature_updates() {
         // SAFETY: `avx2_feature_updates` checked AVX2 support at runtime.
-        unsafe { apply_feature_avx2(accumulator, feature, piece, sign) };
+        unsafe { apply_feature_avx2(model, accumulator, feature, piece, sign) };
         return;
     }
-    apply_feature_scalar(accumulator, feature, piece, sign);
+    apply_feature_scalar(model, accumulator, feature, piece, sign);
 }
 
 #[cfg(target_arch = "x86_64")]
@@ -1059,14 +1125,20 @@ fn avx2_feature_updates() -> bool {
     })
 }
 
-fn apply_feature_scalar(accumulator: &mut [i16; FEATURES], feature: usize, piece: bool, sign: i32) {
+fn apply_feature_scalar(
+    model: &[u8],
+    accumulator: &mut [i16; FEATURES],
+    feature: usize,
+    piece: bool,
+    sign: i32,
+) {
     let row = if piece {
         PIECE_OFFSET + feature * FEATURES * 2
     } else {
         feature * FEATURES
     };
     if piece {
-        let weights = &MODEL[row..row + FEATURES * 2];
+        let weights = &model[row..row + FEATURES * 2];
         for (i, value) in accumulator.iter_mut().enumerate() {
             let offset = i * 2;
             let weight = i16::from_le_bytes([weights[offset], weights[offset + 1]]);
@@ -1077,7 +1149,7 @@ fn apply_feature_scalar(accumulator: &mut [i16; FEATURES], feature: usize, piece
             };
         }
     } else {
-        let weights = &MODEL[row..row + FEATURES];
+        let weights = &model[row..row + FEATURES];
         for (value, &weight) in accumulator.iter_mut().zip(weights) {
             let weight = i16::from(weight as i8);
             *value = if sign >= 0 {
@@ -1092,6 +1164,7 @@ fn apply_feature_scalar(accumulator: &mut [i16; FEATURES], feature: usize, piece
 #[cfg(target_arch = "x86_64")]
 #[target_feature(enable = "avx2")]
 unsafe fn apply_feature_avx2(
+    model: &[u8],
     accumulator: &mut [i16; FEATURES],
     feature: usize,
     piece: bool,
@@ -1109,10 +1182,10 @@ unsafe fn apply_feature_avx2(
     };
     for i in (0..FEATURES).step_by(16) {
         let values = if piece {
-            _mm256_loadu_si256(MODEL.as_ptr().add(row + i * 2) as *const __m256i)
+            _mm256_loadu_si256(model.as_ptr().add(row + i * 2) as *const __m256i)
         } else {
             _mm256_cvtepi8_epi16(_mm_loadu_si128(
-                MODEL.as_ptr().add(row + i) as *const __m128i
+                model.as_ptr().add(row + i) as *const __m128i
             ))
         };
         let slot = accumulator.as_mut_ptr().add(i) as *mut __m256i;
@@ -1126,15 +1199,15 @@ unsafe fn apply_feature_avx2(
     }
 }
 
-fn l2_forward_scalar(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
+fn l2_forward_scalar(model: &[u8], bucket: usize, input: &[f32; L2]) -> [f32; L3] {
     let mut output = [0.0f32; L3];
     for (j, value) in output.iter_mut().enumerate() {
-        *value = model_f32(L2_BIAS_OFFSET + (bucket * L3 + j) * 4);
+        *value = model_f32(model, L2_BIAS_OFFSET + (bucket * L3 + j) * 4);
     }
     for (i, &input_value) in input.iter().enumerate() {
         for (j, value) in output.iter_mut().enumerate() {
             let weight = L2_WEIGHT_OFFSET + ((bucket * L2 + i) * L3 + j) * 4;
-            *value = model_f32(weight).mul_add(input_value, *value);
+            *value = model_f32(model, weight).mul_add(input_value, *value);
         }
     }
     output
@@ -1146,13 +1219,13 @@ fn l2_forward_scalar(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
 #[cfg(target_arch = "x86_64")]
 #[cfg(any(not(feature = "nnue-scalar"), test))]
 #[target_feature(enable = "avx2,fma")]
-unsafe fn l2_forward_avx2(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
+unsafe fn l2_forward_avx2(model: &[u8], bucket: usize, input: &[f32; L2]) -> [f32; L3] {
     use std::arch::x86_64::{
         _mm256_fmadd_ps, _mm256_loadu_ps, _mm256_max_ps, _mm256_min_ps, _mm256_set1_ps,
         _mm256_storeu_ps,
     };
 
-    let bias = MODEL
+    let bias = model
         .as_ptr()
         .add(L2_BIAS_OFFSET + bucket * L3 * 4)
         .cast::<f32>();
@@ -1163,7 +1236,7 @@ unsafe fn l2_forward_avx2(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
         _mm256_loadu_ps(bias.add(24)),
     ];
     for (i, &input_value) in input.iter().enumerate() {
-        let row = MODEL
+        let row = model
             .as_ptr()
             .add(L2_WEIGHT_OFFSET + (bucket * L2 + i) * L3 * 4)
             .cast::<f32>();
@@ -1183,16 +1256,16 @@ unsafe fn l2_forward_avx2(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
     output
 }
 
-fn l2_forward(bucket: usize, input: &[f32; L2]) -> [f32; L3] {
+fn l2_forward(model: &[u8], bucket: usize, input: &[f32; L2]) -> [f32; L3] {
     #[cfg(all(target_arch = "x86_64", not(feature = "nnue-scalar")))]
     if std::arch::is_x86_feature_detected!("avx2") && std::arch::is_x86_feature_detected!("fma") {
         // SAFETY: both required target features were checked at runtime above.
-        return unsafe { l2_forward_avx2(bucket, input) };
+        return unsafe { l2_forward_avx2(model, bucket, input) };
     }
-    l2_forward_scalar(bucket, input)
+    l2_forward_scalar(model, bucket, input)
 }
 
-fn l1_forward_scalar(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
+fn l1_forward_scalar(model: &[u8], bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
     let mut pre = [0i32; L2];
     for group in 0..FEATURES / 4 {
         let start = group * 4;
@@ -1202,7 +1275,7 @@ fn l1_forward_scalar(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
         for (out, value) in pre.iter_mut().enumerate() {
             let weight_start = L1_OFFSET + (bucket * L2 * FEATURES) + group * L2 * 4 + out * 4;
             for lane in 0..4 {
-                *value += transformed[start + lane] as i32 * model_i8(weight_start + lane);
+                *value += transformed[start + lane] as i32 * model_i8(model, weight_start + lane);
             }
         }
     }
@@ -1212,7 +1285,7 @@ fn l1_forward_scalar(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
 #[cfg(target_arch = "x86_64")]
 #[cfg(any(not(feature = "nnue-scalar"), test))]
 #[target_feature(enable = "avx2")]
-unsafe fn l1_forward_avx2(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
+unsafe fn l1_forward_avx2(model: &[u8], bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
     use std::arch::x86_64::{
         __m256i, _mm256_add_epi32, _mm256_loadu_si256, _mm256_madd_epi16, _mm256_maddubs_epi16,
         _mm256_set1_epi16, _mm256_set1_epi32, _mm256_setzero_si256, _mm256_storeu_si256,
@@ -1237,7 +1310,7 @@ unsafe fn l1_forward_avx2(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; 
             continue;
         }
         let pattern = _mm256_set1_epi32(lanes as i32);
-        let weights = MODEL.as_ptr().add(base + group * L2 * 4) as *const __m256i;
+        let weights = model.as_ptr().add(base + group * L2 * 4) as *const __m256i;
         let low_products = _mm256_maddubs_epi16(pattern, _mm256_loadu_si256(weights));
         low = _mm256_add_epi32(low, _mm256_madd_epi16(low_products, ones));
         let high_products = _mm256_maddubs_epi16(pattern, _mm256_loadu_si256(weights.add(1)));
@@ -1249,13 +1322,13 @@ unsafe fn l1_forward_avx2(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; 
     pre
 }
 
-fn l1_forward(bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
+fn l1_forward(model: &[u8], bucket: usize, transformed: &[u8; FEATURES]) -> [i32; L2] {
     #[cfg(all(target_arch = "x86_64", not(feature = "nnue-scalar")))]
     if std::arch::is_x86_feature_detected!("avx2") {
         // SAFETY: AVX2 support was checked above.
-        return unsafe { l1_forward_avx2(bucket, transformed) };
+        return unsafe { l1_forward_avx2(model, bucket, transformed) };
     }
-    l1_forward_scalar(bucket, transformed)
+    l1_forward_scalar(model, bucket, transformed)
 }
 
 fn transform_accumulators_scalar(
@@ -1327,26 +1400,30 @@ fn transform_accumulators(stm: usize, accumulators: &[[i16; FEATURES]; 2]) -> [u
 }
 
 fn output_transformer(position: &Position, accumulators: &[[i16; FEATURES]; 2]) -> i32 {
+    let model = model();
     let stm = if position.side == Side::White { 0 } else { 1 };
     let transformed = transform_accumulators(stm, accumulators);
 
     let pieces = position.piece_count().min(32) as usize;
     let bucket = OUTPUT_BUCKET_LAYOUT[pieces];
-    let pre = l1_forward(bucket, &transformed);
+    let pre = l1_forward(model, bucket, &transformed);
 
     let mut l1 = [0f32; L2];
     for (i, value) in l1.iter_mut().enumerate() {
         *value = (pre[i] as f32)
-            .mul_add(SCALE, model_f32(L1_BIAS_OFFSET + (bucket * L2 + i) * 4))
+            .mul_add(
+                SCALE,
+                model_f32(model, L1_BIAS_OFFSET + (bucket * L2 + i) * 4),
+            )
             .clamp(0.0, 1.0);
     }
 
-    let l2 = l2_forward(bucket, &l1);
+    let l2 = l2_forward(model, bucket, &l1);
 
     let mut sums = [0f32; 16];
     for i in 0..L3 {
         let weight = L3_WEIGHT_OFFSET + (bucket * L3 + i) * 4;
-        sums[i % 16] = model_f32(weight).mul_add(l2[i], sums[i % 16]);
+        sums[i % 16] = model_f32(model, weight).mul_add(l2[i], sums[i % 16]);
     }
     let mut stride = 8;
     while stride > 0 {
@@ -1355,7 +1432,7 @@ fn output_transformer(position: &Position, accumulators: &[[i16; FEATURES]; 2]) 
         }
         stride /= 2;
     }
-    ((sums[0] + model_f32(L3_BIAS_OFFSET + bucket * 4)) * 380.0) as i32
+    ((sums[0] + model_f32(model, L3_BIAS_OFFSET + bucket * 4)) * 380.0) as i32
 }
 
 pub fn evaluate(position: &Position) -> Option<i32> {
@@ -1539,6 +1616,7 @@ mod tests {
         if !std::arch::is_x86_feature_detected!("avx2") {
             return;
         }
+        let model = super::model();
         for bucket in 0..OUTPUT_BUCKETS {
             for sample in 0..32u32 {
                 let mut state = 0x9e37_79b9u32 ^ (bucket as u32).wrapping_mul(0x85eb_ca6b) ^ sample;
@@ -1550,8 +1628,8 @@ mod tests {
                     *value = (state >> 24) as u8 & 0x7f;
                 }
                 // SAFETY: the feature check above matches the helper's requirements.
-                let vector = unsafe { super::l1_forward_avx2(bucket, &transformed) };
-                let scalar = l1_forward_scalar(bucket, &transformed);
+                let vector = unsafe { super::l1_forward_avx2(model, bucket, &transformed) };
+                let scalar = l1_forward_scalar(model, bucket, &transformed);
                 for lane in 0..L2 {
                     assert_eq!(
                         vector[lane], scalar[lane],
@@ -1570,6 +1648,7 @@ mod tests {
         {
             return;
         }
+        let model = super::model();
         for bucket in 0..OUTPUT_BUCKETS {
             for sample in 0..32u32 {
                 let mut state = 0x9e37_79b9u32 ^ (bucket as u32).wrapping_mul(0x85eb_ca6b) ^ sample;
@@ -1581,8 +1660,8 @@ mod tests {
                     *value = (state & 0xffff) as f32 / u16::MAX as f32;
                 }
                 // SAFETY: the feature checks above match the helper's requirements.
-                let vector = unsafe { super::l2_forward_avx2(bucket, &input) };
-                let scalar = l2_forward_scalar(bucket, &input);
+                let vector = unsafe { super::l2_forward_avx2(model, bucket, &input) };
+                let scalar = l2_forward_scalar(model, bucket, &input);
                 for lane in 0..L3 {
                     assert_eq!(
                         vector[lane].to_bits(),
@@ -1707,7 +1786,8 @@ mod tests {
     #[cfg(target_arch = "x86_64")]
     #[test]
     fn avx2_feature_update_matches_scalar() {
-        if super::MODEL.is_empty() || !std::arch::is_x86_feature_detected!("avx2") {
+        let model = super::model();
+        if model.len() != super::MODEL_BYTES || !std::arch::is_x86_feature_detected!("avx2") {
             return;
         }
         for feature in [0usize, 1, 17, 767] {
@@ -1715,9 +1795,9 @@ mod tests {
                 for sign in [-1i32, 1] {
                     let mut scalar = [0i16; super::FEATURES];
                     let mut vector = [0i16; super::FEATURES];
-                    super::apply_feature_scalar(&mut scalar, feature, piece, sign);
+                    super::apply_feature_scalar(model, &mut scalar, feature, piece, sign);
                     // SAFETY: AVX2 support was checked above.
-                    unsafe { super::apply_feature_avx2(&mut vector, feature, piece, sign) };
+                    unsafe { super::apply_feature_avx2(model, &mut vector, feature, piece, sign) };
                     assert_eq!(
                         scalar, vector,
                         "feature {feature} piece {piece} sign {sign}"

@@ -17,7 +17,7 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 
 - [x] Native Windows release build completes.
 - [x] UCI handshake and `isready` work in a local protocol smoke check.
-- [x] UCI options include `Hash`, `Threads`, `SyzygyPath`, `Clear Hash`, and `UCI_Chess960`.
+- [x] UCI options include `Hash`, `Threads`, `SyzygyPath`, `EvalFile`, `Clear Hash`, and `UCI_Chess960`.
 - [x] Shredder-FEN castling rights and Chess960 rook-square move notation are implemented.
 - [x] Standard perft checks pass through depth 4 from start position and Kiwipete, and depth 3 from four special-rule positions.
 - [x] Five published Chess960 perft positions pass through depth 3; the first also passes depth 4.
@@ -33,12 +33,15 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
 - [x] Record compiler/toolchain, build command, NNUE identity, executable/model SHA-256, and a filtered source snapshot for the local candidate.
 - [x] Inventory Rust dependency licenses and include their license texts in the source snapshot.
 - [x] Prepare an unsent inquiry asking the CCC director about current intake and runtime requirements.
-- [x] Add `VALOX_NNUE_PATH` and `VALOX_NO_NNUE` build controls so release builds can inject weights from outside the repository or force the classical evaluator.
+- [x] Add `VALOX_NNUE_PATH` and `VALOX_NO_NNUE` build controls so release builds can inject weights from outside the repository or produce a weight-free binary.
 - [x] Add `tools/make-synthetic-net.py`, a deterministic same-layout network for exercising the NNUE code path without third-party weights.
 - [x] Cross-build a static Linux x86_64 musl binary and verify the ELF type, machine, and absence of a dynamic loader.
 - [x] Add a `linux-nnue` CI job that runs the 38-test NNUE suite on Ubuntu with the synthetic network, builds the static musl binary, and runs a UCI smoke test and benchmark.
 - [x] Add `tools/build-release.py` with SHA-256 manifests and a hard gate: a binary containing the Reckless v60 network cannot be packaged without `--allow-network-redistribution`.
-- [x] Produce a legally distributable classical-evaluation Windows package that contains no `.nnue` file.
+- [x] Produce a legally distributable weight-free Windows package that contains no `.nnue` file and can load an external model through `EvalFile`.
+- [x] Add runtime NNUE loading through the `EvalFile` UCI option, `--evalfile`, and `VALOX_EVALFILE`.
+- [x] Verify runtime-loaded v60 produces the same nodes and best moves as the embedded build; an eight-round ABBA `--bench 12` comparison was performance-neutral (median -0.18%, 5/8 pairs faster).
+- [x] Extend the `linux-nnue` CI job to compare a weight-free musl build using `--evalfile` against the embedded synthetic-network build.
 - [x] Confirm the new `linux-nnue` CI job passes in GitHub Actions.
 - [x] Run the real-network Linux binary in a Linux kernel under QEMU TCG. `--bench 10` reports 389,894 nodes and the same best moves as Windows; `id name Valox 0.5.0 NNUE` confirms the embedded weights are active.
 - [ ] Run the real-network binary on native Linux hardware at the tournament host. The static musl binary and the QEMU run cover the runtime path; this is a final deployment check.
@@ -47,7 +50,7 @@ The latest direct public contact guidance found is on the CCC24 Blitz page, upda
   declares `license = "MIT OR Apache-2.0"`. `tools/package-source.py` excludes
   `.nnue` files; a fresh extraction of the source archive builds and passes 31
   tests with the classical evaluator.
-- [ ] Resolve permission/license terms for `networks/v60-7f587dfb.nnue` before distributing a binary that embeds it. The Reckless engine is AGPL-3.0, but the separate RecklessNetworks repository contains model files without a model-specific license: <https://github.com/codedeliveryservice/RecklessNetworks>. A ready-to-send permission request is in [`NETWORK_PERMISSION_DRAFT.md`](NETWORK_PERMISSION_DRAFT.md).
+- [ ] Resolve permission/license terms for `networks/v60-7f587dfb.nnue` before distributing a binary that embeds it. A weight-free release can already ship because the model is supplied at runtime by the user. The Reckless engine is AGPL-3.0, but the separate RecklessNetworks repository contains model files without a model-specific license: <https://github.com/codedeliveryservice/RecklessNetworks>. A ready-to-send permission request is in [`NETWORK_PERMISSION_DRAFT.md`](NETWORK_PERMISSION_DRAFT.md).
 - [ ] After rights and release artifacts are ready, ask the CCC tournament director whether Valox can enter a qualifying event.
 
 ## Linux and release preparation (2026-11-19)
@@ -63,21 +66,52 @@ local candidate only and must not be distributed.
 `tools/build-release.py` builds Windows and Linux binaries, injects a network
 only through `VALOX_NNUE_PATH`, and packages binaries with license texts,
 `BUILD-INFO.txt`, `SHA256SUMS`, and a ZIP checksum. Without a network it sets
-`VALOX_NO_NNUE=1`, so a classical release cannot accidentally embed a local
-copy. Packaging a network build requires `--allow-network-redistribution`; the
-script refuses otherwise. The first legally distributable artifact is the
-classical Windows package `build/release/valox-0.5.0-windows-x86_64.zip`
-(210,843 bytes), SHA-256
-`C33BA8C3578372E3E9D340FF36C20CE46CB5514DC5304D522C088CC045EF4651`; it contains
-no `.nnue` file.
+`VALOX_NO_NNUE=1`, so a release cannot accidentally embed a local copy and the
+resulting binary starts with the classical evaluator. Packaging a network build
+requires `--allow-network-redistribution`; the script refuses otherwise. The
+first legally distributable artifact is the weight-free Windows package
+`build/release/valox-0.5.0-windows-x86_64.zip`, which contains no `.nnue` file
+and supports runtime loading through `EvalFile`.
 
 The synthetic network (`tools/make-synthetic-net.py`) has exactly the v60 byte
 layout (63,266,880 bytes) but small deterministic values. It makes the 38 tests
 run through the NNUE path on Linux, including incremental-versus-full-refresh
-comparisons, without using or distributing the third-party weights. The new CI
-job runs those tests natively on Ubuntu, then builds and exercises the static
-musl binary. A native Linux run with the real weights remains a release step
-after the permission question is resolved.
+comparisons, without using or distributing the third-party weights. The
+`linux-nnue` CI job runs those tests natively on Ubuntu, builds a static musl
+binary with the synthetic network, then builds a second weight-free binary and
+checks that `--evalfile synthetic.nnue` produces the same nodes and best moves
+as the embedded build. A native Linux run with the real weights remains a
+deployment check.
+
+## Runtime EvalFile loading (2026-11-19)
+
+The engine can now load a same-layout model at runtime through the UCI
+`EvalFile` option, the `--evalfile` command-line argument, or the
+`VALOX_EVALFILE` environment variable. The weight-free Windows binary is
+`build/valox-runtime-evalfile-20261119.exe` (537,600 bytes), SHA-256
+`09CCA536342F92B5CF1B1CCB088D82871D00B9FCC8114FFBE242244CEEA5843F`. It contains
+no weights and starts with the classical evaluator.
+
+Loading `networks/v60-7f587dfb.nnue` at runtime produces exactly the embedded
+build's results:
+
+```text
+start: bestmove g1f3 nodes 129168
+open: bestmove c1g5 nodes 193465
+tactics: bestmove e3c5 nodes 48412
+endgame: bestmove c4c5 nodes 18849
+bench depth 10 nodes 389894
+```
+
+An eight-round ABBA comparison of the embedded build against the weight-free
+build plus `--evalfile networks/v60-7f587dfb.nnue` at `--bench 12` kept
+1,216,373 nodes and all best moves identical. The runtime build was 0.18% faster
+at the median (mean -0.27%, 5/8 pairs faster), which is noise: the change is
+treated as performance-neutral, not as a gain. The engine validates the file
+size (63,266,880 bytes) and reports `info string NNUE loaded ...`; a failed load
+leaves the previous model active. The upstream file and SHA-256 are documented
+in `THIRD_PARTY_NOTICES.md`; it is supplied by the user and is not part of any
+release archive.
 
 ## Real-network Linux runtime check (2026-11-19)
 
@@ -187,7 +221,20 @@ QEMU.
 - Earlier 20-game match (2026-11-12) against Stockfish 19 configured with `UCI_Elo=2000`, `Hash=256`, at `10+0`: Valox 12 wins, 6 draws, 2 losses (75%). Cute Chess reported a relative difference of `+190.8 ±151.4 Elo`; this is a small sample and not Valox's standalone rating. Valox scored 8/10 as White and 4/10 as Black. PGN contains 20 games and parses with zero errors; all terminations were mate or draw, with no time forfeits or illegal moves in the match log.
 - Match record from 2026-11-12: Valox scored 29 wins, 11 draws, 0 losses in 40 games against Stockfish 19 configured with `UCI_LimitStrength=true` and `UCI_Elo=2000`, at `15+0`. This is a short, limited-strength local result, not an official Elo estimate. `15+0` is 15 seconds initial clock per side with no increment for the entire game.
 - Current network weights are Reckless v60, not a Valox-trained network. The experimental Bullet checkpoints in `tools/training` did not outperform the current evaluator on their small correlated holdout and are not integrated.
-- Current Windows release executable SHA-256: `D1DEBC3333B42E481E94B0A4A2169CFF632F9078FA6596DB8CDAB09A38D2E958` (`build\valox-threat-ray-20261119.exe`, 2026-11-19). This is a local candidate artifact only; no public release has been prepared.
+- Current embedded candidate with runtime `EvalFile` support:
+  `build\valox-runtime-evalfile-embedded-20261119.exe` (63,804,928 bytes), SHA-256
+  `383400F286345509F613438B7DD47BC6BB9D48ED059E60147A577665BD69E774`. The
+  previous pinned throughput artifact remains
+  `build\valox-threat-ray-20261119.exe`, SHA-256
+  `D1DEBC3333B42E481E94B0A4A2169CFF632F9078FA6596DB8CDAB09A38D2E958`. These are
+  local candidate artifacts only; no public release has been prepared.
+- The weight-free runtime build is
+  `build\valox-runtime-evalfile-20261119.exe` (537,600 bytes), SHA-256
+  `09CCA536342F92B5CF1B1CCB088D82871D00B9FCC8114FFBE242244CEEA5843F`. With
+  `--evalfile networks\v60-7f587dfb.nnue` it reports the same `--bench 10`
+  nodes and best moves as the embedded build. Eight ABBA `--bench 12` rounds
+  measured a median -0.18% time (5/8 faster), which is noise; no performance
+  gain is claimed.
 - The exact build and network fingerprints are recorded in [`RELEASE_CANDIDATE.md`](RELEASE_CANDIDATE.md); the paired match files are in `tools\engine-match\results`.
 
 ## Reproduction commands

@@ -2,9 +2,10 @@
 """Build Valox release binaries and create tournament-ready archives.
 
 The Reckless v60 network is not redistributable until its rights are clarified.
-This script therefore builds a classical-evaluation binary unless a network is
-passed explicitly, and it refuses to package a network build unless the caller
-confirms redistribution rights with ``--allow-network-redistribution``.
+This script therefore builds a weight-free binary by default. The binary can
+load a compatible model at runtime through the UCI ``EvalFile`` option, so the
+weights never have to be part of the archive. An embedded build is still
+possible with ``--network`` and requires ``--allow-network-redistribution``.
 """
 
 from __future__ import annotations
@@ -172,7 +173,8 @@ def package(
     except (subprocess.CalledProcessError, FileNotFoundError):
         info.append("Git commit: unavailable")
     if network is None:
-        info.append("Evaluation: classical (no NNUE weights embedded)")
+        info.append("Evaluation: classical by default; no NNUE weights embedded")
+        info.append("External NNUE: set the UCI option EvalFile to a compatible network file")
     else:
         info.append(f"Evaluation: embedded NNUE {network.name}")
         info.append(f"NNUE SHA-256: {sha256_file(network)}")

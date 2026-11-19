@@ -45,24 +45,48 @@ jobs:
         run: cargo test --release
       - name: Install musl linker
         run: sudo apt-get update && sudo apt-get install -y musl-tools
-      - name: Build static musl binary
+      - name: Build static musl binary with the synthetic network
         env:
           VALOX_NNUE_PATH: ${{ github.workspace }}/target/synthetic.nnue
           CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER: musl-gcc
-        run: cargo build --release --target x86_64-unknown-linux-musl
+        run: |
+          cargo build --release --target x86_64-unknown-linux-musl
+          cp target/x86_64-unknown-linux-musl/release/valox target/valox-embedded-synthetic
+      - name: Benchmark the embedded synthetic network
+        run: target/valox-embedded-synthetic --bench 10 | tee target/embedded-bench.txt
       - name: Verify static linking
         run: |
-          file target/x86_64-unknown-linux-musl/release/valox
-          output=$(ldd target/x86_64-unknown-linux-musl/release/valox 2>&1 || true)
+          file target/valox-embedded-synthetic
+          output=$(ldd target/valox-embedded-synthetic 2>&1 || true)
           echo "$output"
           case "$output" in
             *"not a dynamic executable"*|*"statically linked"*) echo "static binary confirmed" ;;
             *) echo "musl binary is not static"; exit 1 ;;
           esac
+      - name: Build static musl binary without embedded weights
+        env:
+          VALOX_NO_NNUE: "1"
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER: musl-gcc
+        run: |
+          cargo build --release --target x86_64-unknown-linux-musl
+          cp target/x86_64-unknown-linux-musl/release/valox target/valox-runtime-synthetic
+      - name: Runtime EvalFile matches the embedded network
+        run: |
+          target/valox-runtime-synthetic --evalfile target/synthetic.nnue --bench 10 | tee target/runtime-bench.txt
+          diff \
+            <(grep -E '^(start|open|tactics|endgame): bestmove' target/embedded-bench.txt; grep -E '^bench depth [0-9]+ nodes [0-9]+' target/embedded-bench.txt) \
+            <(grep -E '^(start|open|tactics|endgame): bestmove' target/runtime-bench.txt; grep -E '^bench depth [0-9]+ nodes [0-9]+' target/runtime-bench.txt)
+      - name: UCI EvalFile smoke
+        run: |
+          printf 'uci\nisready\nsetoption name EvalFile value %s\nposition startpos\ngo depth 8\nquit\n' "$PWD/target/synthetic.nnue" \
+            | target/valox-runtime-synthetic | tee target/uci-evalfile.txt
+          grep -q '^id name Valox 0.5.0$' target/uci-evalfile.txt
+          grep -q 'info string NNUE loaded' target/uci-evalfile.txt
+          grep -q '^bestmove ' target/uci-evalfile.txt
       - name: UCI smoke (musl)
-        run: python3 tools/engine-match/stress-uci.py target/x86_64-unknown-linux-musl/release/valox --games 4
+        run: python3 tools/engine-match/stress-uci.py target/valox-embedded-synthetic --games 4
       - name: Benchmark (musl)
-        run: target/x86_64-unknown-linux-musl/release/valox --bench 10
+        run: target/valox-embedded-synthetic --bench 10
 
   wasm:
     runs-on: ubuntu-latest

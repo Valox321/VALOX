@@ -103,12 +103,35 @@ standard + 40 Chess960 at depth 3) and the tactical suite (6/6 at depths 12 and
 
 Open blockers for any public release remain the redistribution rights for the
 embedded Reckless v60 network. The Valox source itself is dual-licensed under
-MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`).
+MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`). A weight-free build can
+already be distributed; see the runtime `EvalFile` section below.
+
+## Runtime EvalFile build, 2026-11-19
+
+The engine can load a compatible model at runtime, so the strong network no
+longer has to be embedded in a distributed binary.
+
+| Field | Value |
+|---|---|
+| Executable | `build\valox-runtime-evalfile-20261119.exe` |
+| Size | 537,600 bytes |
+| Executable SHA-256 | `09CCA536342F92B5CF1B1CCB088D82871D00B9FCC8114FFBE242244CEEA5843F` |
+| Embedded NNUE | none |
+| Runtime loading | UCI `EvalFile`, `--evalfile <path>`, `VALOX_EVALFILE` |
+| Model validation | exact size 63,266,880 bytes; failed loads keep the previous model |
+| `--bench 10` with v60 | 389,894 nodes; `g1f3`, `c1g5`, `e3c5`, `c4c5` |
+| ABBA `--bench 12` vs embedded | median -0.18% time, mean -0.27%, 5/8 pairs faster; identical 1,216,373 nodes and moves |
+
+The validation is performance-neutral within noise and is not claimed as a
+speed gain. The weight-free binary starts with the classical evaluator. The
+third-party v60 file is supplied by the user from the upstream RecklessNetworks
+release; it is not part of any Valox archive. Its upstream URL and SHA-256 are
+in `THIRD_PARTY_NOTICES.md`.
 
 ## Release tooling and Linux cross-build, 2026-11-19
 
 `build.rs` now accepts `VALOX_NNUE_PATH` for a network outside the repository
-and `VALOX_NO_NNUE=1` to force the classical evaluator. The default remains
+and `VALOX_NO_NNUE=1` to produce a weight-free binary. The default remains
 `networks/v60-7f587dfb.nnue`, so existing local builds are unchanged.
 
 | Field | Value |
@@ -119,20 +142,23 @@ and `VALOX_NO_NNUE=1` to force the classical evaluator. The default remains
 | Linux artifact SHA-256 | `FA8FB875F99196DBA04534BF950055328877333186F16D71998847405C72F167` |
 | Release tool | `tools/build-release.py` |
 | Network gate | packaging a network build requires `--allow-network-redistribution` |
-| Classical Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` (210,843 bytes) |
-| Classical package SHA-256 | `C33BA8C3578372E3E9D340FF36C20CE46CB5514DC5304D522C088CC045EF4651` |
-| Classical executable SHA-256 | `DFDE3F6EC5E1AF8E712A000C68E8C6A0FE932FE539041A8F8D5B6BE5735A6666` |
+| Weight-free Windows package | `build/release/valox-0.5.0-windows-x86_64.zip` |
+| Weight-free package SHA-256 | updated after the runtime-EvalFile rebuild |
+| Weight-free executable SHA-256 | updated after the runtime-EvalFile rebuild |
 
-The classical package contains no `.nnue` file and is the only artifact that is
-currently safe to distribute. The Linux artifact embeds the Reckless network and
-is local-only until permission is confirmed.
+The weight-free package contains no `.nnue` file and is the only artifact that
+is currently safe to distribute. It can load the v60 model through `EvalFile`.
+The Linux artifact embeds the Reckless network and is local-only until
+permission is confirmed.
 
 `tools/make-synthetic-net.py` writes a 63,266,880-byte file with the v60 layout
-and small deterministic weights. The new `linux-nnue` CI job uses it to run all
-38 tests through the NNUE path on Ubuntu, builds the static musl binary, and
-runs a UCI smoke test and benchmark. This validates the Linux binary and NNUE
-inference without distributing the third-party weights; it does not measure
-playing strength. GitHub Actions run
+and small deterministic weights. The `linux-nnue` CI job uses it to run all 38
+tests through the NNUE path on Ubuntu, builds the static musl binary, and runs a
+UCI smoke test and benchmark. It then builds a weight-free binary and verifies
+that `--evalfile synthetic.nnue` reproduces the embedded build's nodes and best
+moves, and that the UCI `EvalFile` option loads the file. This validates Linux,
+runtime loading, and NNUE inference without distributing the third-party
+weights; it does not measure playing strength. GitHub Actions run
 [#8](https://github.com/Valox321/VALOX/actions/runs/44598540713) passed all
 jobs, including `linux-nnue`, on commit `5ae51b4`.
 
