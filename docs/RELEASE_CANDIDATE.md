@@ -121,8 +121,7 @@ longer has to be embedded in a distributed binary.
 | Model validation | exact size 63,266,880 bytes; failed loads keep the previous model |
 | `--bench 10` with v60 | 389,894 nodes; `g1f3`, `c1g5`, `e3c5`, `c4c5` |
 | ABBA `--bench 12` vs embedded | median -0.18% time, mean -0.27%, 5/8 pairs faster; identical 1,216,373 nodes and moves |
-| Source archive | `build\valox-source-20261119.zip` (64 files, 191,403 bytes, no `.nnue` weights) |
-| Source archive SHA-256 | `C9E57D4E004B6A488C06248B87DE8A9700FEB83396C089D14F661A6E87CE5D76` |
+| Source archive | `build\valox-source-20261119.zip` (64 files, no `.nnue` weights); SHA-256 is published in `build\valox-source-20261119.zip.sha256` |
 
 The rebuilt source archive was extracted into an empty directory and tested
 offline: 31 tests pass with the classical evaluator, and 38 tests pass when

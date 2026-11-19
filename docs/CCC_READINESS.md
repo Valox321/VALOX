@@ -219,12 +219,11 @@ QEMU.
 - Latest 100-game paired match (2026-11-12) against Stockfish 19 with `UCI_LimitStrength=true`, `UCI_Elo=2000`, `Hash=256`, Syzygy WDL, `5+0`, one thread per engine, two concurrent games, and the bundled sequential opening set: Valox 68 wins, 28 draws, 4 losses (82/100 points, 82%). Cute Chess reports `+263.4 ±65.9` relative Elo and LOS 100%. Valox scored 43/50 as White and 39/50 as Black. Treat this as a local result for this configuration, not an official or opponent-independent Valox rating. The pinned Valox executable SHA-256 was `87EF90A88B2A629A357DE7ABB460216E5733B7130E7AC7BCE96F1C94E03951BF`.
 - `python tools\engine-match\audit-pgn.py tools\engine-match\results\valox-stockfish-2000-20261112-145753.pgn --expected-games 100`: parsed all 100 games and found no illegal moves or PGN errors. Match log shows 28 threefold draws and 72 checkmates; no time forfeits.
 - `THIRD_PARTY_NOTICES.md` lists the current Rust runtime dependencies and the source snapshot includes the identified MIT/Apache license texts. Valox's own source is licensed under MIT OR Apache-2.0; the external NNUE model's redistribution rights remain unresolved and the model is excluded from source archives.
-- `build/valox-source-20261119.zip` (64 files, 191,403 bytes, no `.nnue` files,
-  SHA-256 `C9E57D4E004B6A488C06248B87DE8A9700FEB83396C089D14F661A6E87CE5D76`)
-  is accompanied by `build/valox-source-20261119.zip.sha256`. A fresh extraction
-  passes 31 tests with the classical evaluator and builds offline; with
-  `VALOX_NNUE_PATH` pointing at the synthetic network outside the archive, it
-  passes all 38 tests.
+- `build/valox-source-20261119.zip` (64 files, no `.nnue` files) is accompanied
+  by `build/valox-source-20261119.zip.sha256` with its SHA-256. A fresh
+  extraction passes 31 tests with the classical evaluator and builds offline;
+  with `VALOX_NNUE_PATH` pointing at the synthetic network outside the archive,
+  it passes all 38 tests.
 - Earlier 20-game match (2026-11-12) against Stockfish 19 configured with `UCI_Elo=2000`, `Hash=256`, at `10+0`: Valox 12 wins, 6 draws, 2 losses (75%). Cute Chess reported a relative difference of `+190.8 ±151.4 Elo`; this is a small sample and not Valox's standalone rating. Valox scored 8/10 as White and 4/10 as Black. PGN contains 20 games and parses with zero errors; all terminations were mate or draw, with no time forfeits or illegal moves in the match log.
 - Match record from 2026-11-12: Valox scored 29 wins, 11 draws, 0 losses in 40 games against Stockfish 19 configured with `UCI_LimitStrength=true` and `UCI_Elo=2000`, at `15+0`. This is a short, limited-strength local result, not an official Elo estimate. `15+0` is 15 seconds initial clock per side with no increment for the entire game.
 - Current network weights are Reckless v60, not a Valox-trained network. The experimental Bullet checkpoints in `tools/training` did not outperform the current evaluator on their small correlated holdout and are not integrated.
