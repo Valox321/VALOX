@@ -169,8 +169,9 @@ that `--evalfile synthetic.nnue` reproduces the embedded build's nodes and best
 moves, and that the UCI `EvalFile` option loads the file. This validates Linux,
 runtime loading, and NNUE inference without distributing the third-party
 weights; it does not measure playing strength. GitHub Actions run
-[#11](https://github.com/Valox321/VALOX/actions/runs/44606262028) passed all
-jobs, including `linux-nnue`, on commit `261a196`. Its runtime check reported
+[#13](https://github.com/Valox321/VALOX/actions/runs/44606745624) passed all
+jobs on commit `6dacd86`, which is the state archived as the source snapshot;
+later commits only change documentation and CI text. Its runtime check reported
 identical nodes (304,504 at depth 10) and best moves for the embedded synthetic
 build and the weight-free build loaded with `--evalfile`.
 
