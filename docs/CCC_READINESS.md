@@ -218,8 +218,8 @@ QEMU.
 - Latest 100-game paired match (2026-11-12) against Stockfish 19 with `UCI_LimitStrength=true`, `UCI_Elo=2000`, `Hash=256`, Syzygy WDL, `5+0`, one thread per engine, two concurrent games, and the bundled sequential opening set: Valox 68 wins, 28 draws, 4 losses (82/100 points, 82%). Cute Chess reports `+263.4 ±65.9` relative Elo and LOS 100%. Valox scored 43/50 as White and 39/50 as Black. Treat this as a local result for this configuration, not an official or opponent-independent Valox rating. The pinned Valox executable SHA-256 was `87EF90A88B2A629A357DE7ABB460216E5733B7130E7AC7BCE96F1C94E03951BF`.
 - `python tools\engine-match\audit-pgn.py tools\engine-match\results\valox-stockfish-2000-20261112-145753.pgn --expected-games 100`: parsed all 100 games and found no illegal moves or PGN errors. Match log shows 28 threefold draws and 72 checkmates; no time forfeits.
 - `THIRD_PARTY_NOTICES.md` lists the current Rust runtime dependencies and the source snapshot includes the identified MIT/Apache license texts. Valox's own source is licensed under MIT OR Apache-2.0; the external NNUE model's redistribution rights remain unresolved and the model is excluded from source archives.
-- `build/valox-source-20261119.zip` (64 files, 190,555 bytes, no `.nnue` files,
-  SHA-256 `6FF924AEF4162032A0C63ED9F5F555E7ABBC963618DE1A98F547E504B6238807`)
+- `build/valox-source-20261119.zip` (64 files, 191,403 bytes, no `.nnue` files,
+  SHA-256 `C9E57D4E004B6A488C06248B87DE8A9700FEB83396C089D14F661A6E87CE5D76`)
   is accompanied by `build/valox-source-20261119.zip.sha256`. A fresh extraction
   passes 31 tests with the classical evaluator and builds offline; with
   `VALOX_NNUE_PATH` pointing at the synthetic network outside the archive, it
