@@ -64,6 +64,13 @@ def host_triple() -> str:
     raise SystemExit("could not determine the Rust host triple")
 
 
+def cargo_target_dir() -> Path:
+    configured = os.environ.get("CARGO_TARGET_DIR")
+    if configured:
+        return (ROOT / configured).resolve()
+    return ROOT / "target"
+
+
 def find_rust_lld() -> Path:
     sysroot = Path(command_output("rustc", "--print", "sysroot"))
     name = "rust-lld.exe" if os.name == "nt" else "rust-lld"
@@ -101,7 +108,7 @@ def build(platform: str, network: Path | None) -> Path:
         if os.name != "nt":
             raise SystemExit("Windows builds require a Windows host")
         subprocess.run(["cargo", "build", "--release", "--bin", "valox"], cwd=ROOT, env=env, check=True)
-        return ROOT / "target" / "release" / "valox.exe"
+        return cargo_target_dir() / "release" / "valox.exe"
 
     ensure_musl_target()
     if os.name == "nt":
@@ -127,7 +134,7 @@ def build(platform: str, network: Path | None) -> Path:
         env=env,
         check=True,
     )
-    return ROOT / "target" / "x86_64-unknown-linux-musl" / "release" / "valox"
+    return cargo_target_dir() / "x86_64-unknown-linux-musl" / "release" / "valox"
 
 
 def write_checksums(directory: Path) -> None:
